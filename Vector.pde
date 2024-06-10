@@ -23,6 +23,20 @@ class  Vector {
     this.destino = destino;
     this.componentes = destino;
   }
+  /** Constructor parametrizado con origen y nombre de la direccion*/
+  public Vector(PVector origen, String direccion) {
+    this.origen = origen;
+    if (direccion=="up") {
+      this.destino = new PVector(0, -60);
+    } else if (direccion=="down") {
+      this.destino = new PVector(0, 60);
+    } else if (direccion=="right") {
+      this.destino = new PVector(60, 0);
+    } else if (direccion=="left") {
+      this.destino = new PVector(-60, 0);
+    }
+    this.componentes = this.destino;
+  }
 
   /* -- METODOS --*/
   /** Metodo que dibuja al vector */
@@ -80,6 +94,20 @@ class  Vector {
     this.componentes = this.destino;  //los componentes cambian segun el destino
   }
 
+  /** Asigna un nuevo destino al vector segun el nombre de la direccion*/
+  public void setDestino(String direccion){
+    if (direccion=="up") {
+      this.destino = new PVector(0, -60);
+    } else if (direccion=="down") {
+      this.destino = new PVector(0, 60);
+    } else if (direccion=="right") {
+      this.destino = new PVector(60, 0);
+    } else if (direccion=="left") {
+      this.destino = new PVector(-60, 0);
+    }
+    this.componentes = this.destino;
+  }
+  
   /** Asigna un nuevo origen al vector */
   public void setOrigen(PVector nuevaPos) {
     this.origen = nuevaPos;
