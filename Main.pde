@@ -17,12 +17,6 @@ public void setup()
 
 public void draw()
 {
-  background(#ffffff);
-  textSize(50);
-  fill(#050000);
-  text("Estima2", width/4, height/2);
-  fill(#050000, 50);
-  text("Estima2", width/4+2.5, height/2);
-  
+  background(100);
   jugador.display(); 
 }
