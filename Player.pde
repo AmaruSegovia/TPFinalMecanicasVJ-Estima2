@@ -29,8 +29,8 @@ class Player extends GameObject implements IMovable{
     fill(255);
   }
   
+  /** Metodo que mueve al jugador */
   public void mover() {
-    float deltaTime = 1.0/frameRate;
     float acceleration = 60;
     float deceleration = 10;
 
@@ -59,7 +59,7 @@ class Player extends GameObject implements IMovable{
     this.speed = constrain(speed, 0, topSpeed);
 
     // Actualizar la posicion del jugador
-    this.posicion.add(this.direccion.getDestino().copy().mult(this.speed * deltaTime));
+    this.posicion.add(this.direccion.getDestino().copy().mult(this.speed * Time.getDeltaTime(frameRate)));
 
     text("Aceleracion: "+acceleration, 30, 40);
     text("Velocidad: "+this.speed, 30, 80);
