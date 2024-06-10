@@ -23,7 +23,7 @@ public void draw()
 }
 
 public void keyPressed() {
-  switch (key) {
+  switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula 
     case 'w':
       W_PRESSED = true;
       break;
@@ -39,7 +39,7 @@ public void keyPressed() {
   }
 }
 public void keyReleased() {
-  switch (key) {
+  switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula 
     case 'w':
       W_PRESSED = false;
       break;
