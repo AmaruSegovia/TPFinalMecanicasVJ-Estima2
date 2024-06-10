@@ -45,7 +45,7 @@ class SpriteObject {
   public void render(int estado, PVector posicion) {
     imageMode(CENTER);
     switch(estado) {
-    case MaquinaEstadosAnimacion.IDLE:{
+    /*case MaquinaEstadosAnimacion.IDLE:{
         //Colocando la imagen en la fila del Sprite de idle
         this.yFrame = 0;
         //Dibujando el frame
@@ -109,7 +109,7 @@ class SpriteObject {
         this.xFrame=0;
         image(this.spriteSheet.get(this.xFrame, this.yFrame, this.anchoFrame, this.altoFrame), posicion.x, posicion.y);
         break;
-      }
+      }*/
     }
   }
   /** Mueve la posicion del Frame en x del SpriteSheet */
