@@ -1,5 +1,5 @@
 /** Clase que representa al jugador */
-class Player extends GameObject implements IMovable{
+class Player extends GameObject implements IMovable {
   /** Representa la velocidad del jugador */
   private float speed;
   /** Representa la maxima velocidad del jugador */
@@ -24,17 +24,17 @@ class Player extends GameObject implements IMovable{
   /** Metodo que dibuja al jugador en pantalla */
   public void display() {
     fill(200, 30);
-    circle(this.posicion.x, this.posicion.y, ancho);
+    circle(this.posicion.x, this.posicion.y, this.ancho);
     textSize(20);
     fill(255);
   }
-  
+
   /** Metodo que mueve al jugador */
   public void mover() {
     float acceleration = 60;
     float deceleration = 10;
 
-    // operador ternario para acelerar o desacelerar segun si se apreta una tecla
+    // Operador ternario para acelerar o desacelerar segun si se apreta una tecla
     this.speed = W_PRESSED || D_PRESSED || S_PRESSED || A_PRESSED ? this.speed+acceleration : this.speed-deceleration;
 
     //  Verificar si se están presionando las teclas 'w', 'a', 's' o 'd'
@@ -51,39 +51,39 @@ class Player extends GameObject implements IMovable{
       this.direccion = this.direccion.sumar(new Vector(this.posicion, "right"));
     }
     this.direccion.display();
-    
+
     if (this.direccion.obtenerMagnitud() != 0) {
       this.direccion.getDestino().normalize(); // Normalizar la dirección para que el movimiento diagonal no sea mas rapido
     }
     // Limitar la velocidad
-    this.speed = constrain(speed, 0, topSpeed);
+    this.speed = constrain(this.speed, 0, this.topSpeed);
 
     // Actualizar la posicion del jugador
     this.posicion.add(this.direccion.getDestino().copy().mult(this.speed * Time.getDeltaTime(frameRate)));
 
-    text("Aceleracion: "+acceleration, 30, 40);
-    text("Velocidad: "+this.speed, 30, 80);
-    text("Direccion destino:"+this.direccion.destino, 30, 120);
+    // Limitar el movimiento del jugador
+    this.posicion.x = constrain(this.posicion.x, 0 + this.ancho, width - this.ancho);
+    this.posicion.y = constrain(this.posicion.y, 0 + this.ancho, height - this.ancho);
   }// end mover
-  
+
   /* -- ASESORES -- */
   /* Getters */
   /** Devuelve la velocidad maxima del jugador */
-  public float getTopSpeed(){
+  public float getTopSpeed() {
     return this.topSpeed;
   }
   /** Devuelve la velocidad del jugador */
-  public float getSpeed(){
+  public float getSpeed() {
     return this.speed;
   }
   /** Devuelve la direccion del jugador */
-  public Vector getDireccion(){
+  public Vector getDireccion() {
     return this.direccion;
   }
-  
+
   /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
-  public void setTopSpeed( float topSpeed){
+  public void setTopSpeed( float topSpeed) {
     this.topSpeed = topSpeed;
   }
 }
