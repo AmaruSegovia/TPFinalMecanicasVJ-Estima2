@@ -42,13 +42,13 @@ class  Vector {
   /** Metodo que dibuja al vector */
   public void display() {
     strokeWeight(2);
-    stroke(#EBFF6A);
+    stroke(#34407E);
     line(this.origen.x, this.origen.y, this.origen.x + this.destino.x, this.origen.y + this.destino.y);
 
     // Dibujar la flecha al final del vector
     float angle = atan2(this.destino.y, this.destino.x ); //Calcula el angulo entre la linea en radianes.
     strokeWeight(3);
-    fill(#EBFF6A);
+    fill(#34407E);
     pushMatrix(); // Todos los cambios aplicados no afectaran a otros objetos que se dibujen después.
       translate(this.origen.x + this.destino.x, this.origen.y + this.destino.y); // Se traslada el origen del sistema de coordenadas al punto final del vector
       rotate(angle); //Se rota el sistema de coordenadas al ángulo del vector
