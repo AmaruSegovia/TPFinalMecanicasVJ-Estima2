@@ -24,8 +24,7 @@ class  Vector {
     this.componentes = destino;
   }
   /** Constructor parametrizado con origen y nombre de la direccion*/
-  public Vector(PVector origen, String direccion) {
-    this.origen = origen;
+  public Vector(String direccion) {
     if (direccion=="up") {
       this.destino = new PVector(0, -60);
     } else if (direccion=="down") {

@@ -5,7 +5,7 @@ public boolean S_PRESSED;
 public boolean A_PRESSED;
 public int nivel = 1;
 
-private Room room;
+private Dungeon dungeon;
 private Player jugador;
 
 public void setup()
@@ -13,15 +13,19 @@ public void setup()
   size(900, 800);
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
-  
+  dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));
-  room = new Room(15,width, height, new PVector(0,0));
 }
 
 public void draw()
 {
   background(100);
-  room.display();
+  Room roomActual = dungeon.getRoom(jugador.col, jugador.row);
+  if (roomActual != null) { // si existe:
+    roomActual.display();
+    // Verificar colisionescon las puertas
+    jugador.checkCollisions(roomActual);
+  }
   jugador.display(); 
   jugador.mover();
 }
@@ -57,4 +61,10 @@ public void keyReleased() {
       D_PRESSED = false;
       break;
   }
+}
+
+public void displayPlayerPosition() {
+  fill(0);
+  textSize(16);
+  text("pos: "+jugador.getPosicion(), 10, 20);
 }

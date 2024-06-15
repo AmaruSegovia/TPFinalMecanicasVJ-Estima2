@@ -28,7 +28,7 @@ class Room extends GameObject{
   
   /** Metodo que dibuja a la puerta */
   public void display() {
-    stroke(0);
+    noStroke();
     fill(170);
     rect(-1, -1, ancho, alto);
     for (Door door : this.doorList) {
