@@ -7,6 +7,7 @@ public int nivel = 1;
 
 private Dungeon dungeon;
 private Player jugador;
+private GestorBullets gestorBalas;
 
 public void setup()
 {
@@ -15,6 +16,7 @@ public void setup()
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));
+  gestorBalas = new GestorBullets();
 }
 
 public void draw()
@@ -28,10 +30,13 @@ public void draw()
   }
   jugador.display(); 
   jugador.mover();
+  
+  gestorBalas.updateBullets();
 }
 
 public void keyPressed() {
-  switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula 
+  char input = Character.toLowerCase(key);
+  switch (input) { // convierte la tecla a minuscula 
     case 'w':
       W_PRESSED = true;
       break;
@@ -45,6 +50,10 @@ public void keyPressed() {
       D_PRESSED = true;
       break;
   }
+  
+  if (input == 'i' || input == 'j' || input == 'k' || input == 'l') {
+    gestorBalas.addBullet(jugador.shoot(input));
+  }  
 }
 public void keyReleased() {
   switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula 
