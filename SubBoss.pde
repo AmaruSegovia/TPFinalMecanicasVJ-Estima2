@@ -43,6 +43,9 @@ class SubBoss extends GameObject {
         println("No esta persiguiendo al jugador");
       }
     }
+    if (persiguiendoJugador == false) {
+      movimientoOscilatorioY();
+    }
   }
 
   void dibujarSubBoss() {
@@ -68,5 +71,11 @@ class SubBoss extends GameObject {
         bombsList.remove(i);
       }
     }
+  }
+
+  /*Movimiento Oscilatorio del sub Jefe al detenerse*/
+  void movimientoOscilatorioY() {
+    int tiempo = millis() / 1000;
+    this.posicion.y += (2 * sin(tiempo * 3));
   }
 }
