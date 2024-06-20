@@ -49,9 +49,9 @@ class  Vector {
     strokeWeight(3);
     fill(#34407E);
     pushMatrix(); // Todos los cambios aplicados no afectaran a otros objetos que se dibujen después.
-      translate(this.origen.x + this.destino.x, this.origen.y + this.destino.y); // Se traslada el origen del sistema de coordenadas al punto final del vector
-      rotate(angle); //Se rota el sistema de coordenadas al ángulo del vector
-      triangle(-this.tamañoFlecha, this.tamañoFlecha/2, -this.tamañoFlecha, -this.tamañoFlecha/2, 0, 0);
+    translate(this.origen.x + this.destino.x, this.origen.y + this.destino.y); // Se traslada el origen del sistema de coordenadas al punto final del vector
+    rotate(angle); //Se rota el sistema de coordenadas al ángulo del vector
+    triangle(-this.tamañoFlecha, this.tamañoFlecha/2, -this.tamañoFlecha, -this.tamañoFlecha/2, 0, 0);
     popMatrix();
   }
 
@@ -94,7 +94,7 @@ class  Vector {
   }
 
   /** Asigna un nuevo destino al vector segun el nombre de la direccion*/
-  public void setDestino(String direccion){
+  public void setDestino(String direccion) {
     if (direccion=="up") {
       this.destino = new PVector(0, -60);
     } else if (direccion=="down") {
@@ -106,7 +106,7 @@ class  Vector {
     }
     this.componentes = this.destino;
   }
-  
+
   /** Asigna un nuevo origen al vector */
   public void setOrigen(PVector nuevaPos) {
     this.origen = nuevaPos;

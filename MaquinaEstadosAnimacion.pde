@@ -21,5 +21,4 @@ class MaquinaEstadosAnimacion {
 
   /** Estado en reposo hacia abajo */
   public static final int MOV_ESPECIAL = 7;
-  
 }

@@ -19,7 +19,7 @@ class Dungeon {
     this.rooms = new Room[this.rows][this.cols];  // Inicialización de las dimenciones de la matriz de habitaciones
     generateRooms();
   }
-  
+
   /* -- METODOS -- */
   /** Metodo que inicia la dungeon segun el nivel */
   public int[][] startDungeon() {

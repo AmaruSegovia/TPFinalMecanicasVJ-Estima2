@@ -1,16 +1,17 @@
 /** Clase que representa las habitaciones de la dungeon */
-class Room extends GameObject{
+class Room extends GameObject {
   /** Representa las posiciones de las puertas en binario */
   private int doors;
   /** Representa la lista de puertas que tiene la habitacion*/
   private Door[] doorList;
-  
+
   /* -- CONSTRUCTORES -- */
   /** Constructor por defecto */
-  public Room(){}
+  public Room() {
+  }
   /** Constructor parametrizado */
   public Room(int doors, int ancho, int alto, PVector posicion) {
-    super(posicion,ancho,alto);
+    super(posicion, ancho, alto);
     this.doors = doors;
     this.doorList = new Door[4];
     generateDoors();
@@ -25,7 +26,7 @@ class Room extends GameObject{
     if ((this.doors & 4) != 0) this.doorList[2] = new Door(new PVector(width / 2, height), "DOWN");
     if ((this.doors & 8) != 0) this.doorList[3] = new Door(new PVector(0, height / 2), "LEFT");
   }
-  
+
   /** Metodo que dibuja a la puerta */
   public void display() {
     noStroke();
@@ -35,7 +36,7 @@ class Room extends GameObject{
       if (door != null) door.display();
     }
   }
-  
+
   /** Metodo que devuelve si hay puertas en la habitacion*/
   public boolean hasDoors() {
     for (Door door : this.doorList) {

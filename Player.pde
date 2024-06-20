@@ -35,7 +35,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   /** Metodo que mueve al jugador */
   public void mover() {
     this.direccion.setOrigen(this.posicion);
-    
+
     float acceleration = 60;
     float deceleration = 10;
 
@@ -70,8 +70,8 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.posicion.x = constrain(this.posicion.x, 0 + this.ancho, width - this.ancho);
     this.posicion.y = constrain(this.posicion.y, 0 + this.ancho, height - this.ancho);
   }// end mover
-  
-  
+
+
   public void checkCollisions(Room roomActual) {
     // Si en la habitacion actual no hay puertas salir
     if (roomActual.hasDoors() == false) return;
@@ -80,23 +80,23 @@ class Player extends GameObject implements IMovable, IVisualizable {
       //Si colisiono con una puerta preparar nuevas posiciones
       if (door != null && door.isColliding(this)) {
         int newCol = this.col, newRow = this.row;
-        PVector newPos = new PVector(0,0);
+        PVector newPos = new PVector(0, 0);
         switch (door.direction) {
         case "UP":
           newRow = row - 1;
-          newPos = new PVector(width / 2,  height - this.ancho * 2);
+          newPos = new PVector(width / 2, height - this.ancho * 2);
           break;
         case "DOWN":
           newRow = row + 1;
-          newPos = new PVector(width / 2,  this.ancho * 2);
+          newPos = new PVector(width / 2, this.ancho * 2);
           break;
         case "LEFT":
           newCol = col - 1;
-          newPos = new PVector(width - this.ancho * 2,  height/2);
+          newPos = new PVector(width - this.ancho * 2, height/2);
           break;
         case "RIGHT":
           newCol = col + 1;
-          newPos = new PVector(this.ancho * 2,  height /2 );
+          newPos = new PVector(this.ancho * 2, height /2 );
           break;
         }
         //si la proxima habitacion esta en el rango de la matriz actualizar posiciones
@@ -113,7 +113,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.row = newRow;
     this.posicion = newPos;
   }
-  
+
   /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */
   public Bullet shoot(char input) {
     if (input == 'i') return new Bullet(this.posicion.copy(), 20, 20, new PVector(0, -1), 400);
@@ -137,10 +137,10 @@ class Player extends GameObject implements IMovable, IVisualizable {
   public Vector getDireccion() {
     return this.direccion;
   }
-  public int getCol(){
+  public int getCol() {
     return this.col;
   }
-  public int getRow(){
+  public int getRow() {
     return this.row;
   }
 
