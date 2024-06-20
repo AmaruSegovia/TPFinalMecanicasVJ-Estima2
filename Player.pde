@@ -1,5 +1,5 @@
 /** Clase que representa al jugador */
-class Player extends GameObject implements IMovable {
+class Player extends GameObject implements IMovable, IVisualizable {
   /** Representa la velocidad del jugador */
   private float speed;
   /** Representa la maxima velocidad del jugador */
@@ -112,6 +112,15 @@ class Player extends GameObject implements IMovable {
     this.col = newCol;
     this.row = newRow;
     this.posicion = newPos;
+  }
+  
+  /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */
+  public Bullet shoot(char input) {
+    if (input == 'i') return new Bullet(this.posicion.copy(), 20, 20, new PVector(0, -1), 400);
+    if (input == 'j') return new Bullet(this.posicion.copy(), 20, 20, new PVector(-1, 0), 400);
+    if (input == 'k') return new Bullet(this.posicion.copy(), 20, 20, new PVector(0, 1), 400);
+    if (input == 'l') return new Bullet(this.posicion.copy(), 20, 20, new PVector(1, 0), 400);
+    return null;
   }
 
   /* -- ASESORES -- */
