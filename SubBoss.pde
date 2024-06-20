@@ -36,7 +36,6 @@ class SubBoss extends GameObject {
         posicion.add(direccion);//Mueve al subjefe hacia la direccion calculada
         println("Persiguiendo al jugador");
       } else {
-        posicion.set(ultimaPosicionJugador);
         persiguiendoJugador = false;
         println("No esta persiguiendo al jugador");
       }
