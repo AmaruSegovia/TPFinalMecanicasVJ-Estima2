@@ -121,8 +121,9 @@ public void keyPressed() {
       break;
   }
 
-  if (input == 'i' || input == 'j' || input == 'k' || input == 'l') {
+  if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && !jugador.getIsShooting()) {
     gestorBalas.addBullet(jugador.shoot(input));
+    jugador.setIsShooting(true);
   }  
   if (estadoJuego == EstadoJuego.MENU && key == ENTER) {
     iniciarJuego();
@@ -141,7 +142,8 @@ void iniciarJuego() {
 }
 
 public void keyReleased() {
-  switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula 
+  char input = Character.toLowerCase(key);
+  switch (input) { // convierte la tecla a minuscula 
     case 'w':
       W_PRESSED = false;
       break;
@@ -154,6 +156,9 @@ public void keyReleased() {
     case 'd':
       D_PRESSED = false;
       break;
+  }
+  if ((input == 'i' || input == 'j' || input == 'k' || input == 'l')) {
+    jugador.setIsShooting(false);
   }
 }
 

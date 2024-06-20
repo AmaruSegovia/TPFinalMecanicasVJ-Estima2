@@ -8,6 +8,8 @@ class Player extends GameObject implements IMovable, IVisualizable {
   private Vector direccion;
   /** Representa la posicion del jugador con respecto a la dungeon*/
   private int col, row;
+  /** Controla si el jugador está disparando o no */
+  private boolean isShooting;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor por defecto */
@@ -20,6 +22,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.speed = 0;
     this.topSpeed = 250;
     this.direccion = new Vector("down");
+    this.isShooting = false;
   }
 
   /* -- METODOS -- */
@@ -136,17 +139,27 @@ class Player extends GameObject implements IMovable, IVisualizable {
   /** Devuelve la direccion del jugador */
   public Vector getDireccion() {
     return this.direccion;
-  }
+  }  
+  /** Devuelve la columna en la que se encuentra el jugador */
   public int getCol(){
     return this.col;
-  }
+  }  
+  /** Devuelve la fila en la que se encuentra el jugador */
   public int getRow(){
     return this.row;
+  }
+  /** Devuelve si el jugador está disparando o no */
+  public boolean getIsShooting() {
+    return this.isShooting;
   }
 
   /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
   public void setTopSpeed( float topSpeed) {
     this.topSpeed = topSpeed;
+  }  
+  /** Actualiza si el jugador está disparando o no */
+  public void setIsShooting(boolean isShooting) {
+    this.isShooting = isShooting;
   }
 }
