@@ -8,11 +8,13 @@ class SubBoss extends GameObject {
   int tiempoPersecucion = 200;//El tiempo el cual el enemigo persigue al jugador
 
   boolean persiguiendoJugador = false;//Indica si el enemigo esta actualmente persiguiendo al jugador, por defecto esta en falso
+  ArrayList<Bomb> bombsList;//ArrayList que servira para la creacion de la bombas
 
   SubBoss(PVector posicionSubBoss, float velocidadSubBoss) {
     this.posicion = posicionSubBoss;
     this.velocidad = velocidadSubBoss;
     this.ultimaPosicionJugador = new PVector(0, 0);
+    this.bombsList = new ArrayList<Bomb>();
   }
 
   /*METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
@@ -45,5 +47,12 @@ class SubBoss extends GameObject {
   void dibujarSubBoss() {
     fill(#FF0505);
     circle(this.posicion.x, this.posicion.y, 50);
+  }
+
+  /*Creacion de las Bombas*/
+  void creacionBombas() {
+    if (random(0, 25) <= 10.5) {
+      bombsList.add(new Bomb(posicion.copy()));//Agregar una nueva bomba a la lista en la posicion del enemigo
+    }
   }
 }
