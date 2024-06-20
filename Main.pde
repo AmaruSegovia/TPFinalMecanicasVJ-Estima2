@@ -8,6 +8,7 @@ public int estadoJuego = 0;
 
 private Dungeon dungeon;
 private Player jugador;
+private GestorBullets gestorBalas;
 
 public void setup()
 {
@@ -16,6 +17,7 @@ public void setup()
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));
+  gestorBalas = new GestorBullets();
 }
 
 public void draw()
@@ -47,6 +49,7 @@ void jugando() {
   }
   jugador.display(); 
   jugador.mover();
+  gestorBalas.updateBullets();
   
   if (jugadorGana()) {
     estadoJuego = EstadoJuego.VICTORIA;
@@ -102,7 +105,8 @@ boolean jugadorPierde() {
 
 
 public void keyPressed() {
-  switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula 
+   char input = Character.toLowerCase(key);
+  switch (input) { // convierte la tecla a minuscula 
     case 'w':
       W_PRESSED = true;
       break;
@@ -116,6 +120,10 @@ public void keyPressed() {
       D_PRESSED = true;
       break;
   }
+
+  if (input == 'i' || input == 'j' || input == 'k' || input == 'l') {
+    gestorBalas.addBullet(jugador.shoot(input));
+  }  
   if (estadoJuego == EstadoJuego.MENU && key == ENTER) {
     iniciarJuego();
   } else if ((estadoJuego == EstadoJuego.VICTORIA || estadoJuego == EstadoJuego.DERROTA) && key == ENTER) {
@@ -129,6 +137,7 @@ void iniciarJuego() {
     // Aqui deberiamos reiniciar el estado del juego
   dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));
+   gestorBalas = new GestorBullets();
 }
 
 public void keyReleased() {
