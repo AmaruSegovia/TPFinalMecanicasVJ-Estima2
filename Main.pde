@@ -123,6 +123,7 @@ public void keyPressed() {
 
   if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && !jugador.getIsShooting()) {
     gestorBalas.addBullet(jugador.shoot(input));
+    jugador.setTimeSinceLastShot(millis());
     jugador.setIsShooting(true);
   }  
   if (estadoJuego == EstadoJuego.MENU && key == ENTER) {
@@ -157,7 +158,7 @@ public void keyReleased() {
       D_PRESSED = false;
       break;
   }
-  if ((input == 'i' || input == 'j' || input == 'k' || input == 'l')) {
+  if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && (millis() - jugador.getTimeSinceLastShot() >= 100)) {
     jugador.setIsShooting(false);
   }
 }
