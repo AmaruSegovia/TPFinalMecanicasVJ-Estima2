@@ -39,7 +39,6 @@ public void draw()
 
 void jugando() {
   Room roomActual = dungeon.getRoom(jugador.col, jugador.row);
-  println(jugador.col);
   println(jugador.row);
   if (roomActual != null) { // si existe:
     roomActual.display();
@@ -87,8 +86,9 @@ void mostrarDerrota() {
 }
 
 boolean jugadorGana() {
-  // Implementa la lógica para ganar
-  // Por ejemplo, podrías comprobar si el jugador ha alcanzado un cierto puntaje o nivel
+    if (jugador.row == 1) {
+    return true;
+  }
   return false;
 }
 
@@ -126,11 +126,9 @@ public void keyPressed() {
 
 void iniciarJuego() {
   estadoJuego = EstadoJuego.JUGANDO;
+    // Aqui deberiamos reiniciar el estado del juego
   dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));
-  // Aqui deberiamos reiniciar el estado del juego
-  // jugador = new Jugador(jugadorImagen, new PVector(width/2, height/2), 20);
-  //gestorEnemigos = new GestorEnemigos(enemigoImagen, 2000);
 }
 
 public void keyReleased() {
