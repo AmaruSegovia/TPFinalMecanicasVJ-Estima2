@@ -10,6 +10,8 @@ private Dungeon dungeon;
 private Player jugador;
 private GestorBullets gestorBalas;
 
+private SubBoss subBoss;
+
 public void setup()
 {
   size(900, 800);
@@ -18,6 +20,8 @@ public void setup()
   dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));
   gestorBalas = new GestorBullets();
+
+  subBoss = new SubBoss(new PVector(random(0, 900), 100), 20);
 }
 
 public void draw()
@@ -50,6 +54,10 @@ void jugando() {
   jugador.display();
   jugador.mover();
   gestorBalas.updateBullets();
+
+  subBoss.dibujarSubBoss();
+  subBoss.actualizarPosicion(jugador.posicion);
+  subBoss.creacionEliminacionBombas(jugador);
 
   if (jugadorGana()) {
     estadoJuego = EstadoJuego.VICTORIA;

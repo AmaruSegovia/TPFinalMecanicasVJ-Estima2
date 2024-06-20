@@ -36,6 +36,7 @@ class SubBoss extends GameObject {
         direccion.normalize();//Normalizamos a la direccion
         direccion.mult(velocidad);//La multiplicamos para aumentar su velocidad y evitar que avanze a muy poca velocidad
         posicion.add(direccion);//Mueve al subjefe hacia la direccion calculada
+        creacionBombas();
         println("Persiguiendo al jugador");
       } else {
         persiguiendoJugador = false;
@@ -45,7 +46,7 @@ class SubBoss extends GameObject {
   }
 
   void dibujarSubBoss() {
-    fill(#FF0505);
+    fill(#8B08FF);
     circle(this.posicion.x, this.posicion.y, 50);
   }
 
@@ -53,6 +54,19 @@ class SubBoss extends GameObject {
   void creacionBombas() {
     if (random(0, 25) <= 10.5) {
       bombsList.add(new Bomb(posicion.copy()));//Agregar una nueva bomba a la lista en la posicion del enemigo
+    }
+  }
+  /*Metodo que crea a las bombas y las elimina*/
+  void creacionEliminacionBombas(Player jugador) {
+    //Itera en el bucle for la lista bomba desde el ultimo hasta el primero para evitar problemas al eliminar las bombas mientras itera
+    for (int i = bombsList.size() - 1; i >= 0; i--) {
+      Bomb bomba = bombsList.get(i);
+      bomba.dibujar();
+      bomba.explotar(jugador);
+      //Si la bomba exploto entonces usamos la funcion remove de arraylist para eliminar a la bomba de acuerdo a la posicion
+      if (bomba.haExplotado) {
+        bombsList.remove(i);
+      }
     }
   }
 }
