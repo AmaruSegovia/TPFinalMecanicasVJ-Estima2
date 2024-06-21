@@ -6,6 +6,8 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   private float speed;
   /** Representa la dirección de la bala */
   private PVector direction;
+  /** Representa el sprite de la bala */
+  private SpriteObject sprite;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
@@ -13,6 +15,7 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     super(pos, ancho, alto);
     this.direction = direction;
     this.speed = speed;
+    this.sprite = new SpriteObject("playerBullet.png", ancho, alto);
   }
 
   /* -- ACCESORES (GETTERS Y SETTERS) -- */
@@ -45,9 +48,12 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   }
 
   /** Método para dibujar las balas (implementando la interfaz IVisualizable) */
-  public void display() {
+  public void display() {    
+    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
+    /*
     stroke(#149eee);
     fill(3 * sin(this.posicion.x + this.posicion.y) * 100, 255, 255);
     circle(this.posicion.x, this.posicion.y, this.ancho);
+    */
   }
 }
