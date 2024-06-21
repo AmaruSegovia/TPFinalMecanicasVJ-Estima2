@@ -46,7 +46,8 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
 
   /** Método para dibujar las balas (implementando la interfaz IVisualizable) */
   public void display() {
-    fill(#baa423);
+    stroke(#149eee);
+    fill(3 * sin(this.posicion.x + this.posicion.y) * 100, 255, 255);
     circle(this.posicion.x, this.posicion.y, this.ancho);
   }
 }
