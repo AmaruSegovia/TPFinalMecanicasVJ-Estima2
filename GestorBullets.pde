@@ -18,14 +18,18 @@ public class GestorBullets {
 
   /** Método para actualizar el estado de las balas */
   public void updateBullets() {
+    ArrayList<Bullet> removableBullets = new ArrayList<Bullet>();
+    
     for (Bullet bullet : this.bulletList) {
       bullet.mover();
       bullet.display();
 
       if (bullet.getPosicion().x >= width || bullet.getPosicion().x <= 0
         || bullet.getPosicion().y >= height || bullet.getPosicion().y <= 0) {
-        //this.bulletList.remove(bullet);
+        removableBullets.add(bullet);
       }
     }
+    
+    this.bulletList.removeAll(removableBullets);
   }
 }

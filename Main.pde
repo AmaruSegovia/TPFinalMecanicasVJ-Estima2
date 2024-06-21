@@ -122,9 +122,11 @@ public void keyPressed() {
     break;
   }
 
-  if (input == 'i' || input == 'j' || input == 'k' || input == 'l') {
+  if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && !jugador.getIsShooting()) {
     gestorBalas.addBullet(jugador.shoot(input));
-  }
+    jugador.setTimeSinceLastShot(millis());
+    jugador.setIsShooting(true);
+  }  
   if (estadoJuego == EstadoJuego.MENU && key == ENTER) {
     iniciarJuego();
   } else if ((estadoJuego == EstadoJuego.VICTORIA || estadoJuego == EstadoJuego.DERROTA) && key == ENTER) {
@@ -141,19 +143,23 @@ void iniciarJuego() {
 }
 
 public void keyReleased() {
-  switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula
-  case 'w':
-    W_PRESSED = false;
-    break;
-  case 's':
-    S_PRESSED = false;
-    break;
-  case 'a':
-    A_PRESSED = false;
-    break;
-  case 'd':
-    D_PRESSED = false;
-    break;
+  char input = Character.toLowerCase(key);
+  switch (input) { // convierte la tecla a minuscula 
+    case 'w':
+      W_PRESSED = false;
+      break;
+    case 's':
+      S_PRESSED = false;
+      break;
+    case 'a':
+      A_PRESSED = false;
+      break;
+    case 'd':
+      D_PRESSED = false;
+      break;
+  }
+  if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && (millis() - jugador.getTimeSinceLastShot() >= 100)) {
+    jugador.setIsShooting(false);
   }
 }
 
