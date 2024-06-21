@@ -12,6 +12,7 @@ private GestorBullets gestorBalas;
 
 public void setup()
 {
+  noSmooth();
   size(900, 800);
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
@@ -50,6 +51,16 @@ void jugando() {
   jugador.display();
   jugador.mover();
   gestorBalas.updateBullets();
+  
+  if (millis() - jugador.getTimeSinceLastShot() >= 310) {
+    jugador.setIsShooting(false);
+    if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_DERECHA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_DERECHA);
+    }
+    else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA);
+    }
+  }
 
   if (jugadorGana()) {
     estadoJuego = EstadoJuego.VICTORIA;
@@ -115,18 +126,56 @@ public void keyPressed() {
     S_PRESSED = true;
     break;
   case 'a':
+    jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_IZQUIERDA);
     A_PRESSED = true;
     break;
   case 'd':
+    jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_DERECHA);
     D_PRESSED = true;
     break;
+  case 'j':
+    jugador.setAnimationState(MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA);
+    break;
+  case 'l':
+    jugador.setAnimationState(MaquinaEstadosAnimacion.ATAQUE_DERECHA);
+    break;
   }
-
+  
+  if (S_PRESSED || W_PRESSED){
+    if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ESTATICO_DERECHA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_DERECHA);
+    }
+    else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_IZQUIERDA);
+    }
+  }
+  
+  if (W_PRESSED || A_PRESSED || S_PRESSED || W_PRESSED){   
+    if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_DERECHA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_DERECHA);
+    }
+    else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_IZQUIERDA);
+    }
+  }
+  
   if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && !jugador.getIsShooting()) {
     gestorBalas.addBullet(jugador.shoot(input));
     jugador.setTimeSinceLastShot(millis());
-    jugador.setIsShooting(true);
+    jugador.setIsShooting(true);    
   }  
+  
+  if (input == 'i' || input == 'k'){
+    if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ESTATICO_DERECHA ||
+        jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_DERECHA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.ATAQUE_DERECHA);
+    }
+    else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA ||
+        jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_IZQUIERDA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA);
+    }
+  }
+  
   if (estadoJuego == EstadoJuego.MENU && key == ENTER) {
     iniciarJuego();
   } else if ((estadoJuego == EstadoJuego.VICTORIA || estadoJuego == EstadoJuego.DERROTA) && key == ENTER) {
@@ -158,8 +207,14 @@ public void keyReleased() {
       D_PRESSED = false;
       break;
   }
-  if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && (millis() - jugador.getTimeSinceLastShot() >= 100)) {
-    jugador.setIsShooting(false);
+  
+  if (!A_PRESSED == !S_PRESSED == !W_PRESSED == !D_PRESSED){
+    if (jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_DERECHA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_DERECHA);
+    }
+    else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_IZQUIERDA){
+      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA);
+    }
   }
 }
 

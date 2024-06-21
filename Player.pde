@@ -12,6 +12,10 @@ class Player extends GameObject implements IMovable, IVisualizable {
   private boolean isShooting;
   /** Representa el tiempo transcurrido tras el último disparo */
   private float timeSinceLastShot;
+  /** Representa el sprite del jugador */
+  private SpriteObject sprite;
+  /** Representa el estado de la animación del sprite del jugador */
+  private int animationState;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor por defecto */
@@ -20,9 +24,12 @@ class Player extends GameObject implements IMovable, IVisualizable {
   /** Constructor parametrizado */
   public Player(PVector posicion) {
     this.posicion = posicion;
-    this.ancho = 50;
+    this.alto = 20;
+    this.ancho = 20;
     this.speed = 0;
     this.topSpeed = 250;
+    this.sprite = new SpriteObject("mage.png", ancho, alto);
+    this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
     this.direccion = new Vector("down");
     this.isShooting = false;
   }
@@ -32,7 +39,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   public void display() {
     stroke(0);
     fill(200, 30);
-    circle(this.posicion.x, this.posicion.y, this.ancho);
+    this.sprite.render(this.animationState, new PVector(this.posicion.x, this.posicion.y));
     textSize(20);
     fill(255);
   }
@@ -158,6 +165,10 @@ class Player extends GameObject implements IMovable, IVisualizable {
   public float getTimeSinceLastShot() {
     return this.timeSinceLastShot;
   }
+  /** Devuelve el estado de la animación del jugador */
+  public int getAnimationState() {
+    return this.animationState;
+  }
 
   /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
@@ -171,5 +182,9 @@ class Player extends GameObject implements IMovable, IVisualizable {
   /** Actualiza si el jugador está disparando o no */
   public void setTimeSinceLastShot(float timeSinceLastShot) {
     this.timeSinceLastShot = timeSinceLastShot;
+  }
+  /** Actualiza el estado de la animación del jugador */
+  public void setAnimationState(int animationState) {
+    this.animationState = animationState;
   }
 }
