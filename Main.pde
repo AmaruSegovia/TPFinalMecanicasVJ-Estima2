@@ -52,6 +52,7 @@ void jugando() {
   jugador.mover();
   gestorBalas.updateBullets();
   
+  /* Regulando disparo a la vez que mantiene la animación de disparo mientras no se pueda disparar */
   if (millis() - jugador.getTimeSinceLastShot() >= 310) {
     jugador.setIsShooting(false);
     if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_DERECHA){
@@ -141,6 +142,7 @@ public void keyPressed() {
     break;
   }
   
+  /* Verificando que el jugador mantenga su orientación al moverese arriba o abajo */
   if (S_PRESSED || W_PRESSED){
     if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ESTATICO_DERECHA){
       jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_DERECHA);
@@ -150,21 +152,14 @@ public void keyPressed() {
     }
   }
   
-  if (W_PRESSED || A_PRESSED || S_PRESSED || W_PRESSED){   
-    if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_DERECHA){
-      jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_DERECHA);
-    }
-    else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA){
-      jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_IZQUIERDA);
-    }
-  }
-  
+  /* Disparando y seteando el tiempo de disparo */
   if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && !jugador.getIsShooting()) {
     gestorBalas.addBullet(jugador.shoot(input));
     jugador.setTimeSinceLastShot(millis());
     jugador.setIsShooting(true);    
   }  
   
+  /* Verificando que el jugador mantenga su orientación al disparar mientras se mueve arriba o abajo */
   if (input == 'i' || input == 'k'){
     if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ESTATICO_DERECHA ||
         jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_DERECHA){
