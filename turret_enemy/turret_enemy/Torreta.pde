@@ -1,7 +1,7 @@
 class Torreta {
   private float x, y;
   Torreta() {
-    x = random(0, width - 20); 
+    x = random(0, width - 20);
     y = random(0, height - 40);
   }
 
@@ -11,13 +11,17 @@ class Torreta {
   void detectar(PJ pj) {
     float centroX=x+10;
     float centroY=y+20;
+
+    float vectorX = pj.getX() - centroX;
+    float vectorY = pj.getY() - centroY;
     
-    float distancia = dist(centroX, centroY, pj.getX(), pj.getY());
-    
-    if (distancia<=50){
+    float productoPunto = vectorX * vectorX + vectorY * vectorY;
+
+    float radioDeteccion = 50;
+    if (productoPunto <= radioDeteccion * radioDeteccion) {
       fill(255);
       textSize(32);
-      text("detectao",50,50);
+      text("Detectado", 50, 50);
     }
   }
 }
