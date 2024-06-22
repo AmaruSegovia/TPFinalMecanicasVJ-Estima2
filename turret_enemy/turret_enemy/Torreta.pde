@@ -1,8 +1,8 @@
 class Torreta {
   private float x, y;
   Torreta() {
-    x=width/2;
-    y=200;
+    x = random(0, width - 20); 
+    y = random(0, height - 40);
   }
 
   void dibujar() {
