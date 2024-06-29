@@ -6,12 +6,8 @@ class Player extends GameObject implements IMovable, IVisualizable {
   private float topSpeed;
   /** Representa la direccion de movimiento del jugador */
   private Vector direccion;
-  /** Representa la posicion del jugador con respecto a la dungeon */
+  /** Representa la posicion del jugador con respecto a la dungeon*/
   private int col, row;
-  /** Controla si el jugador está disparando o no */
-  private boolean isShooting;
-  /** Representa el tiempo transcurrido tras el último disparo */
-  private float timeSinceLastShot;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor por defecto */
@@ -24,7 +20,6 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.speed = 0;
     this.topSpeed = 250;
     this.direccion = new Vector("down");
-    this.isShooting = false;
   }
 
   /* -- METODOS -- */
@@ -141,35 +136,17 @@ class Player extends GameObject implements IMovable, IVisualizable {
   /** Devuelve la direccion del jugador */
   public Vector getDireccion() {
     return this.direccion;
-  }  
-  /** Devuelve la columna en la que se encuentra el jugador */
-  public int getCol(){
+  }
+  public int getCol() {
     return this.col;
-  }  
-  /** Devuelve la fila en la que se encuentra el jugador */
-  public int getRow(){
+  }
+  public int getRow() {
     return this.row;
-  }
-  /** Devuelve si el jugador está disparando o no */
-  public boolean getIsShooting() {
-    return this.isShooting;
-  }
-  /** Devuelve si el jugador está disparando o no */
-  public float getTimeSinceLastShot() {
-    return this.timeSinceLastShot;
   }
 
   /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
   public void setTopSpeed( float topSpeed) {
     this.topSpeed = topSpeed;
-  }  
-  /** Actualiza si el jugador está disparando o no */
-  public void setIsShooting(boolean isShooting) {
-    this.isShooting = isShooting;
-  }
-  /** Actualiza si el jugador está disparando o no */
-  public void setTimeSinceLastShot(float timeSinceLastShot) {
-    this.timeSinceLastShot = timeSinceLastShot;
   }
 }
