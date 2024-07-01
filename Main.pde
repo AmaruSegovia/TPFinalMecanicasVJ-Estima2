@@ -21,7 +21,7 @@ public void setup()
   jugador = new Player(new PVector(width/2, height/2));
   gestorBalas = new GestorBullets();
 
-  subBoss = new SubBoss(new PVector(random(0, 900), 100), 950);
+  subBoss = new SubBoss(new PVector(random(0, 900), 100), 980);
 }
 
 public void draw()

@@ -43,11 +43,11 @@ class SubBoss extends GameObject {
         println("Persiguiendo al jugador");
       } else {
         persiguiendoJugador = false;
-        println("No esta persiguiendo al jugador");
       }
     }
     if (persiguiendoJugador == false) {
       movimientoOscilatorioY();
+      println("No esta persiguiendo al jugador");
     }
   }
 
@@ -62,6 +62,8 @@ class SubBoss extends GameObject {
     float distanciaRecorridaSubBoss = PVector.dist(posicion, ultimaPosicionBomba);
     if(distanciaRecorridaSubBoss >= distanciaBomba){
       bombsList.add(new Bomb(posicion.copy()));
+      //actualizamos la posicion en que el sub-jefe creo la ultima bomba
+      ultimaPosicionBomba = posicion.copy();
     }
   }
   /*Metodo que crea a las bombas y las elimina*/
