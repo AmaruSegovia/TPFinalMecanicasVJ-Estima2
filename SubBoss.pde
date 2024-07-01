@@ -55,9 +55,7 @@ class SubBoss extends GameObject {
 
   /*Creacion de las Bombas*/
   void creacionBombas() {
-    if (random(0, 25) <= 10.5) {
-      bombsList.add(new Bomb(posicion.copy()));//Agregar una nueva bomba a la lista en la posicion del enemigo
-    }
+    
   }
   /*Metodo que crea a las bombas y las elimina*/
   void creacionEliminacionBombas(Player jugador) {
