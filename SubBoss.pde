@@ -10,11 +10,14 @@ class SubBoss extends GameObject {
   boolean persiguiendoJugador = false;//Indica si el enemigo esta actualmente persiguiendo al jugador, por defecto esta en falso
   ArrayList<Bomb> bombsList;//ArrayList que servira para la creacion de la bombas
 
+  PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
+  float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
   SubBoss(PVector posicionSubBoss, float velocidadSubBoss) {
     this.posicion = posicionSubBoss;
     this.velocidad = velocidadSubBoss;
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
+    this.ultimaPosicionBomba = posicionSubBoss.copy();//La posicion incial del sub-boss
   }
 
   /*METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
