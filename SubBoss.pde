@@ -76,6 +76,8 @@ class SubBoss extends GameObject {
   /*Movimiento Oscilatorio del sub Jefe al detenerse*/
   void movimientoOscilatorioY() {
     int tiempo = millis() / 1000;
-    this.posicion.y += (2 * sin(tiempo * 3));
+    int velocidad = 2;
+    int amplitud = 80;//Altura de la oscilacion en el eje Y
+    this.posicion.y += (amplitud * sin(tiempo * velocidad) * Time.getDeltaTime(frameRate));
   }
 }
