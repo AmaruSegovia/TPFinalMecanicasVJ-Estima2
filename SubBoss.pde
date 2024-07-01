@@ -58,7 +58,11 @@ class SubBoss extends GameObject {
 
   /*Creacion de las Bombas*/
   void creacionBombas() {
-    
+    //Calcula la distancia recorrida desde la ultima bomba
+    float distanciaRecorridaSubBoss = PVector.dist(posicion, ultimaPosicionBomba);
+    if(distanciaRecorridaSubBoss >= distanciaBomba){
+      bombsList.add(new Bomb(posicion.copy()));
+    }
   }
   /*Metodo que crea a las bombas y las elimina*/
   void creacionEliminacionBombas(Player jugador) {
