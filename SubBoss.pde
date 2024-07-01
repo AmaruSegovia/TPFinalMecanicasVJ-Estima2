@@ -32,7 +32,7 @@ class SubBoss extends GameObject {
     if (persiguiendoJugador == true) {
       PVector direccion = PVector.sub(ultimaPosicionJugador, posicion);//Calculamos la direccion hacia la ultima posicion del jugador
       float distancia = direccion.mag();//Calculamos la distancia a la ultima posicion del jugador
-      if (distancia > velocidad) {
+      if (distancia > 5) {
         direccion.normalize();//Normalizamos a la direccion
         direccion.mult(velocidad);//La multiplicamos para aumentar su velocidad y evitar que avanze a muy poca velocidad
         posicion.add(direccion);//Mueve al subjefe hacia la direccion calculada
