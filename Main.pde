@@ -6,6 +6,11 @@ public boolean A_PRESSED;
 public int nivel = 1;
 public int estadoJuego = 0;
 
+import ddf.minim.*;
+private Minim minim;
+private AudioPlayer musicaTitulo;
+private AudioPlayer musicaJuego;
+
 private Dungeon dungeon;
 private Player jugador;
 private GestorBullets gestorBalas;
@@ -16,6 +21,11 @@ public void setup()
 {
   noSmooth();
   size(900, 800);
+  minim = new Minim(this);
+  musicaTitulo = minim.loadFile("musicaTitulo.mp3");
+  musicaJuego = minim.loadFile("musicaJuego.mp3");
+  musicaTitulo.setGain(-10);
+  musicaJuego.setGain(-10);
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);
@@ -45,6 +55,9 @@ public void draw()
 }
 
 void jugando() {
+  musicaTitulo.pause();
+  musicaTitulo.rewind();
+  musicaJuego.play();
   Room roomActual = dungeon.getRoom(jugador.col, jugador.row);
   println(jugador.row);
   if (roomActual != null) { // si existe:
@@ -80,6 +93,9 @@ void jugando() {
 }
 
 void mostrarMenu() {
+  musicaJuego.pause();
+    musicaJuego.rewind();
+  musicaTitulo.play();
   background(0, 0, 128);
   fill(255);
   textAlign(CENTER, CENTER);
