@@ -1,9 +1,11 @@
 class GestorEnemigos {
   private ArrayList<Enemy> enemigos;
   private int maxEnemigos = 2;
-
+  private ArrayList<EnemyFollower> enemyFollowers;
+ 
   public GestorEnemigos() {
     this.enemigos = new ArrayList<Enemy>();
+    this.enemyFollowers = new ArrayList<EnemyFollower>();
   }
 
   public void inicializarTorretas(Room room) {
@@ -12,6 +14,12 @@ class GestorEnemigos {
       float y = random(50, height - 50);
       addEnemy(new PVector(x, y), room);
     }
+    
+    for (int i = 0; i < maxEnemigos; i++) {
+      float x = random(50, width - 50);
+      float y = random(50, height - 50);
+      addFollowerEnemy(new PVector(x, y), room);
+    }
   }
 
   public void addEnemy(PVector posicion, Room room) {
@@ -19,11 +27,24 @@ class GestorEnemigos {
     enemigos.add(enemy);
     room.addEnemy(enemy); // Asegúrate de que la habitación tenga un método para agregar enemigos
   }
-
+  
+  public void addFollowerEnemy(PVector posicion, Room room) {
+    EnemyFollower enemyFollower = new EnemyFollower(posicion);
+    enemyFollowers.add(enemyFollower);
+    room.addEnemyFollower(enemyFollower); // Asegúrate de que la habitación tenga un método para agregar enemigos
+  }
+  
+  
   public void actualizar(Room roomActual) {
     for (Enemy enemy : roomActual.getEnemies()) {
       enemy.display();
       enemy.detectar(jugador);
+    }
+    
+    for (EnemyFollower enemyFollower : roomActual.getEnemyFollowers()) {
+      enemyFollower.display();
+      enemyFollower.seguirJugador(jugador);
+      enemyFollower.evitarColisiones(roomActual.getEnemyFollowers());
     }
   }
 }
