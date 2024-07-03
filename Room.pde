@@ -4,6 +4,9 @@ class Room extends GameObject {
   private int doors;
   /** Representa la lista de puertas que tiene la habitacion*/
   private Door[] doorList;
+  /*representa los enemigos*/
+  private ArrayList<Enemy> enemies;
+  
 
   /* -- CONSTRUCTORES -- */
   /** Constructor por defecto */
@@ -14,6 +17,7 @@ class Room extends GameObject {
     super(posicion, ancho, alto);
     this.doors = doors;
     this.doorList = new Door[4];
+    this.enemies=new ArrayList<Enemy>();
     generateDoors();
   }
   /* -- METODOS -- */
@@ -35,6 +39,9 @@ class Room extends GameObject {
     for (Door door : this.doorList) {
       if (door != null) door.display();
     }
+    for(Enemy enemy:this.enemies){
+     enemy.display(); 
+    }
   }
 
   /** Metodo que devuelve si hay puertas en la habitacion*/
@@ -44,5 +51,12 @@ class Room extends GameObject {
     }
     println("no hay puertas!! estas encerrado!! >:3");
     return false;
+  }
+   public void addEnemy(Enemy enemy) {
+    this.enemies.add(enemy);
+  }
+
+  public ArrayList<Enemy> getEnemies() {
+    return this.enemies;
   }
 }
