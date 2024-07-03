@@ -1,8 +1,10 @@
 class GestorEnemigos {
   private ArrayList<Enemy> enemigos;
+  ///private Player jugador;
   private int maxEnemigos = 2;
 
   public GestorEnemigos() {
+   // this.jugador = jugador;
     this.enemigos = new ArrayList<Enemy>();
   }
 
