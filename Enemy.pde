@@ -13,4 +13,16 @@ class Enemy extends GameObject implements IVisualizable {
     noStroke();
     rect(posicion.x - ancho / 2, posicion.y - alto / 2, ancho, alto);
   }
+  public void detectar(Player player){
+   PVector centro = new PVector (posicion.x,posicion.y);
+     PVector vectorDireccion= PVector.sub(player.posicion,centro);
+     float distancia= vectorDireccion.mag();
+     
+     float radioDeteccion=100;
+     if(distancia<=radioDeteccion){
+      textSize(20);
+      text("Detectao",50,50);
+     }
+  }
 }
+  

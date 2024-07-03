@@ -1,10 +1,8 @@
 class GestorEnemigos {
   private ArrayList<Enemy> enemigos;
-  ///private Player jugador;
   private int maxEnemigos = 2;
 
   public GestorEnemigos() {
-   // this.jugador = jugador;
     this.enemigos = new ArrayList<Enemy>();
   }
 
@@ -19,12 +17,13 @@ class GestorEnemigos {
   public void addEnemy(PVector posicion, Room room) {
     Enemy enemy = new Enemy(posicion);
     enemigos.add(enemy);
-    room.addEnemy(enemy); // Añadir la torreta a la habitación
+    room.addEnemy(enemy); // Asegúrate de que la habitación tenga un método para agregar enemigos
   }
 
   public void actualizar(Room roomActual) {
     for (Enemy enemy : roomActual.getEnemies()) {
       enemy.display();
+      enemy.detectar(jugador);
     }
   }
 }
