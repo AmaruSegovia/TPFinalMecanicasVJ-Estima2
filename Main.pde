@@ -27,7 +27,6 @@ public void setup()
   musicaJuego = minim.loadFile("musicaJuego.mp3");
   musicaTitulo.setGain(-10);
   musicaJuego.setGain(-10);
-  background = loadImage("bg.png");
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);
@@ -38,7 +37,6 @@ public void setup()
 
 public void draw()
 {
-  image(background, 0,0);
   println(frameRate);
   switch (estadoJuego) {
     case EstadoJuego.MENU:

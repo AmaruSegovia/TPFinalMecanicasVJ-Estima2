@@ -10,13 +10,17 @@ class Room extends GameObject {
   private ArrayList<SubBoss> subBosses;
   private ArrayList<Boss> bosses;
 
+  /** Representa el fondo de la habitación */
+  private PImage background;
+
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
   public Room(int doors, int ancho, int alto, PVector posicion) {
     super(posicion, ancho, alto);
     this.doors = doors;
     this.doorList = new Door[4];
-     this.towers=new ArrayList<Tower>();
+    background = loadImage("bg.png");
+    this.towers=new ArrayList<Tower>();
     this.followers = new ArrayList<Follower>();
     this.subBosses = new ArrayList<SubBoss>();
     this.bosses = new ArrayList<Boss>();
@@ -37,8 +41,8 @@ class Room extends GameObject {
   /** Metodo que dibuja la room y las puertas */
   public void display() {
     noStroke();
-    fill(170);
-    rect(-1, -1, ancho, alto);
+    imageMode(CORNER);
+    image(background, 0, 0, 900, 800);
     for (Door door : this.doorList) {
       if (door != null) door.display();
     }

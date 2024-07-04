@@ -77,7 +77,7 @@ class SubBoss extends Enemy implements IVisualizable{
     imageMode(CENTER);
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     // dibuja la colision del boss
-    collider.displayCircle(#FFF63E);
+    //this.collider.displayCircle(#FFF63E);
     dibujarBarraVida(10, 50, 5, 35);
   }
 

@@ -39,10 +39,10 @@ class Tower extends Enemy implements IVisualizable {
     imageMode(CENTER);
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     //dibuja elarea de colision con la torre
-    collider.displayCircle(#DE3EFF);
+    //this.collider.displayCircle(#DE3EFF);
 
     for (Bala bala : balas) {
-      bala.dibujar();
+      bala.display();
     }
 
     dibujarBarraVida(2, 40, 5, 35);
@@ -67,38 +67,40 @@ class Tower extends Enemy implements IVisualizable {
 
     for (int i = balas.size() - 1; i >= 0; i--) {
       Bala b = balas.get(i);
-      b.actualizar();
+      b.mover();
       if (b.estaFuera()) {
         balas.remove(i);
       }
     }
   }
 
-  class Bala {
+  public class Bala extends GameObject implements IMovable, IVisualizable {
     private float x, y;
     private float dirX, dirY;
     private float velocidad = 5;
+    private SpriteObject sprite;
 
     Bala(float xInicial, float yInicial, PVector objetivo) {
-      x = xInicial;
-      y = yInicial;
+      this.x = xInicial;
+      this.y = yInicial;
       float vectorX = objetivo.x - xInicial;
       float vectorY = objetivo.y - yInicial;
       float magnitud = sqrt(vectorX * vectorX + vectorY * vectorY);
-      dirX = vectorX / magnitud;
-      dirY = vectorY / magnitud;
+      this.dirX = vectorX / magnitud;
+      this.dirY = vectorY / magnitud;
+      this.sprite = new SpriteObject("enemyBullet.png", 10, 10, 2);
     }
 
-    void actualizar() {
-      x += dirX * velocidad;
-      y += dirY * velocidad;
+    public void mover() {
+      this.x += this.dirX * this.velocidad;
+      this.y += this.dirY * this.velocidad;
     }
 
-    void dibujar() {
-      ellipse(x, y, 10, 10);
+    public void display() {
+      this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.x, this.y));
     }
 
-    boolean estaFuera() {
+    public boolean estaFuera() {
       return (x < 0 || x > width || y < 0 || y > height);
     }
   }

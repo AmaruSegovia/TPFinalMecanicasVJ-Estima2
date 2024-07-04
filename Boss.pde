@@ -122,7 +122,7 @@ class Boss extends Enemy {
         for (int i = 0; i < numBalas; i++) {
           float angulo = PI / 2 + radians(40) / (numBalas - 1) * i - radians(20); // Ajustar los ángulos para las balas
           Bullet bala;
-          bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y+60), angulo);
+          bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y+80), angulo);
           gestorBalas.addBullet(bala);
         }
       break;

@@ -37,7 +37,7 @@ class Follower extends Enemy implements IVisualizable {
     imageMode(CENTER);
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     // dibuja el area de colision del enemigo
-    this.collider.displayCircle(#FF3E78);
+    //this.collider.displayCircle(#FF3E78);
     
     float barraAncho = 40; // ancho total de la barra
     float barraAlto = 5; // alto de la barra

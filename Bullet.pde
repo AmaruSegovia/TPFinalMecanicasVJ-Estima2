@@ -9,9 +9,9 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   private Colisionador colisionador;
   private String pertenece;
   
-  /** Representan los sprites de las balas del jugador y enemigo respectivamente */
+  /** Representan los sprites de las balas del jugador y del jefe respectivamente */
   private SpriteObject spritePlayer;
-  private SpriteObject spriteEnemy;
+  private SpriteObject spriteBoss;
 
   // var para orbitar 
   float angulo;
@@ -25,18 +25,19 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     this.direction = direction;
     this.speed = speed;
     this.spritePlayer = new SpriteObject("playerBullet.png", ancho, alto, 3);
-    this.spriteEnemy = new SpriteObject("enemyBullet.png", ancho, alto, 2);
-    this.colisionador = new Colisionador(this.posicion, ancho*4); 
+    this.colisionador = new Colisionador(this.posicion, ancho*3); 
     this.disparada = true;
   }
   /** Constructor para balas con angulo para el enemigo */
   public Bullet(PVector pos, float angulo){
     this.posicion = pos;
-    this.ancho = 10;
+    this.ancho = 8;
+    this.alto = 8;
     this.angulo = angulo;
     this.speed = 150;
+    this.spriteBoss = new SpriteObject("bossBullet1.png", ancho, alto, 3);
     this.disparada = true;
-    this.colisionador = new Colisionador(this.posicion, ancho, alto); 
+    this.colisionador = new Colisionador(this.posicion, ancho*3); 
   }
   
   /** Constructor para balas que orbitan para el enemigo */
@@ -44,9 +45,11 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     this.posicion = posicion.copy().add(PVector.fromAngle(angulo).mult(radioOrbita));
     this.angulo = angulo;
     this.speed = 300;
-    this.ancho = 10;
+    this.alto = 8;
+    this.ancho = 8;
+    this.spriteBoss = new SpriteObject("bossBullet2.png", ancho, alto, 4);
     this.disparada = false;
-    this.colisionador = new Colisionador(this.posicion, ancho, alto); 
+    this.colisionador = new Colisionador(this.posicion, ancho*4); 
   }
 
   /* -- MÉTODOS -- */
@@ -64,9 +67,9 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     if(this.pertenece == "jugador"){
       this.spritePlayer.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }else{      
-      //this.spriteEnemy.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
+      this.spriteBoss.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }
-    circle(this.posicion.x, this.posicion.y,this.ancho);
+    //circle(this.posicion.x, this.posicion.y,this.colisionador.ancho);
   }
   
   void disparar() {
