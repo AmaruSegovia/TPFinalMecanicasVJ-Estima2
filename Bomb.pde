@@ -1,9 +1,9 @@
 /** Clase que representa a las bombas del juego */
 class Bomb extends GameObject{
-  float radioActual;//El radio actual de la bomba
-  float radioMaximo;//El radio maximo de la bomba
-  boolean haExplotado = false;//Nos va a indicar si la bomba a explotado o no
-  int duracionExplosion = 60;//La duracion de la bomba
+  private float radioActual;//El radio actual de la bomba
+  private float radioMaximo;//El radio maximo de la bomba
+  private boolean haExplotado = false;//Nos va a indicar si la bomba a explotado o no
+  private int duracionExplosion = 60;//La duracion de la bomba
 
   /* -- CONSTRUCTOR -- */
   /** Contructor parametrizado*/
@@ -14,7 +14,7 @@ class Bomb extends GameObject{
   }
 
   /** Creacion de la explosion*/
-  void dibujar() {
+  public void dibujar() {
     if (radioActual < radioMaximo) {
       fill(255, 0, 0, 100);
       //Dibuja la explosion y expandimo el diametro por 2.5
@@ -28,7 +28,7 @@ class Bomb extends GameObject{
     }
   }
   /** Explosion de la bomba y afectar al jugador*/
-  void explotar(Player jugador) {
+  public void explotar(Player jugador) {
     //Comparamos la posicion del jugador y bomba con el radio actual, si es menor que el radio actual, entonces exploto cerca del jugador
     if (dist(posicion.x, posicion.y, jugador.posicion.x, jugador.posicion.y) < radioActual) {
       haExplotado = true;
