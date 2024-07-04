@@ -14,6 +14,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   private SpriteObject sprite;
   /** Representa el estado de la animación del sprite del jugador */
   private int animationState;
+  private Colisionador collider;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
@@ -26,6 +27,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.sprite = new SpriteObject("mage.png", ancho, alto);
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
     this.direccion = new Vector("down");
+    this.collider = new Colisionador(this.posicion,this.ancho+20);
   }
 
   /* -- METODOS -- */
@@ -36,7 +38,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.sprite.render(this.animationState, new PVector(this.posicion.x, this.posicion.y));
     textSize(20);
     fill(255);
-    circle(posicion.x, posicion.y, ancho*2);
+    collider.displayCircle(#1AEEFF);
   }
 
   /** Metodo que mueve al jugador */
@@ -76,7 +78,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
 
     for (Door door : roomActual.doorList) {
       //Si colisiono con una puerta preparar nuevas posiciones
-      if (door != null && door.collider.isCircle(this) && door.getIsOpen()) {
+      if (door != null && door.collider.isCircle(this.collider) && door.getIsOpen()) {
         int newCol = this.col, newRow = this.row;
         PVector newPos = new PVector(0, 0);
         Door newDoor;
