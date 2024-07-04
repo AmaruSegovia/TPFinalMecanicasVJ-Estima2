@@ -48,6 +48,10 @@ class Dungeon {
     for (int i = 0; i < this.rows; i++) {
       for (int j = 0; j < this.cols; j++) {
         this.rooms[i][j] = new Room(matriz[i][j], width+1, height+1, new PVector(0, 0));
+<<<<<<< Updated upstream
+=======
+         this.gestorEnemigos.inicializarEnemigos(this.rooms[i][j]);
+>>>>>>> Stashed changes
       }
     }
   }

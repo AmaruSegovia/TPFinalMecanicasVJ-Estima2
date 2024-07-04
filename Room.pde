@@ -4,6 +4,12 @@ class Room extends GameObject {
   private int doors;
   /** Representa la lista de puertas que tiene la habitacion*/
   private Door[] doorList;
+<<<<<<< Updated upstream
+=======
+  /*representa los enemigos*/
+  private ArrayList<Tower> towers;
+  private ArrayList<Follower> followers;
+>>>>>>> Stashed changes
 
   /* -- CONSTRUCTORES -- */
   /** Constructor por defecto */
@@ -14,6 +20,11 @@ class Room extends GameObject {
     super(posicion, ancho, alto);
     this.doors = doors;
     this.doorList = new Door[4];
+<<<<<<< Updated upstream
+=======
+    this.towers=new ArrayList<Tower>();
+    this.followers = new ArrayList<Follower>();
+>>>>>>> Stashed changes
     generateDoors();
   }
   /* -- METODOS -- */
@@ -45,4 +56,39 @@ class Room extends GameObject {
     println("no hay puertas!! estas encerrado!! >:3");
     return false;
   }
+<<<<<<< Updated upstream
+=======
+   public void addTower(Tower tower) {
+    this.towers.add(tower);
+  }
+  
+  public void addFollower(Follower follower) {
+    this.followers.add(follower);
+  }
+  
+  public void removeEnemy(Enemy enemy) {
+  if (enemy instanceof Tower) {
+    towers.remove(enemy);
+  } else if (enemy instanceof Follower) {
+    followers.remove(enemy);
+  }
+>>>>>>> Stashed changes
+}
+
+
+  public ArrayList<Tower> getTowers() {
+    return this.towers;
+  }
+  
+  public ArrayList<Follower> getFollowers() {
+    return this.followers;
+  }
+  
+    public ArrayList<Enemy> getAllEnemies() {
+    ArrayList<Enemy> todosLosEnemigos = new ArrayList<Enemy>();
+    todosLosEnemigos.addAll(towers);
+    todosLosEnemigos.addAll(followers);
+    return todosLosEnemigos;
+  }
+  
 }

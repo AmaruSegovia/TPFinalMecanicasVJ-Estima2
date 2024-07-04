@@ -17,12 +17,23 @@ public class GestorBullets {
   }
 
   /** Método para actualizar el estado de las balas */
-  public void updateBullets() {
+  public void updateBullets(Room room) {
     ArrayList<Bullet> removableBullets = new ArrayList<Bullet>();
     
     for (Bullet bullet : this.bulletList) {
       bullet.mover();
       bullet.display();
+
+      for (Enemy enemigo : room.getAllEnemies()) {
+        if (bullet.verificarColision(enemigo)) {
+          removableBullets.add(bullet);
+          if(enemigo.lives == 0)
+          {
+           room.removeEnemy(enemigo);
+          }
+          break;
+        }
+      }
 
       if (bullet.getPosicion().x >= width || bullet.getPosicion().x <= 0
         || bullet.getPosicion().y >= height || bullet.getPosicion().y <= 0) {

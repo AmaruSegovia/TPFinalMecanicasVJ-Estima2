@@ -18,7 +18,13 @@ public void setup()
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));
+<<<<<<< Updated upstream
   gestorBalas = new GestorBullets();
+=======
+  gestorEnemigos= new GestorEnemigos();
+    gestorBalas = new GestorBullets();
+  subBoss = new SubBoss(new PVector(random(0, 900), 100), 980);
+>>>>>>> Stashed changes
 }
 
 public void draw()
@@ -50,7 +56,8 @@ void jugando() {
   }
   jugador.display();
   jugador.mover();
-  gestorBalas.updateBullets();
+  gestorBalas.updateBullets(roomActual);
+
   
   /* Regulando disparo a la vez que mantiene la animación de disparo mientras no se pueda disparar */
   if (millis() - jugador.getTimeSinceLastShot() >= 310) {
