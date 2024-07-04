@@ -52,6 +52,34 @@ class Room extends GameObject {
     println("no hay puertas!! estas encerrado!! >:3");
     return false;
   }
+  
+  /** Metodo que verifica y actualiza el estado de las puertas*/
+  public void updateDoors(){
+    if(!hayEnemigos()){
+      stateDoors(true);
+    } else {
+    stateDoors(false);
+    }
+  }
+  
+  /* Devuelve si hay enemigos */
+  public boolean hayEnemigos(){
+    if(towers.size() == 0 && followers.size() == 0 &&subBosses.size() == 0){
+      return false;
+    }
+    
+    text("todos: " +getAllEnemies().size()  ,40,60);
+    return true;
+  }
+  
+  /** Metodo que cierra o abre las puertas */
+  public void stateDoors(boolean state) {
+    for (Door door : this.doorList) {
+      if (door != null) {
+        door.setIsOpen(state);
+      }
+    }
+  }
    public void addTower(Tower tower) {
     this.towers.add(tower);
   }

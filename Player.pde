@@ -1,9 +1,7 @@
 /** Clase que representa al jugador */
 class Player extends GameObject implements IMovable, IVisualizable {
-  /** Representa la velocidad del jugador */
-  private float speed;
-  /** Representa la maxima velocidad del jugador */
-  private float topSpeed;
+  /** Representa la velocidad y maxima velocidad del jugador */
+  private float speed,  topSpeed;
   /** Representa la direccion de movimiento del jugador */
   private Vector direccion;
   /** Representa la posicion del jugador con respecto a la dungeon*/
@@ -18,9 +16,6 @@ class Player extends GameObject implements IMovable, IVisualizable {
   private int animationState;
 
   /* -- CONSTRUCTORES -- */
-  /** Constructor por defecto */
-  public Player() {
-  }
   /** Constructor parametrizado */
   public Player(PVector posicion) {
     this.posicion = posicion;
@@ -54,19 +49,10 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.speed = W_PRESSED || D_PRESSED || S_PRESSED || A_PRESSED ? this.speed+acceleration : this.speed-deceleration;
 
     //  Verificar si se están presionando las teclas 'w', 'a', 's' o 'd'
-    if (W_PRESSED) {
-      this.direccion = this.direccion.sumar(new Vector("up"));
-    }
-    if (S_PRESSED) {
-      this.direccion = this.direccion.sumar(new Vector("down"));
-    }
-    if (A_PRESSED) {
-      this.direccion = this.direccion.sumar(new Vector("left"));
-    }
-    if (D_PRESSED) {
-      this.direccion = this.direccion.sumar(new Vector("right"));
-    }
-    this.direccion.display();
+    if (W_PRESSED)  this.direccion = this.direccion.sumar(new Vector("up"));
+    if (S_PRESSED)  this.direccion = this.direccion.sumar(new Vector("down"));
+    if (A_PRESSED)  this.direccion = this.direccion.sumar(new Vector("left"));
+    if (D_PRESSED)  this.direccion = this.direccion.sumar(new Vector("right"));
 
     if (this.direccion.obtenerMagnitud() != 0) {
       this.direccion.getDestino().normalize(); // Normalizar la dirección para que el movimiento diagonal no sea mas rapido
@@ -89,7 +75,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
 
     for (Door door : roomActual.doorList) {
       //Si colisiono con una puerta preparar nuevas posiciones
-      if (door != null && door.isColliding(this)) {
+      if (door != null && door.isColliding(this) && door.getIsOpen()) {
         int newCol = this.col, newRow = this.row;
         PVector newPos = new PVector(0, 0);
         switch (door.direction) {
@@ -136,55 +122,40 @@ class Player extends GameObject implements IMovable, IVisualizable {
 
    /* Getters */
   /** Devuelve la velocidad maxima del jugador */
-  public float getTopSpeed() {
-    return this.topSpeed;
-  }
+  public float getTopSpeed() {  return this.topSpeed;  }
+  
   /** Devuelve la velocidad del jugador */
-  public float getSpeed() {
-    return this.speed;
-  }
+  public float getSpeed() {  return this.speed;  }
+  
   /** Devuelve la direccion del jugador */
-  public Vector getDireccion() {
-    return this.direccion;
-  }  
+  public Vector getDireccion() {  return this.direccion;  }  
+  
   /** Devuelve la columna en la que se encuentra el jugador */
-  public int getCol(){
-    return this.col;
-  }  
+  public int getCol(){  return this.col;  }  
+  
   /** Devuelve la fila en la que se encuentra el jugador */
-  public int getRow(){
-    return this.row;
-  }
+  public int getRow(){  return this.row;  }
+  
   /** Devuelve si el jugador está disparando o no */
-  public boolean getIsShooting() {
-    return this.isShooting;
-  }
+  public boolean getIsShooting() {  return this.isShooting;  }
+  
   /** Devuelve si el jugador está disparando o no */
-  public float getTimeSinceLastShot() {
-    return this.timeSinceLastShot;
-  }
+  public float getTimeSinceLastShot() {  return this.timeSinceLastShot;  }
+  
   /** Devuelve el estado de la animación del jugador */
-  public int getAnimationState() {
-    return this.animationState;
-  }
-
+  public int getAnimationState() {  return this.animationState;  }
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
-  public void setTopSpeed( float topSpeed) {
-    this.topSpeed = topSpeed;
-  }  
+  public void setTopSpeed( float topSpeed) {  this.topSpeed = topSpeed;  } 
+  
   /** Actualiza si el jugador está disparando o no */
-  public void setIsShooting(boolean isShooting) {
-    this.isShooting = isShooting;
-  }
+  public void setIsShooting(boolean isShooting) {  this.isShooting = isShooting;  }
+  
   /** Actualiza si el jugador está disparando o no */
-  public void setTimeSinceLastShot(float timeSinceLastShot) {
-    this.timeSinceLastShot = timeSinceLastShot;
-  }
+  public void setTimeSinceLastShot(float timeSinceLastShot) {  this.timeSinceLastShot = timeSinceLastShot;  }
+  
   /** Actualiza el estado de la animación del jugador */
-  public void setAnimationState(int animationState) {
-    this.animationState = animationState;
-  }
+  public void setAnimationState(int animationState) {  this.animationState = animationState;  }
 
 }

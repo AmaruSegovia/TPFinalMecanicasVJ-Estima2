@@ -10,6 +10,12 @@ class GestorEnemigos {
     this.followers = new ArrayList<Follower>();
     this.subBosses = new ArrayList<SubBoss>();
   }
+  
+  public void inicializarEnemigos(Room room){
+    inicializarTowers(room);
+    inicializarFollowers(room);
+    inicializarSubBosses(room);
+  }
 
   public void inicializarTowers(Room room) {
     for (int i = 0; i < maxEnemigos; i++) {
@@ -38,19 +44,19 @@ class GestorEnemigos {
   public void addTower(PVector posicion, Room room) {
     Tower tower = new Tower(posicion);
     towers.add(tower);
-    room.addTower(tower); // Asegúrate de que la habitación tenga un método para agregar enemigos
+    room.addTower(tower);
   }
 
   public void addFollower(PVector posicion, Room room) {
     Follower follower = new Follower(posicion);
     followers.add(follower);
-    room.addFollower(follower); // Asegúrate de que la habitación tenga un método para agregar enemigos
+    room.addFollower(follower); 
   }
 
   public void addSubBoss(PVector posicion, Room room) {
     SubBoss subBoss = new SubBoss(posicion);
     subBosses.add(subBoss);
-    room.addSubBoss(subBoss); // Asegúrate de que la habitación tenga un método para agregar enemigos
+    room.addSubBoss(subBoss);
   }
   public void actualizar(Room roomActual) {
     for (Tower tower : roomActual.getTowers()) {

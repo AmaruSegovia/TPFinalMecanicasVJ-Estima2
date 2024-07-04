@@ -1,7 +1,7 @@
 // Clase que se encarga de crear y gestionar las habitaciones segun el nivel.
 class Dungeon {
   private GestorEnemigos gestorEnemigos;
-  
+
   private int nivel;
   private int cols, rows; // Número de columnas y filas en la matriz de habitaciones
   private int[][] matriz; // Representa la matriz de la dungeon con enteros para definir las puertas mas adelante
@@ -46,19 +46,35 @@ class Dungeon {
     }
   }
 
-  /* Metodo que genera las habitaciones */
+  /** Metodo que genera las habitaciones */
   public void generateRooms() {
     for (int i = 0; i < this.rows; i++) {
       for (int j = 0; j < this.cols; j++) {
         this.rooms[i][j] = new Room(matriz[i][j], width+1, height+1, new PVector(0, 0));
-         this.gestorEnemigos.inicializarFollowers(this.rooms[i][j]);
-         this.gestorEnemigos.inicializarTowers(this.rooms[i][j]);
-         this.gestorEnemigos.inicializarSubBosses(this.rooms[i][j]);
+        if (j > 0 && j < 3) {
+          this.gestorEnemigos.inicializarEnemigos(this.rooms[i][j]);
+        }
+        if (j > 3){
+          // Crear Boss
+        }
       }
     }
   }
 
-  /* Metodo que devuelve el objeto habitacion */
+  /** Metodo que dibuja la habitacion actual*/
+  public void displayRoom(Player jugador, GestorEnemigos enemies, GestorBullets balas) {
+    Room roomActual = dungeon.getRoom(jugador.col, jugador.row);
+    if (roomActual != null) { // si existe:
+      roomActual.display();
+      roomActual.updateDoors();
+      jugador.checkCollisions(roomActual);
+      // Verificar colisiones con las puertas
+      balas.updateBullets(roomActual);
+      enemies.actualizar(roomActual);
+    }
+  }
+
+  /** Metodo que devuelve el objeto habitacion */
   public Room getRoom(int col, int row) {
     // segun si la columna y fila solicitada estan dentro del limite de la matriz
     if (col >= 0 && col < this.cols && row >= 0 && row < this.rows) {

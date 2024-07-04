@@ -56,16 +56,9 @@ void jugando() {
   musicaTitulo.pause();
   musicaTitulo.rewind();
   musicaJuego.play();
-  Room roomActual = dungeon.getRoom(jugador.col, jugador.row);
-  println(jugador.row);
-  if (roomActual != null) { // si existe:
-    roomActual.display();
-    // Verificar colisionescon las puertas
-    jugador.checkCollisions(roomActual);
-  }
+  dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
   jugador.display(); 
   jugador.mover();
-  gestorBalas.updateBullets(roomActual);
   
   /* Regulando disparo a la vez que mantiene la animación de disparo mientras no se pueda disparar */
   if (millis() - jugador.getTimeSinceLastShot() >= 310) {
@@ -78,7 +71,6 @@ void jugando() {
     }
   }
 
-  gestorEnemigos.actualizar(roomActual);
   
   if (jugadorGana()) {
     estadoJuego = EstadoJuego.VICTORIA;
