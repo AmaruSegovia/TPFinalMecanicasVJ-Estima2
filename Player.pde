@@ -36,6 +36,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.sprite.render(this.animationState, new PVector(this.posicion.x, this.posicion.y));
     textSize(20);
     fill(255);
+    circle(posicion.x, posicion.y, ancho*2);
   }
 
   /** Metodo que mueve al jugador */
@@ -64,8 +65,8 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.posicion.add(this.direccion.getDestino().copy().mult(this.speed * Time.getDeltaTime(frameRate)));
 
     // Limitar el movimiento del jugador
-    this.posicion.x = constrain(this.posicion.x, 0 + this.ancho, width - this.ancho);
-    this.posicion.y = constrain(this.posicion.y, 0 + this.ancho, height - this.ancho);
+    this.posicion.x = constrain(this.posicion.x, 0 + this.ancho*2, width - this.ancho*2);
+    this.posicion.y = constrain(this.posicion.y, 0 + this.ancho*2, height - this.ancho*2);
   }// end mover
 
 
@@ -75,25 +76,30 @@ class Player extends GameObject implements IMovable, IVisualizable {
 
     for (Door door : roomActual.doorList) {
       //Si colisiono con una puerta preparar nuevas posiciones
-      if (door != null && door.isColliding(this) && door.getIsOpen()) {
+      if (door != null && door.collider.isCircle(this) && door.getIsOpen()) {
         int newCol = this.col, newRow = this.row;
         PVector newPos = new PVector(0, 0);
+        Door newDoor;
         switch (door.direction) {
         case "UP":
           newRow = row - 1;
-          newPos = new PVector(width / 2, height - this.ancho * 2);
+          newDoor= new Door("DOWN");
+          newPos = new PVector(newDoor.getPosicion().x, newDoor.getPosicion().y - newDoor.getAncho() * 1.05);
           break;
         case "DOWN":
           newRow = row + 1;
-          newPos = new PVector(width / 2, this.ancho * 2);
+          newDoor = new Door("UP");
+          newPos = new PVector(newDoor.getPosicion().x, newDoor.getPosicion().y + newDoor.getAncho() * 1.05);
           break;
         case "LEFT":
           newCol = col - 1;
-          newPos = new PVector(width - this.ancho * 2, height/2);
+          newDoor = new Door("RIGHT");
+          newPos = new PVector(newDoor.getPosicion().x - newDoor.getAncho() * 1.05, newDoor.getPosicion().y );
           break;
         case "RIGHT":
           newCol = col + 1;
-          newPos = new PVector(this.ancho * 2, height /2 );
+          newDoor = new Door("LEFT");
+          newPos = new PVector(newDoor.getPosicion().x + newDoor.getAncho()*1.05, newDoor.getPosicion().y );
           break;
         }
         //si la proxima habitacion esta en el rango de la matriz actualizar posiciones
@@ -104,7 +110,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
       }
     }
   }
-  // Actualiza la posicion del jugador segun los parametros anteriores
+  /** Actualiza la posicion del jugador segun los parametros anteriores */
   private void updatePosition(int newCol, int newRow, PVector newPos) {
     this.col = newCol;
     this.row = newRow;

@@ -4,15 +4,12 @@ class Room extends GameObject {
   private int doors;
   /** Representa la lista de puertas que tiene la habitacion*/
   private Door[] doorList;
-  /*representa los enemigos*/
+  /** Representa los enemigos*/
   private ArrayList<Tower> towers;
   private ArrayList<Follower> followers;
   private ArrayList<SubBoss> subBosses;
 
   /* -- CONSTRUCTORES -- */
-  /** Constructor por defecto */
-  public Room() {
-  }
   /** Constructor parametrizado */
   public Room(int doors, int ancho, int alto, PVector posicion) {
     super(posicion, ancho, alto);
@@ -23,18 +20,19 @@ class Room extends GameObject {
     this.subBosses = new ArrayList<SubBoss>();
     generateDoors();
   }
+
   /* -- METODOS -- */
   /** Metodo que genera las puertas segun el numero de la matriz sus binarios */
   public void generateDoors() {
     // Comprobacion AND bit a bit para saber si hay una puerta en X direccion
     // Se comparan los bits del valor de la matriz con otro para limpiar bits
-    if ((this.doors & 1) != 0) this.doorList[0] = new Door(new PVector(width / 2, 0), "UP");
-    if ((this.doors & 2) != 0) this.doorList[1] = new Door(new PVector(width, height / 2), "RIGHT");
-    if ((this.doors & 4) != 0) this.doorList[2] = new Door(new PVector(width / 2, height), "DOWN");
-    if ((this.doors & 8) != 0) this.doorList[3] = new Door(new PVector(0, height / 2), "LEFT");
+    if ((this.doors & 1) != 0) this.doorList[0] = new Door("UP");
+    if ((this.doors & 2) != 0) this.doorList[1] = new Door("RIGHT");
+    if ((this.doors & 4) != 0) this.doorList[2] = new Door("DOWN");
+    if ((this.doors & 8) != 0) this.doorList[3] = new Door("LEFT");
   }
 
-  /** Metodo que dibuja a la puerta */
+  /** Metodo que dibuja la room y las puertas */
   public void display() {
     noStroke();
     fill(170);
@@ -62,58 +60,50 @@ class Room extends GameObject {
     }
   }
   
-  /* Devuelve si hay enemigos */
+  /** Devuelve si hay enemigos */
   public boolean hayEnemigos(){
-    if(towers.size() == 0 && followers.size() == 0 &&subBosses.size() == 0){
-      return false;
-    }
-    
-    text("todos: " +getAllEnemies().size()  ,40,60);
+    if(getAllEnemies().size() == 0) return false;
     return true;
   }
   
   /** Metodo que cierra o abre las puertas */
   public void stateDoors(boolean state) {
     for (Door door : this.doorList) {
-      if (door != null) {
-        door.setIsOpen(state);
-      }
+      if (door != null)  door.setIsOpen(state);
     }
   }
+  /** Metodos que agregan a los enemigos */
    public void addTower(Tower tower) {
     this.towers.add(tower);
   }
-
   public void addFollower(Follower follower) {
     this.followers.add(follower);
-  }
-
-  public void removeEnemy(Enemy enemy) {
-  if (enemy instanceof Tower) {
-    towers.remove(enemy);
-  } if (enemy instanceof Follower) {
-    followers.remove(enemy);
-  }
-  else if (enemy instanceof SubBoss) {
-    subBosses.remove(enemy);
-  }
   }
   public void addSubBoss(SubBoss subBoss) {
     this.subBosses.add(subBoss);
   }
-   public ArrayList<SubBoss> getSubBosses() {
-    return this.subBosses;
+  
+  /** Metodo que remueve a los enemigos */
+  public void removeEnemy(Enemy enemy) {
+    if (enemy instanceof Tower) {
+      towers.remove(enemy);
+    } if (enemy instanceof Follower) {
+      followers.remove(enemy);
+    }
+    else if (enemy instanceof SubBoss) {
+      subBosses.remove(enemy);
+    }
   }
+  
+  /* -- ASESORES -- */
+  /* Getters*/
+  public ArrayList<SubBoss> getSubBosses() {  return this.subBosses;  }
 
-  public ArrayList<Tower> getTowers() {
-    return this.towers;
-  }
+  public ArrayList<Tower> getTowers() {  return this.towers;  }
 
-  public ArrayList<Follower> getFollowers() {
-    return this.followers;
-  }
+  public ArrayList<Follower> getFollowers() {  return this.followers;  }
 
-    public ArrayList<Enemy> getAllEnemies() {
+  public ArrayList<Enemy> getAllEnemies() {
     ArrayList<Enemy> todosLosEnemigos = new ArrayList<Enemy>();
     todosLosEnemigos.addAll(towers);
     todosLosEnemigos.addAll(followers);
