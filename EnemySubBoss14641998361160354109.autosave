@@ -1,29 +1,26 @@
 class SubBoss extends Enemy implements IVisualizable{
-  private float velocidad;
-  private PVector ultimaPosicionJugador;
+  float velocidad;
+  PVector ultimaPosicionJugador;
 
-  private int tiempoEspera = 200;//El tiempo de espera del enemigo antes de comenzar a persegui al jugador
-  private int tiempoEsperaActual = 0;//El tiempo actual de espera acumulador
+  int tiempoEspera = 200;//El tiempo de espera del enemigo antes de comenzar a persegui al jugador
+  int tiempoEsperaActual = 0;//El tiempo actual de espera acumulador
+  int tiempoPersecucion = 200;//El tiempo el cual el enemigo persigue al jugador
 
-  private boolean persiguiendoJugador = false;//Indica si el enemigo esta actualmente persiguiendo al jugador, por defecto esta en falso
-  private ArrayList<Bomb> bombsList;//ArrayList que servira para la creacion de la bombas
+  boolean persiguiendoJugador = false;//Indica si el enemigo esta actualmente persiguiendo al jugador, por defecto esta en falso
+  ArrayList<Bomb> bombsList;//ArrayList que servira para la creacion de la bombas
 
-  private PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
-  private float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
-  
-  /* -- CONSTRUCTOR -- */
-  public SubBoss(PVector posicion) {
+  PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
+  float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
+  SubBoss(PVector posicion) {
     super(posicion,10,color(139, 8, 255));
-    this.velocidad = 980;   
-    this.ancho = 50;
+    this.velocidad = 980;
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
     this.ultimaPosicionBomba = posicion.copy();//La posicion incial del sub-boss
-    this.collider = new Colisionador(this.posicion, this.ancho-30);
   }
 
-  /** METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
-  public void actualizarPosicion(PVector posicionJugador) {
+  /*METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
+  void actualizarPosicion(PVector posicionJugador) {
     //Si no esta persiguiendo al jugador
     if (persiguiendoJugador == false) {
       tiempoEsperaActual++;//Incrementa el tiempo de espera
@@ -47,12 +44,13 @@ class SubBoss extends Enemy implements IVisualizable{
         persiguiendoJugador = false;
       }
     }
-    if (persiguiendoJugador == false) { // si no lo persigue
+    if (persiguiendoJugador == false) {
       movimientoOscilatorioY();
+      println("No esta persiguiendo al jugador");
     }
   }
-  /** Metodo que dibuja al subjefe */
-  public void display() {
+
+  void display() {
     if (isHit) {
       float elapsed = millis() - hitTime;
       if (elapsed < hitDuration) {
@@ -68,15 +66,12 @@ class SubBoss extends Enemy implements IVisualizable{
 
     fill(currentColor);
     noStroke();
-    // dibuja al boss
-    circle(this.posicion.x, this.posicion.y, this.ancho);
-    // dibuja la colision del boss
-    collider.displayCircle(#FFF63E);
+    circle(this.posicion.x, this.posicion.y, 50);
     dibujarBarraVida(10, 50, 5, 35);
   }
 
-  /** Creacion de las Bombas*/
-  public void creacionBombas() {
+  /*Creacion de las Bombas*/
+  void creacionBombas() {
     //Calcula la distancia recorrida desde la ultima bomba
     float distanciaRecorridaSubBoss = PVector.dist(posicion, ultimaPosicionBomba);
     if(distanciaRecorridaSubBoss >= distanciaBomba){
@@ -85,8 +80,8 @@ class SubBoss extends Enemy implements IVisualizable{
       ultimaPosicionBomba = posicion.copy();
     }
   }
-  /** Metodo que crea a las bombas y las elimina*/
-  public void creacionEliminacionBombas(Player jugador) {
+  /*Metodo que crea a las bombas y las elimina*/
+  void creacionEliminacionBombas(Player jugador) {
     //Itera en el bucle for la lista bomba desde el ultimo hasta el primero para evitar problemas al eliminar las bombas mientras itera
     for (int i = bombsList.size() - 1; i >= 0; i--) {
       Bomb bomba = bombsList.get(i);
@@ -99,8 +94,8 @@ class SubBoss extends Enemy implements IVisualizable{
     }
   }
 
-  /** Movimiento Oscilatorio del sub Jefe al detenerse*/
-  public void movimientoOscilatorioY() {
+  /*Movimiento Oscilatorio del sub Jefe al detenerse*/
+  void movimientoOscilatorioY() {
     int tiempo = millis() / 1000;
     int velocidad = 2;
     int amplitud = 80;//Altura de la oscilacion en el eje Y
