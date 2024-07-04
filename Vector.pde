@@ -25,6 +25,7 @@ class  Vector {
   }
   /** Constructor parametrizado con origen y nombre de la direccion*/
   public Vector(String direccion) {
+    this.origen = new PVector(width/2,height/2);
     if (direccion=="up") {
       this.destino = new PVector(0, -60);
     } else if (direccion=="down") {
@@ -45,14 +46,14 @@ class  Vector {
     line(this.origen.x, this.origen.y, this.origen.x + this.destino.x, this.origen.y + this.destino.y);
 
     // Dibujar la flecha al final del vector
-    /*float angle = atan2(this.destino.y, this.destino.x ); //Calcula el angulo entre la linea en radianes.
+    float angle = atan2(this.destino.y, this.destino.x ); //Calcula el angulo entre la linea en radianes.
     strokeWeight(3);
     fill(#34407E);
     pushMatrix(); // Todos los cambios aplicados no afectaran a otros objetos que se dibujen después.
-    translate(this.origen.x + this.destino.x, this.origen.y + this.destino.y); // Se traslada el origen del sistema de coordenadas al punto final del vector
-    rotate(angle); //Se rota el sistema de coordenadas al ángulo del vector
-    triangle(-this.tamañoFlecha, this.tamañoFlecha/2, -this.tamañoFlecha, -this.tamañoFlecha/2, 0, 0);
-    popMatrix();*/
+      translate(this.origen.x + this.destino.x, this.origen.y + this.destino.y); // Se traslada el origen del sistema de coordenadas al punto final del vector
+      rotate(angle); //Se rota el sistema de coordenadas al ángulo del vector
+      triangle(-this.tamañoFlecha, this.tamañoFlecha/2, -this.tamañoFlecha, -this.tamañoFlecha/2, 0, 0);
+    popMatrix();
   }
 
   /** Metodo que suma dos Vectores*/
@@ -69,6 +70,10 @@ class  Vector {
   /** Metodo que devuelve la magnitud del vector */
   public float obtenerMagnitud() {
     return this.destino.mag();
+  }
+  
+  public void normalizar(){
+    this.destino.normalize();
   }
 
   /* -- ASESORES -- */
@@ -94,7 +99,7 @@ class  Vector {
   }
 
   /** Asigna un nuevo destino al vector segun el nombre de la direccion*/
-  public void setDestino(String direccion) {
+  public void setDestino(String direccion){
     if (direccion=="up") {
       this.destino = new PVector(0, -60);
     } else if (direccion=="down") {
@@ -106,7 +111,7 @@ class  Vector {
     }
     this.componentes = this.destino;
   }
-
+  
   /** Asigna un nuevo origen al vector */
   public void setOrigen(PVector nuevaPos) {
     this.origen = nuevaPos;

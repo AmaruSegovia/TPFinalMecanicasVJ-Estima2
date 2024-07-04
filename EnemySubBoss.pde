@@ -1,25 +1,28 @@
 class SubBoss extends Enemy implements IVisualizable{
-  float velocidad;
-  PVector ultimaPosicionJugador;
+  private float velocidad;
+  private PVector ultimaPosicionJugador;
 
-  int tiempoEspera = 200;//El tiempo de espera del enemigo antes de comenzar a persegui al jugador
-  int tiempoEsperaActual = 0;//El tiempo actual de espera acumulador
-  int tiempoPersecucion = 200;//El tiempo el cual el enemigo persigue al jugador
+  private int tiempoEspera = 200;//El tiempo de espera del enemigo antes de comenzar a persegui al jugador
+  private int tiempoEsperaActual = 0;//El tiempo actual de espera acumulador
 
-  boolean persiguiendoJugador = false;//Indica si el enemigo esta actualmente persiguiendo al jugador, por defecto esta en falso
-  ArrayList<Bomb> bombsList;//ArrayList que servira para la creacion de la bombas
+  private boolean persiguiendoJugador = false;//Indica si el enemigo esta actualmente persiguiendo al jugador, por defecto esta en falso
+  private ArrayList<Bomb> bombsList;//ArrayList que servira para la creacion de la bombas
 
-  PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
-  float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
-  SubBoss(PVector posicion) {
+  private PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
+  private float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
+  
+  /* -- CONSTRUCTOR -- */
+  public SubBoss(PVector posicion) {
     super(posicion,10,color(139, 8, 255));
-    this.velocidad = 980;
+    this.velocidad = 980;   
+    this.ancho = 50;
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
     this.ultimaPosicionBomba = posicion.copy();//La posicion incial del sub-boss
+    this.collider = new Colisionador(this.posicion, this.ancho-30);
   }
 
-  /*METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
+  /** METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
   void actualizarPosicion(PVector posicionJugador) {
     //Si no esta persiguiendo al jugador
     if (persiguiendoJugador == false) {
@@ -44,12 +47,11 @@ class SubBoss extends Enemy implements IVisualizable{
         persiguiendoJugador = false;
       }
     }
-    if (persiguiendoJugador == false) {
+    if (persiguiendoJugador == false) { // si no lo persigue
       movimientoOscilatorioY();
-      println("No esta persiguiendo al jugador");
     }
   }
-
+  /** Metodo que dibuja al subjefe */
   void display() {
     if (isHit) {
       float elapsed = millis() - hitTime;
@@ -66,11 +68,14 @@ class SubBoss extends Enemy implements IVisualizable{
 
     fill(currentColor);
     noStroke();
-    circle(this.posicion.x, this.posicion.y, 50);
+    // dibuja al boss
+    circle(this.posicion.x, this.posicion.y, this.ancho);
+    // dibuja la colision del boss
+    collider.displayCircle(#FFF63E);
     dibujarBarraVida(10, 50, 5, 35);
   }
 
-  /*Creacion de las Bombas*/
+  /** Creacion de las Bombas*/
   void creacionBombas() {
     //Calcula la distancia recorrida desde la ultima bomba
     float distanciaRecorridaSubBoss = PVector.dist(posicion, ultimaPosicionBomba);
@@ -80,7 +85,7 @@ class SubBoss extends Enemy implements IVisualizable{
       ultimaPosicionBomba = posicion.copy();
     }
   }
-  /*Metodo que crea a las bombas y las elimina*/
+  /** Metodo que crea a las bombas y las elimina*/
   void creacionEliminacionBombas(Player jugador) {
     //Itera en el bucle for la lista bomba desde el ultimo hasta el primero para evitar problemas al eliminar las bombas mientras itera
     for (int i = bombsList.size() - 1; i >= 0; i--) {
@@ -94,7 +99,7 @@ class SubBoss extends Enemy implements IVisualizable{
     }
   }
 
-  /*Movimiento Oscilatorio del sub Jefe al detenerse*/
+  /** Movimiento Oscilatorio del sub Jefe al detenerse*/
   void movimientoOscilatorioY() {
     int tiempo = millis() / 1000;
     int velocidad = 2;
