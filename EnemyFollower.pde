@@ -1,11 +1,16 @@
 class Follower extends Enemy implements IVisualizable {
-  private float velocidad; // velocidad del enemigo
+  /** Representa la velocidad del enemigo */
+  private float velocidad;
 
+  /* -- CONSTRUCTOR -- */
   public Follower(PVector posicion) {
     super(posicion,4,color(0, 0, 255)); 
     this.velocidad = 2; // ajusta la velocidad del enemigo
+    this.collider = new Colisionador(this.posicion, this.ancho-10);
   }
-
+  
+  /* -- METODOS -- */
+  /** Dibuj al enemigo */
   void display() {
     //Cambio de color cuando le hacen daño
     if (isHit) {
@@ -23,20 +28,24 @@ class Follower extends Enemy implements IVisualizable {
 
     fill(currentColor);
     noStroke();
+    // dibuja al enemigo
     circle(posicion.x,  posicion.y, 40);
-     float barraAncho = 40; // ancho total de la barra
-  float barraAlto = 5; // alto de la barra
-  float vidasMaximas = 4; // número máximo de vidas
-  float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
-
-  fill(255, 0, 0); // color rojo para la barra de vida
-  rect(posicion.x - barraAncho / 2, posicion.y - 30, anchoActual, barraAlto); // posición de la barra encima del enemigo
-
-  // Dibujar el contorno de la barra de vida
-  noFill();
-  stroke(0);
+    // dibuja el area de colision del enemigo
+    this.collider.displayCircle(#FF3E78);
+    
+    float barraAncho = 40; // ancho total de la barra
+    float barraAlto = 5; // alto de la barra
+    float vidasMaximas = 4; // número máximo de vidas
+    float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
   
-  dibujarBarraVida(4, 40, 5, 30);
+    fill(255, 0, 0); // color rojo para la barra de vida
+    rect(posicion.x - barraAncho / 2, posicion.y - 30, anchoActual, barraAlto); // posición de la barra encima del enemigo
+  
+    // Dibujar el contorno de la barra de vida
+    noFill();
+    stroke(0);
+    
+    dibujarBarraVida(4, 40, 5, 30);
   }
 
   public void seguirJugador(Player player) {

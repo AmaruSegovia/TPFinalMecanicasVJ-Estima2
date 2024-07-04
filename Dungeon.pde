@@ -1,4 +1,4 @@
-// Clase que se encarga de crear y gestionar las habitaciones segun el nivel.
+/* Clase que se encarga de crear y gestionar las habitaciones segun el nivel. */
 class Dungeon {
   private GestorEnemigos gestorEnemigos;
 

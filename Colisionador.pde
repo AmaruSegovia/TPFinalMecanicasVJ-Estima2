@@ -1,11 +1,7 @@
-/** Clase que verifica las coliciones entre objetos */
+/** Clase que verifica las colisiones entre objetos */
 class Colisionador extends GameObject{
 
   /* -- CONSTRUCTORES -- */
-  /** Constructor por defecto */
-  public Colisionador() {
-  }
-  
   /** Constructor para circulos y cuadrados */
   public Colisionador(PVector posicion, int ancho) {
     super(posicion, ancho, ancho);
@@ -16,14 +12,14 @@ class Colisionador extends GameObject{
   }
 
   /* -- MÉTODOS -- */
-  /** Dibuja el area de colicion circular*/
+  /** Dibuja el area de colision circular*/
   public void displayCircle(color Color) {
     stroke(Color);
     strokeWeight(2);
     noFill();
     circle( this.posicion.x, this.posicion.y, this.ancho);
   }
-  /** Dibuja el area de colicion rect */
+  /** Dibuja el area de colision rect */
   public void displayRect(color Color) {
     stroke(Color);
     strokeWeight(2);

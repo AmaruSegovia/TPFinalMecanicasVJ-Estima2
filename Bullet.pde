@@ -1,6 +1,5 @@
-/** Clase que define las balas del jugador */
+/** Clase que representa las balas del jugador */
 private class Bullet extends GameObject implements IMovable, IVisualizable {
-
   /* -- ATRIBUTOS -- */
   /** Representa la velocidad de la bala */
   private float speed;
@@ -8,7 +7,9 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   private PVector direction;
   /** Representa el sprite de la bala */
   private SpriteObject sprite;
- private Colisionador colisionador;
+  /** Representa el area de colision de la bala */
+  private Colisionador colisionador;
+
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
   public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed) {
@@ -16,30 +17,7 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     this.direction = direction;
     this.speed = speed;
     this.sprite = new SpriteObject("playerBullet.png", ancho, alto);
-    this.colisionador = new Colisionador(); 
-  }
-
-  /* -- ACCESORES (GETTERS Y SETTERS) -- */
-  /* Getters */
-  /* Devuelve la velocidad de la bala */
-  public float getSpeed() {
-    return this.speed;
-  }
-
-  /* Devuelve la dirección de la bala */
-  public PVector getDirection() {
-    return this.direction;
-  }
-
-  /* Setters */
-  /* Cambia la velocidad de la bala */
-  public void setSpeed() {
-    this.speed = speed;
-  }
-
-  /* Cambia la dirección de la bala */
-  public void setDirection() {
-    this.direction = direction;
+    this.colisionador = new Colisionador(this.posicion, ancho, alto); 
   }
 
   /* -- MÉTODOS -- */
@@ -51,18 +29,29 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   /** Método para dibujar las balas (implementando la interfaz IVisualizable) */
   public void display() {    
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
-    /*
-    stroke(#149eee);
-    fill(3 * sin(this.posicion.x + this.posicion.y) * 100, 255, 255);
-    circle(this.posicion.x, this.posicion.y, this.ancho);
-    */
+    colisionador.displayCircle(#153F81);
   }
-  
+  /** Verifica la colision del colisionador con los enemigos */
    public boolean verificarColision(Enemy enemigo) {
-    if (colisionador.colisionarCirculo(this, enemigo)) {
+    if (colisionador.isCircle(enemigo.collider)) {
       enemigo.reducirVida();
       return true;
     }
     return false;
   }
+
+  /* -- ACCESORES (GETTERS Y SETTERS) -- */
+  /* Getters */
+  /** Devuelve la velocidad de la bala */
+  public float getSpeed() {  return this.speed;  }
+
+  /** Devuelve la dirección de la bala */
+  public PVector getDirection() {  return this.direction;  }
+
+  /* Setters */
+  /** Cambia la velocidad de la bala */
+  public void setSpeed() {  this.speed = speed;  }
+
+  /** Cambia la dirección de la bala */
+  public void setDirection() {  this.direction = direction;  }
 }

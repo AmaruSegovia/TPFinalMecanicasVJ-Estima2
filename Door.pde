@@ -4,7 +4,7 @@ class Door extends GameObject {
   private String direction;
   /** Representa el estado de la puerta, si esta abierta o cerrada */
   private boolean isOpen;
-  /** Representa el area de colision */
+  /** Representa el area de colision de la puerta */
   private Colisionador collider;
 
   /* -- CONSTRUCTORES -- */
@@ -14,8 +14,7 @@ class Door extends GameObject {
     this.ancho = 60;
     this.isOpen = true;
     this.direction = direction;
-    
-    this.collider = new Colisionador(this.posicion,this.ancho);
+    this.collider = new Colisionador(this.posicion,this.ancho-20);
   }
   /** Constructor para puertas con posiciones fijas */
   public Door(String direction) {

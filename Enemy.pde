@@ -1,3 +1,4 @@
+/* Clase que representa a los enemigos por defecto */
 class Enemy extends GameObject {
   protected int lives;
   protected boolean isHit; // bandera para el impacto
@@ -5,7 +6,9 @@ class Enemy extends GameObject {
   protected int hitDuration = 500; // duración del impacto en milisegundos
   protected color originalColor;
   protected color currentColor;
+  protected Colisionador collider;
   
+  /* -- CONSTRUCTOR -- */
   public Enemy(PVector posicion, int vidas, color colorInicial) {
     super(posicion, 40, 40); // constructor de clase GameObject con la pos y tamaño
     this.lives = vidas;
@@ -13,14 +16,7 @@ class Enemy extends GameObject {
     this.hitTime = 0;
     this.originalColor = colorInicial;
     this.currentColor = colorInicial;
-  }
-
-  public int getLives() {
-    return lives;
-  }
-
-  public void setLives(int lives) {
-    this.lives = lives;
+    this.collider = new Colisionador(this.posicion, this.ancho-10);
   }
 
   public void reducirVida() {
@@ -28,7 +24,6 @@ class Enemy extends GameObject {
     this.isHit = true; // establecer bandera de impacto
     this.hitTime = millis(); // iniciar temporizador
   }
-  
   
    public void dibujarBarraVida(float vidasMaximas, float barraAncho, float barraAlto, float offsetY) {
     float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
@@ -46,4 +41,12 @@ class Enemy extends GameObject {
     rect(posicion.x - barraAncho / 2, posicion.y - offsetY, barraAncho, barraAlto);
   }
   
+  /* -- ASESOERS -- */
+  public int getLives() {
+    return lives;
+  }
+
+  public void setLives(int lives) {
+    this.lives = lives;
+  }
 }

@@ -5,9 +5,11 @@ class Tower extends Enemy implements IVisualizable {
 
   public Tower(PVector posicion) {
     super(posicion, 2, color(255, 255, 0)); // color inicial amarillo
+    this.ancho = 50;
     this.fireRate = 0.5;
     this.lastFireTime = millis() / 1000.0;
     this.balas = new ArrayList<Bala>();
+    this.collider = new Colisionador(this.posicion, this.ancho-10);
   }
 
   public void display() {
@@ -26,7 +28,10 @@ class Tower extends Enemy implements IVisualizable {
 
     fill(currentColor);
     noStroke();
-    rect(posicion.x - ancho / 2, posicion.y - alto / 2, ancho, alto);
+    // dibuja a la torre
+    rect(this.posicion.x - this.ancho / 2, this.posicion.y - this.ancho / 2, this.ancho, this.ancho);
+    //dibuja elarea de colision con la torre
+    collider.displayCircle(#DE3EFF);
 
     for (Bala bala : balas) {
       bala.dibujar();
