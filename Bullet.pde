@@ -63,8 +63,8 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   /** Método para dibujar las balas (implementando la interfaz IVisualizable) */
   public void display() {
     imageMode(CENTER);
-    tint(#FFFFFF);
     if(this.pertenece == "jugador"){
+    tint(#FFFFFF);
       this.spritePlayer.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }else{      
       this.spriteBoss.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));

@@ -37,6 +37,7 @@ class Tower extends Enemy implements IVisualizable {
     noStroke();
     // dibuja a la torreta
     imageMode(CENTER);
+    tint(#FFFFFF);
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     //dibuja elarea de colision con la torre
     //this.collider.displayCircle(#DE3EFF);
