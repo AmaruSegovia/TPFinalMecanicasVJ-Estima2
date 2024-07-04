@@ -63,8 +63,11 @@ class Room extends GameObject {
   public void removeEnemy(Enemy enemy) {
   if (enemy instanceof Tower) {
     towers.remove(enemy);
-  } else if (enemy instanceof Follower) {
+  } if (enemy instanceof Follower) {
     followers.remove(enemy);
+  }
+  else if (enemy instanceof SubBoss) {
+    subBosses.remove(enemy);
   }
   }
   public void addSubBoss(SubBoss subBoss) {
@@ -86,6 +89,7 @@ class Room extends GameObject {
     ArrayList<Enemy> todosLosEnemigos = new ArrayList<Enemy>();
     todosLosEnemigos.addAll(towers);
     todosLosEnemigos.addAll(followers);
+    todosLosEnemigos.addAll(subBosses);
     return todosLosEnemigos;
   }
 }

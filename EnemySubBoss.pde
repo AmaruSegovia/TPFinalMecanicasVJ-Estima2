@@ -1,5 +1,4 @@
 class SubBoss extends Enemy implements IVisualizable{
-  PVector posicion;
   float velocidad;
   PVector ultimaPosicionJugador;
 
@@ -13,11 +12,11 @@ class SubBoss extends Enemy implements IVisualizable{
   PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
   float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
   SubBoss(PVector posicion) {
-    super(posicion,2);
+    super(posicion,10);
     this.velocidad = 980;
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
-    this.ultimaPosicionBomba = posicionSubBoss.copy();//La posicion incial del sub-boss
+    this.ultimaPosicionBomba = posicion.copy();//La posicion incial del sub-boss
   }
 
   /*METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
@@ -55,6 +54,8 @@ class SubBoss extends Enemy implements IVisualizable{
     noStroke();
     fill(#8B08FF);
     circle(this.posicion.x, this.posicion.y, 50);
+    fill(0, 0, 255);
+    text(this.lives,this.posicion.x,this.posicion.y);
   }
 
   /*Creacion de las Bombas*/

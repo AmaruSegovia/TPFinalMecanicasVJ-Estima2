@@ -89,7 +89,7 @@ void jugando() {
 
 void mostrarMenu() {
   musicaJuego.pause();
-    musicaJuego.rewind();
+  musicaJuego.rewind();
   musicaTitulo.play();
   background(0, 0, 128);
   fill(255);
@@ -101,6 +101,7 @@ void mostrarMenu() {
 }
 
 void mostrarVictoria() {
+  musicaJuego.pause();
   background(0, 128, 0);
   fill(255);
   textAlign(CENTER, CENTER);
@@ -111,6 +112,7 @@ void mostrarVictoria() {
 }
 
 void mostrarDerrota() {
+  musicaJuego.pause();
   background(128, 0, 0);
   fill(255);
   textAlign(CENTER, CENTER);
