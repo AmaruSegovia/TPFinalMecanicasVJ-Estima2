@@ -7,6 +7,7 @@ class Room extends GameObject {
   /*representa los enemigos*/
   private ArrayList<Enemy> enemies;
   private ArrayList<EnemyFollower> enemyFollowers;
+  private ArrayList<SubBoss> subBosses;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor por defecto */
@@ -19,6 +20,7 @@ class Room extends GameObject {
     this.doorList = new Door[4];
     this.enemies=new ArrayList<Enemy>();
     this.enemyFollowers = new ArrayList<EnemyFollower>();
+    this.subBosses = new ArrayList<SubBoss>();
     generateDoors();
   }
   /* -- METODOS -- */
@@ -46,7 +48,9 @@ class Room extends GameObject {
     for(EnemyFollower enemyFollower:this.enemyFollowers){
      enemyFollower.display(); 
     }
-    
+    for(SubBoss subBoss:this.subBosses){
+    subBoss.display();
+    }
   }
 
   /** Metodo que devuelve si hay puertas en la habitacion*/
@@ -64,7 +68,14 @@ class Room extends GameObject {
   public void addEnemyFollower(EnemyFollower enemyFollower) {
     this.enemyFollowers.add(enemyFollower);
   }
-
+  
+  public void addSubBoss(SubBoss subBoss) {
+    this.subBosses.add(subBoss);
+  }
+   public ArrayList<SubBoss> getSubBosses() {
+    return this.subBosses;
+  }
+  
   public ArrayList<Enemy> getEnemies() {
     return this.enemies;
   }

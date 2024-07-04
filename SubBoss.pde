@@ -1,4 +1,4 @@
-class SubBoss extends GameObject {
+class SubBoss extends GameObject implements IVisualizable{
   PVector posicion;
   float velocidad;
   PVector ultimaPosicionJugador;
@@ -12,9 +12,9 @@ class SubBoss extends GameObject {
 
   PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
   float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
-  SubBoss(PVector posicionSubBoss, float velocidadSubBoss) {
+  SubBoss(PVector posicionSubBoss) {
     this.posicion = posicionSubBoss;
-    this.velocidad = velocidadSubBoss;
+    this.velocidad = 980;
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
     this.ultimaPosicionBomba = posicionSubBoss.copy();//La posicion incial del sub-boss
@@ -51,7 +51,8 @@ class SubBoss extends GameObject {
     }
   }
 
-  void dibujarSubBoss() {
+  void display() {
+    noStroke();
     fill(#8B08FF);
     circle(this.posicion.x, this.posicion.y, 50);
   }
