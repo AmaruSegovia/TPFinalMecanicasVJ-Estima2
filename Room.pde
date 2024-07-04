@@ -8,6 +8,7 @@ class Room extends GameObject {
   private ArrayList<Tower> towers;
   private ArrayList<Follower> followers;
   private ArrayList<SubBoss> subBosses;
+  private ArrayList<Boss> bosses;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
@@ -18,6 +19,7 @@ class Room extends GameObject {
      this.towers=new ArrayList<Tower>();
     this.followers = new ArrayList<Follower>();
     this.subBosses = new ArrayList<SubBoss>();
+    this.bosses = new ArrayList<Boss>();
     generateDoors();
   }
 
@@ -82,6 +84,9 @@ class Room extends GameObject {
   public void addSubBoss(SubBoss subBoss) {
     this.subBosses.add(subBoss);
   }
+  public void addBoss(Boss boss){
+    this.bosses.add(boss);
+  }
   
   /** Metodo que remueve a los enemigos */
   public void removeEnemy(Enemy enemy) {
@@ -93,6 +98,9 @@ class Room extends GameObject {
     else if (enemy instanceof SubBoss) {
       subBosses.remove(enemy);
     }
+    else if (enemy instanceof Boss) {
+      bosses.remove(enemy);
+    }
   }
   
   /* -- ASESORES -- */
@@ -102,12 +110,15 @@ class Room extends GameObject {
   public ArrayList<Tower> getTowers() {  return this.towers;  }
 
   public ArrayList<Follower> getFollowers() {  return this.followers;  }
+  
+  public ArrayList<Boss> getBosses() {  return this.bosses;  }
 
   public ArrayList<Enemy> getAllEnemies() {
     ArrayList<Enemy> todosLosEnemigos = new ArrayList<Enemy>();
     todosLosEnemigos.addAll(towers);
     todosLosEnemigos.addAll(followers);
     todosLosEnemigos.addAll(subBosses);
+    todosLosEnemigos.addAll(bosses);
     return todosLosEnemigos;
   }
 }

@@ -54,8 +54,8 @@ class Dungeon {
         if (j > 0 && j < 3) {
           this.gestorEnemigos.inicializarEnemigos(this.rooms[i][j]);
         }
-        if (j > 3){
-          // Crear Boss
+        if (j > 2){
+          this.gestorEnemigos.inicializarBoss(this.rooms[i][j]);
         }
       }
     }
@@ -70,6 +70,7 @@ class Dungeon {
       jugador.checkCollisions(roomActual);
       // Verificar colisiones con las puertas
       balas.updateBullets(roomActual);
+      balas.dibujarBalas();
       enemies.actualizar(roomActual);
     }
   }

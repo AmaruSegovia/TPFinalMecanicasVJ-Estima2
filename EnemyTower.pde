@@ -3,6 +3,7 @@ class Tower extends Enemy implements IVisualizable {
   private float lastFireTime;
   private ArrayList<Bala> balas;
 
+  /* -- CONSTRUCTOR --*/
   public Tower(PVector posicion) {
     super(posicion, 2, color(255, 255, 0)); // color inicial amarillo
     this.ancho = 50;
@@ -12,6 +13,8 @@ class Tower extends Enemy implements IVisualizable {
     this.collider = new Colisionador(this.posicion, this.ancho-10);
   }
 
+  /* -- METODOS -- */
+  /** Metodo que dibuja a la Torre */
   public void display() {
     if (isHit) {
       float elapsed = millis() - hitTime;

@@ -35,7 +35,8 @@ public void setup()
 
 public void draw()
 {
-    background(100);
+  println(frameRate);
+  background(100);
   switch (estadoJuego) {
     case EstadoJuego.MENU:
       mostrarMenu();

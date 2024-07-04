@@ -119,10 +119,10 @@ class Player extends GameObject implements IMovable, IVisualizable {
 
   /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */
   public Bullet shoot(char input) {
-    if (input == 'i') return new Bullet(this.posicion.copy(), 10, 10, new PVector(0, -1), 400);
-    if (input == 'j') return new Bullet(this.posicion.copy(), 10, 10, new PVector(-1, 0), 400);
-    if (input == 'k') return new Bullet(this.posicion.copy(), 10, 10, new PVector(0, 1), 400);
-    if (input == 'l') return new Bullet(this.posicion.copy(), 10, 10, new PVector(1, 0), 400);
+    if (input == 'i') return new Bullet(this.posicion.copy(), 10, 10, new PVector(0, -1), 400,"jugador");
+    if (input == 'j') return new Bullet(this.posicion.copy(), 10, 10, new PVector(-1, 0), 400,"jugador");
+    if (input == 'k') return new Bullet(this.posicion.copy(), 10, 10, new PVector(0, 1), 400,"jugador");
+    if (input == 'l') return new Bullet(this.posicion.copy(), 10, 10, new PVector(1, 0), 400,"jugador");
     return null;
   }
 

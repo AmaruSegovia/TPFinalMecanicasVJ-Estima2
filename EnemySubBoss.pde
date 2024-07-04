@@ -47,9 +47,8 @@ class SubBoss extends Enemy implements IVisualizable{
         persiguiendoJugador = false;
       }
     }
-    if (persiguiendoJugador == false) {
+    if (persiguiendoJugador == false) { // si no lo persigue
       movimientoOscilatorioY();
-      println("No esta persiguiendo al jugador");
     }
   }
   /** Metodo que dibuja al subjefe */
