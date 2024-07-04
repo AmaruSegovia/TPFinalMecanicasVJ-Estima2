@@ -5,11 +5,13 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   private float speed;
   /** Representa la dirección de la bala */
   private PVector direction;
-  /** Representa el sprite de la bala */
-  private SpriteObject sprite;
   /** Representa el area de colision de la bala */
   private Colisionador colisionador;
   private String pertenece;
+  
+  /** Representan los sprites de las balas del jugador y enemigo respectivamente */
+  private SpriteObject spritePlayer;
+  private SpriteObject spriteEnemy;
 
   // var para orbitar 
   float angulo;
@@ -22,8 +24,9 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     this.pertenece = pertenece; 
     this.direction = direction;
     this.speed = speed;
-    this.sprite = new SpriteObject("playerBullet.png", ancho, alto);
-    this.colisionador = new Colisionador(this.posicion, ancho, alto); 
+    this.spritePlayer = new SpriteObject("playerBullet.png", ancho, alto, 3);
+    this.spriteEnemy = new SpriteObject("enemyBullet.png", ancho, alto, 2);
+    this.colisionador = new Colisionador(this.posicion, ancho*4); 
     this.disparada = true;
   }
   /** Constructor para balas con angulo para el enemigo */
@@ -56,8 +59,12 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
 
   /** Método para dibujar las balas (implementando la interfaz IVisualizable) */
   public void display() {
+    imageMode(CENTER);
+    tint(#FFFFFF);
     if(this.pertenece == "jugador"){
-      this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
+      this.spritePlayer.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
+    }else{      
+      //this.spriteEnemy.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }
     circle(this.posicion.x, this.posicion.y,this.ancho);
   }

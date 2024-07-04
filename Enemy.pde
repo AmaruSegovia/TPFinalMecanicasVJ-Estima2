@@ -10,7 +10,7 @@ class Enemy extends GameObject {
   
   /* -- CONSTRUCTOR -- */
   public Enemy(PVector posicion, int vidas, color colorInicial) {
-    super(posicion, 40, 40); // constructor de clase GameObject con la pos y tamaño
+    this.posicion = posicion; // constructor de clase GameObject con la pos y tamaño
     this.lives = vidas;
     this.isHit = false;
     this.hitTime = 0;

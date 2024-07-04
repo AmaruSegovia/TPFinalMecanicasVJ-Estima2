@@ -10,16 +10,20 @@ class SubBoss extends Enemy implements IVisualizable{
 
   private PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
   private float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
+    
+  private SpriteObject sprite;//El objeto sprite del enemigo
   
   /* -- CONSTRUCTOR -- */
   public SubBoss(PVector posicion) {
-    super(posicion,10,color(139, 8, 255));
+    super(posicion,10,color(255, 255, 255));
     this.velocidad = 980;   
-    this.ancho = 50;
+    this.ancho=22;
+    this.alto=22;
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
     this.ultimaPosicionBomba = posicion.copy();//La posicion incial del sub-boss
-    this.collider = new Colisionador(this.posicion, this.ancho-30);
+    this.collider = new Colisionador(this.posicion, this.ancho*3);
+    this.sprite = new SpriteObject("chaserBoss.png", ancho, alto, 3);
   }
 
   /** METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
@@ -53,6 +57,7 @@ class SubBoss extends Enemy implements IVisualizable{
   }
   /** Metodo que dibuja al subjefe */
   public void display() {
+    
     if (isHit) {
       float elapsed = millis() - hitTime;
       if (elapsed < hitDuration) {
@@ -66,10 +71,11 @@ class SubBoss extends Enemy implements IVisualizable{
       currentColor = originalColor;
     }
 
-    fill(currentColor);
+    tint(currentColor);
     noStroke();
     // dibuja al boss
-    circle(this.posicion.x, this.posicion.y, this.ancho);
+    imageMode(CENTER);
+    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     // dibuja la colision del boss
     collider.displayCircle(#FFF63E);
     dibujarBarraVida(10, 50, 5, 35);

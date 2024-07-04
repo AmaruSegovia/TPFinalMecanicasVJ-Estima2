@@ -16,6 +16,8 @@ private Player jugador;
 private GestorBullets gestorBalas;
 private GestorEnemigos gestorEnemigos;
 
+PImage background;
+
 public void setup()
 {
   noSmooth();
@@ -25,6 +27,7 @@ public void setup()
   musicaJuego = minim.loadFile("musicaJuego.mp3");
   musicaTitulo.setGain(-10);
   musicaJuego.setGain(-10);
+  background = loadImage("bg.png");
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);
@@ -35,8 +38,8 @@ public void setup()
 
 public void draw()
 {
+  image(background, 0,0);
   println(frameRate);
-  background(100);
   switch (estadoJuego) {
     case EstadoJuego.MENU:
       mostrarMenu();
@@ -54,9 +57,6 @@ public void draw()
 }
 
 void jugando() {
-  musicaTitulo.pause();
-  musicaTitulo.rewind();
-  musicaJuego.play();
   dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
   jugador.display(); 
   jugador.mover();
@@ -195,6 +195,9 @@ public void keyPressed() {
 
 void iniciarJuego() {
   estadoJuego = EstadoJuego.JUGANDO;
+  musicaTitulo.pause();
+  musicaTitulo.rewind();
+  musicaJuego.loop();
     // Aqui deberiamos reiniciar el estado del juego
   dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));

@@ -2,15 +2,19 @@ class Tower extends Enemy implements IVisualizable {
   private float fireRate;
   private float lastFireTime;
   private ArrayList<Bala> balas;
+    
+  private SpriteObject sprite;//El objeto sprite del enemigo
 
   /* -- CONSTRUCTOR --*/
   public Tower(PVector posicion) {
-    super(posicion, 2, color(255, 255, 0)); // color inicial amarillo
-    this.ancho = 50;
+    super(posicion, 2, color(255, 255, 255)); 
+    this.ancho=22;
+    this.alto=22;
     this.fireRate = 0.5;
     this.lastFireTime = millis() / 1000.0;
     this.balas = new ArrayList<Bala>();
-    this.collider = new Colisionador(this.posicion, this.ancho-10);
+    this.collider = new Colisionador(this.posicion, this.ancho*3);
+    this.sprite = new SpriteObject("turret.png", ancho, alto, 3);
   }
 
   /* -- METODOS -- */
@@ -29,10 +33,11 @@ class Tower extends Enemy implements IVisualizable {
       currentColor = originalColor;
     }
 
-    fill(currentColor);
+    tint(currentColor);
     noStroke();
-    // dibuja a la torre
-    rect(this.posicion.x - this.ancho / 2, this.posicion.y - this.ancho / 2, this.ancho, this.ancho);
+    // dibuja a la torreta
+    imageMode(CENTER);
+    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     //dibuja elarea de colision con la torre
     collider.displayCircle(#DE3EFF);
 

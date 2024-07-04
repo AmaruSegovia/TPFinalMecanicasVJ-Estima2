@@ -1,12 +1,17 @@
 class Follower extends Enemy implements IVisualizable {
   /** Representa la velocidad del enemigo */
   private float velocidad;
+  
+  private SpriteObject sprite;//El objeto sprite del enemigo
 
   /* -- CONSTRUCTOR -- */
   public Follower(PVector posicion) {
-    super(posicion,4,color(0, 0, 255)); 
+    super(posicion,4,color(255, 255, 255)); 
+    this.ancho=22;
+    this.alto=22;
     this.velocidad = 2; // ajusta la velocidad del enemigo
-    this.collider = new Colisionador(this.posicion, this.ancho-10);
+    this.collider = new Colisionador(this.posicion, this.ancho*3);
+    this.sprite = new SpriteObject("chaser.png", ancho, alto, 3);
   }
   
   /* -- METODOS -- */
@@ -26,10 +31,11 @@ class Follower extends Enemy implements IVisualizable {
       currentColor = originalColor;
     }
 
-    fill(currentColor);
+    tint(currentColor);
     noStroke();
     // dibuja al enemigo
-    circle(posicion.x,  posicion.y, 40);
+    imageMode(CENTER);
+    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     // dibuja el area de colision del enemigo
     this.collider.displayCircle(#FF3E78);
     

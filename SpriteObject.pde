@@ -31,13 +31,13 @@ class SpriteObject {
   /* -- CONSTRUCTORES -- */
 
   /** Constructor Parametrizado */
-  public SpriteObject(String spriteSheet, int anchoFrame, int altoFrame) {
+  public SpriteObject(String spriteSheet, int anchoFrame, int altoFrame, int escala) {
     this.spriteSheet = requestImage(spriteSheet);
     this.anchoFrame = anchoFrame;
     this.altoFrame = altoFrame;
     this.xFrame=0;
     this.yFrame=0;
-    this.escala=4;
+    this.escala=escala;
     this.velocidadAnimacion = 14;
   }
 

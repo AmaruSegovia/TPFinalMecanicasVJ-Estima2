@@ -6,6 +6,7 @@ class Boss extends Enemy {
   private float tiempoInicio;
   private float tiempoProximoDisparo;  
   private int fase = 1; // Fase del enemigo
+  private SpriteObject sprite;//El objeto sprite del enemigo
   
   // Funciones adicionales para fase 2
   private int tiempoUltimoDisparo;
@@ -15,18 +16,18 @@ class Boss extends Enemy {
   /* -- CONSTRUCTOR -- */
   public Boss(PVector posicion) {
     super(posicion, 20, color(0, 0, 255));
-    this.ancho = 120;
+    this.ancho = 41;
+    this.alto = 38;
     this.topSpeed= random(150,200);
     this.direccion = new Vector(random(2) < 1 ? "right" : "left");
-    this.collider = new Colisionador(this.posicion, this.ancho-40);
+    this.collider = new Colisionador(this.posicion, this.ancho*3);
+    this.sprite = new SpriteObject("jefe.png", ancho, alto, 3);
     this.tiempoInicio = millis();
     this.tiempoProximoDisparo = millis() + int(random(4000, 6000));
   }
   public void display() {
     noStroke();
-    fill(255, 255, 255);
-    circle(this.posicion.x, this.posicion.y, this.ancho);
-    fill(0);
+    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     text(lives, this.posicion.x, this.posicion.y);
     collider.setPosicion(this.posicion);
     collider.displayCircle(0);
@@ -77,6 +78,7 @@ class Boss extends Enemy {
       } else if (!inCenter) {
         moverFase();
         if (millis() > tiempoProximoDisparo) {
+          disparar();
           tiempoProximoDisparo = millis() + int(random(3000, 6000));
         }
       }
@@ -120,7 +122,7 @@ class Boss extends Enemy {
         for (int i = 0; i < numBalas; i++) {
           float angulo = PI / 2 + radians(40) / (numBalas - 1) * i - radians(20); // Ajustar los ángulos para las balas
           Bullet bala;
-          bala = new Bullet(this.posicion.copy(), angulo);
+          bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y+60), angulo);
           gestorBalas.addBullet(bala);
         }
       break;

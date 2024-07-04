@@ -24,10 +24,10 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.ancho = 20;
     this.speed = 0;
     this.topSpeed = 250;
-    this.sprite = new SpriteObject("mage.png", ancho, alto);
+    this.sprite = new SpriteObject("mage.png", ancho, alto, 4);
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
     this.direccion = new Vector("down");
-    this.collider = new Colisionador(this.posicion,this.ancho+20);
+    this.collider = new Colisionador(this.posicion,this.ancho*3);
   }
 
   /* -- METODOS -- */
@@ -35,6 +35,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   public void display() {
     stroke(0);
     fill(200, 30);
+    tint(#FFFFFF);
     this.sprite.render(this.animationState, new PVector(this.posicion.x, this.posicion.y));
     textSize(20);
     fill(255);
@@ -69,6 +70,10 @@ class Player extends GameObject implements IMovable, IVisualizable {
     // Limitar el movimiento del jugador
     this.posicion.x = constrain(this.posicion.x, 0 + this.ancho*2, width - this.ancho*2);
     this.posicion.y = constrain(this.posicion.y, 0 + this.ancho*2, height - this.ancho*2);
+    
+    //Actualizando la posición del collider
+    this.collider.setPosicion(this.posicion);
+    
   }// end mover
 
 
