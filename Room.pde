@@ -5,8 +5,8 @@ class Room extends GameObject {
   /** Representa la lista de puertas que tiene la habitacion*/
   private Door[] doorList;
   /*representa los enemigos*/
-  private ArrayList<Enemy> enemies;
-  private ArrayList<EnemyFollower> enemyFollowers;
+  private ArrayList<Tower> towers;
+  private ArrayList<Follower> followers;
   private ArrayList<SubBoss> subBosses;
 
   /* -- CONSTRUCTORES -- */
@@ -18,8 +18,8 @@ class Room extends GameObject {
     super(posicion, ancho, alto);
     this.doors = doors;
     this.doorList = new Door[4];
-    this.enemies=new ArrayList<Enemy>();
-    this.enemyFollowers = new ArrayList<EnemyFollower>();
+     this.towers=new ArrayList<Tower>();
+    this.followers = new ArrayList<Follower>();
     this.subBosses = new ArrayList<SubBoss>();
     generateDoors();
   }
@@ -42,15 +42,6 @@ class Room extends GameObject {
     for (Door door : this.doorList) {
       if (door != null) door.display();
     }
-    for(Enemy enemy:this.enemies){
-     enemy.display(); 
-    }
-    for(EnemyFollower enemyFollower:this.enemyFollowers){
-     enemyFollower.display(); 
-    }
-    for(SubBoss subBoss:this.subBosses){
-    subBoss.display();
-    }
   }
 
   /** Metodo que devuelve si hay puertas en la habitacion*/
@@ -61,26 +52,40 @@ class Room extends GameObject {
     println("no hay puertas!! estas encerrado!! >:3");
     return false;
   }
-   public void addEnemy(Enemy enemy) {
-    this.enemies.add(enemy);
+   public void addTower(Tower tower) {
+    this.towers.add(tower);
   }
-  
-  public void addEnemyFollower(EnemyFollower enemyFollower) {
-    this.enemyFollowers.add(enemyFollower);
+
+  public void addFollower(Follower follower) {
+    this.followers.add(follower);
   }
-  
+
+  public void removeEnemy(Enemy enemy) {
+  if (enemy instanceof Tower) {
+    towers.remove(enemy);
+  } else if (enemy instanceof Follower) {
+    followers.remove(enemy);
+  }
+  }
   public void addSubBoss(SubBoss subBoss) {
     this.subBosses.add(subBoss);
   }
    public ArrayList<SubBoss> getSubBosses() {
     return this.subBosses;
   }
-  
-  public ArrayList<Enemy> getEnemies() {
-    return this.enemies;
+
+  public ArrayList<Tower> getTowers() {
+    return this.towers;
   }
-  
-  public ArrayList<EnemyFollower> getEnemyFollowers() {
-    return this.enemyFollowers;
+
+  public ArrayList<Follower> getFollowers() {
+    return this.followers;
+  }
+
+    public ArrayList<Enemy> getAllEnemies() {
+    ArrayList<Enemy> todosLosEnemigos = new ArrayList<Enemy>();
+    todosLosEnemigos.addAll(towers);
+    todosLosEnemigos.addAll(followers);
+    return todosLosEnemigos;
   }
 }

@@ -1,27 +1,27 @@
 class GestorEnemigos {
-  private ArrayList<Enemy> enemigos;
+  private ArrayList<Tower> towers;
   private int maxEnemigos = 2;
-  private ArrayList<EnemyFollower> enemyFollowers;
+  private ArrayList<Follower> followers;
   
   private ArrayList<SubBoss> subBosses;
  
   public GestorEnemigos() {
-    this.enemigos = new ArrayList<Enemy>();
-    this.enemyFollowers = new ArrayList<EnemyFollower>();
+     this.towers = new ArrayList<Tower>();
+    this.followers = new ArrayList<Follower>();
     this.subBosses = new ArrayList<SubBoss>();
   }
 
-  public void inicializarTorretas(Room room) {
-    for (int i = 0; i < maxEnemigos; i++) {
+  public void inicializarEnemigos(Room room) {
+     for (int i = 0; i < maxEnemigos; i++) {
       float x = random(50, width - 50);
       float y = random(50, height - 50);
-      addEnemy(new PVector(x, y), room);
+      addTower(new PVector(x, y), room);
     }
-    
+
     for (int i = 0; i < maxEnemigos; i++) {
       float x = random(50, width - 50);
       float y = random(50, height - 50);
-      addFollowerEnemy(new PVector(x, y), room);
+      addFollower(new PVector(x, y), room);
     }
     for(int i = 0; i < 1; i++){
       float x = random(50, width - 50);
@@ -30,16 +30,16 @@ class GestorEnemigos {
     }
   }
 
-  public void addEnemy(PVector posicion, Room room) {
-    Enemy enemy = new Enemy(posicion);
-    enemigos.add(enemy);
-    room.addEnemy(enemy); // Asegúrate de que la habitación tenga un método para agregar enemigos
+  public void addTower(PVector posicion, Room room) {
+    Tower tower = new Tower(posicion);
+    towers.add(tower);
+    room.addTower(tower); // Asegúrate de que la habitación tenga un método para agregar enemigos
   }
-  
-  public void addFollowerEnemy(PVector posicion, Room room) {
-    EnemyFollower enemyFollower = new EnemyFollower(posicion);
-    enemyFollowers.add(enemyFollower);
-    room.addEnemyFollower(enemyFollower); // Asegúrate de que la habitación tenga un método para agregar enemigos
+
+  public void addFollower(PVector posicion, Room room) {
+    Follower follower = new Follower(posicion);
+    followers.add(follower);
+    room.addFollower(follower); // Asegúrate de que la habitación tenga un método para agregar enemigos
   }
   
   public void addSubBoss(PVector posicion, Room room) {
@@ -48,15 +48,15 @@ class GestorEnemigos {
     room.addSubBoss(subBoss); // Asegúrate de que la habitación tenga un método para agregar enemigos
   }
   public void actualizar(Room roomActual) {
-    for (Enemy enemy : roomActual.getEnemies()) {
-      enemy.display();
-      enemy.detectar(jugador);
+    for (Tower tower : roomActual.getTowers()) {
+      tower.display();
+      tower.detectar(jugador);
     }
-    
-    for (EnemyFollower enemyFollower : roomActual.getEnemyFollowers()) {
-      enemyFollower.display();
-      enemyFollower.seguirJugador(jugador);
-      enemyFollower.evitarColisiones(roomActual.getEnemyFollowers());
+
+    for (Follower follower : roomActual.getFollowers()) {
+      follower.display();
+      follower.seguirJugador(jugador);
+      follower.evitarColisiones(roomActual.getFollowers());
     }
     for(SubBoss subBoss : roomActual.getSubBosses()){
       subBoss.display();

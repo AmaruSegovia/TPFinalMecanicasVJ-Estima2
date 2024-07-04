@@ -65,7 +65,7 @@ void jugando() {
   }
   jugador.display(); 
   jugador.mover();
-  gestorBalas.updateBullets();
+  gestorBalas.updateBullets(roomActual);
   
   /* Regulando disparo a la vez que mantiene la animación de disparo mientras no se pueda disparar */
   if (millis() - jugador.getTimeSinceLastShot() >= 310) {

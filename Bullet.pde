@@ -8,7 +8,7 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   private PVector direction;
   /** Representa el sprite de la bala */
   private SpriteObject sprite;
-
+ private Colisionador colisionador;
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
   public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed) {
@@ -16,6 +16,7 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     this.direction = direction;
     this.speed = speed;
     this.sprite = new SpriteObject("playerBullet.png", ancho, alto);
+    this.colisionador = new Colisionador(); 
   }
 
   /* -- ACCESORES (GETTERS Y SETTERS) -- */
@@ -55,5 +56,13 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     fill(3 * sin(this.posicion.x + this.posicion.y) * 100, 255, 255);
     circle(this.posicion.x, this.posicion.y, this.ancho);
     */
+  }
+  
+   public boolean verificarColision(Enemy enemigo) {
+    if (colisionador.colisionarCirculo(this, enemigo)) {
+      enemigo.reducirVida();
+      return true;
+    }
+    return false;
   }
 }
