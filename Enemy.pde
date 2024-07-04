@@ -2,7 +2,7 @@ class Enemy extends GameObject {
   protected int lives;
   protected boolean isHit; // bandera para el impacto
   protected int hitTime; // tiempo del impacto
-  protected int hitDuration = 1000; // duración del impacto en milisegundos
+  protected int hitDuration = 500; // duración del impacto en milisegundos
   protected color originalColor;
   protected color currentColor;
   
