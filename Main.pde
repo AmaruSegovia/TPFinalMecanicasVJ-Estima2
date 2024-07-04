@@ -123,17 +123,17 @@ void mostrarDerrota() {
 }
 
 boolean jugadorGana() {
-    if (jugador.row == 1) {
-    return true;
-  }
+    //if (jugador.row == 1) {
+   // return true;
+ // }
   return false;
 }
 
 boolean jugadorPierde() {
   // Comprueba si la columna del jugador es 3
-  if (jugador.col == 2) {
-    return true;
-  }
+ // if (jugador.col == 2) {
+  //  return true;
+  //}
   return false;
 }
 

@@ -6,14 +6,28 @@ class Tower extends Enemy implements IVisualizable {
   private ArrayList<Bala>balas;
 /*-_--__-_-CONSTRUCTOR_-_-_-_-------___*/
   public Tower(PVector posicion) {
-    super(posicion,2);/*constructor de clase gameobj con la pos y tamaño*/
+    super(posicion,2,color(255, 255, 0));/*constructor de clase gameobj con la pos y tamaño*/
     this.fireRate = 0.5;/*disparos a una bala por medio seg*/
     this.lastFireTime = millis() / 1000.0;
     this.balas=new ArrayList<Bala>();/*array de las balas*/
   }
 /*metodo que dibuja la torreta*/
   public void display() {
-    fill(255, 0, 0);
+    //Cambio de color cuando le hacen daño
+     if (isHit) {
+      float elapsed = millis() - hitTime;
+      if (elapsed < hitDuration) {
+        float lerpFactor = elapsed / hitDuration;
+        currentColor = lerpColor(color(255, 0, 0), originalColor, lerpFactor);
+      } else {
+        isHit = false;
+        currentColor = originalColor;
+      }
+    } else {
+      currentColor = originalColor;
+    }
+    
+    
     noStroke();
     rect(posicion.x - ancho / 2, posicion.y - alto / 2, ancho, alto);
     /*dibuja las balas para el array*/
@@ -22,7 +36,7 @@ class Tower extends Enemy implements IVisualizable {
     }
 
     fill(0, 0, 255);
-    text(this.lives,this.posicion.x,this.posicion.y);
+    dibujarBarraVida(2, 40, 5, 35);
   }
 /***METODO PARA DETECTAR AL PJ DENTRO DEL RADIO MEDIANTE EL PRODUCTO PUNTO***/
   public void detectar(Player player) {

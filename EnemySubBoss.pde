@@ -12,7 +12,7 @@ class SubBoss extends Enemy implements IVisualizable{
   PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
   float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
   SubBoss(PVector posicion) {
-    super(posicion,10);
+    super(posicion,10,color(139, 8, 255));
     this.velocidad = 980;
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
@@ -51,11 +51,23 @@ class SubBoss extends Enemy implements IVisualizable{
   }
 
   void display() {
+    if (isHit) {
+      float elapsed = millis() - hitTime;
+      if (elapsed < hitDuration) {
+        float lerpFactor = elapsed / hitDuration;
+        currentColor = lerpColor(color(255, 0, 0), originalColor, lerpFactor);
+      } else {
+        isHit = false;
+        currentColor = originalColor;
+      }
+    } else {
+      currentColor = originalColor;
+    }
+
+    fill(currentColor);
     noStroke();
-    fill(#8B08FF);
     circle(this.posicion.x, this.posicion.y, 50);
-    fill(0, 0, 255);
-    text(this.lives,this.posicion.x,this.posicion.y);
+    dibujarBarraVida(10, 50, 5, 35);
   }
 
   /*Creacion de las Bombas*/

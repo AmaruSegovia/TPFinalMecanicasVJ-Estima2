@@ -2,16 +2,41 @@ class Follower extends Enemy implements IVisualizable {
   private float velocidad; // velocidad del enemigo
 
   public Follower(PVector posicion) {
-    super(posicion,4); 
+    super(posicion,4,color(0, 0, 255)); 
     this.velocidad = 2; // ajusta la velocidad del enemigo
   }
 
   void display() {
-    fill(0, 0, 255); // color azul para diferenciar al seguidor
+    //Cambio de color cuando le hacen daño
+    if (isHit) {
+      float elapsed = millis() - hitTime;
+      if (elapsed < hitDuration) {
+        float lerpFactor = elapsed / hitDuration;
+        currentColor = lerpColor(color(255, 0, 0), originalColor, lerpFactor);
+      } else {
+        isHit = false;
+        currentColor = originalColor;
+      }
+    } else {
+      currentColor = originalColor;
+    }
+
+    fill(currentColor);
     noStroke();
     circle(posicion.x,  posicion.y, 40);
-    fill(255, 0, 0);
-        text(lives,this.posicion.x,this.posicion.y);
+     float barraAncho = 40; // ancho total de la barra
+  float barraAlto = 5; // alto de la barra
+  float vidasMaximas = 4; // número máximo de vidas
+  float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
+
+  fill(255, 0, 0); // color rojo para la barra de vida
+  rect(posicion.x - barraAncho / 2, posicion.y - 30, anchoActual, barraAlto); // posición de la barra encima del enemigo
+
+  // Dibujar el contorno de la barra de vida
+  noFill();
+  stroke(0);
+  
+  dibujarBarraVida(4, 40, 5, 30);
   }
 
   public void seguirJugador(Player player) {
