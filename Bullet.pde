@@ -76,7 +76,8 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   public void orbitar(PVector bossPosition) {
     if (!disparada) {
       this.angulo += 0.03; // Velocidad de la órbita
-      posicion = bossPosition.copy().add(PVector.fromAngle(angulo).mult(100));
+      this.posicion.x = bossPosition.x + 150 * cos(angulo);
+      this.posicion.y = bossPosition.y + 150 * sin(angulo);
     }
     if (colisionador.isCircle(jugador.collider)&& !jugador.isHit) {
       jugador.reducirVida();
