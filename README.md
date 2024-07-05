@@ -3,7 +3,7 @@
 ![SplashArt](./data/splash1.png)
 
 MagIA es un juego desarrollado por el grupo Desestima2 como parte de un proyecto final en Processing para la Tecnicatura Universitario en Desarrollo Integral de Videojuegos.
-El juego es un roguelike de acción y aventura, consta de habitaciones que el jugador debe vaciar para avanzar hasta llegar al Jefe Final y completarlo.
+El juego es un roguelike de acción y aventura, consta de habitaciones que el jugador explorar y vaciar para avanzar hasta enfrentarse al Jefe Final .
 
 ## Integrantes del Grupo
 
@@ -21,7 +21,7 @@ El juego es un roguelike de acción y aventura, consta de habitaciones que el ju
 
 [Click aquí para las historias de usuario](https://github.com/users/AmaruSegovia/projects/1/views/1)
 
-En la carpeta data tambien se encuentra una PDF con las imagenes de todas las historias de Usuario usadas en este proyecto.
+Para ver todas las historias de Usuario usadas en este proyecto también puedes consultar el [PDF aquí](./data/HistoriasDeUsuario.pdf).
 
 ---
 
