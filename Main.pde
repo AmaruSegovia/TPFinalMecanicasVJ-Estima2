@@ -10,6 +10,8 @@ import ddf.minim.*;
 private Minim minim;
 private AudioPlayer musicaTitulo;
 private AudioPlayer musicaJuego;
+private AudioPlayer musicaDerrota;
+private AudioPlayer musicaVictoria;
 
 private Dungeon dungeon;
 private Player jugador;
@@ -25,8 +27,12 @@ public void setup()
   minim = new Minim(this);
   musicaTitulo = minim.loadFile("musicaTitulo.mp3");
   musicaJuego = minim.loadFile("musicaJuego.mp3");
+  musicaDerrota = minim.loadFile("musicaDerrota.mp3");
+  musicaVictoria = minim.loadFile("musicaVictoria.mp3");
   musicaTitulo.setGain(-10);
   musicaJuego.setGain(-10);
+  musicaDerrota.setGain(-10);
+  musicaVictoria.setGain(-10);
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);
@@ -40,7 +46,7 @@ public void draw()
   println(frameRate);
   switch (estadoJuego) {
     case EstadoJuego.MENU:
-      mostrarDerrota();
+      mostrarMenu();
       break;
     case EstadoJuego.JUGANDO:
       jugando();
@@ -82,18 +88,24 @@ void mostrarMenu() {
   imageMode(CORNER);
   image(loadImage("splash.png"), 0,0, 900, 800);
   musicaJuego.pause();
+  musicaDerrota.pause();
+  musicaVictoria.pause();
   musicaJuego.rewind();
+  musicaDerrota.rewind();
+  musicaVictoria.rewind();
   musicaTitulo.play();
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(32);
-  text("Presiona ENTER para jugar", width / 2, height / 1.5 + 20*(sin(millis()*0.005)+5));
+  text("Presiona ENTER para jugar", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
 }
 
 void mostrarVictoria() {
   imageMode(CORNER);
   image(loadImage("victory.png"), 0,0, 900, 800);
   musicaJuego.pause();
+  musicaJuego.rewind();
+  musicaVictoria.play();
   fill(#12DB94);
   textAlign(CENTER, CENTER);
   textSize(20*(sin(millis()*0.005)+5));
@@ -106,6 +118,8 @@ void mostrarDerrota() {
   imageMode(CORNER);
   image(loadImage("defeat.png"), 0,0, 900, 800);
   musicaJuego.pause();
+  musicaJuego.rewind();
+  musicaDerrota.play();
   fill(#FF1265);
   textAlign(CENTER, CENTER);
   textSize(36);
