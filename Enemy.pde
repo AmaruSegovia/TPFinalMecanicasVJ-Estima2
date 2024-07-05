@@ -19,7 +19,7 @@ class Enemy extends GameObject {
     this.collider = new Colisionador(this.posicion, this.ancho-10);
   }
 
-  public void reducirVida() {
+  public void reducirVida() {   
     this.lives--;
     this.isHit = true; // establecer bandera de impacto
     this.hitTime = millis(); // iniciar temporizador

@@ -29,8 +29,8 @@ class Dungeon {
     switch (this.nivel) {
     case 1:
       return new int[][] {
-        {2, 14, 12, 0},
-        {0, 3, 11, 8}
+        {2, 14, 12, 0,0},
+        {0, 3, 11, 10,0}
       };
     case 2:
       return new int[][] {
@@ -78,6 +78,7 @@ class Dungeon {
         image(loadImage("wasd.png"), width/4.8, height/1.8, 120, 80);        
         image(loadImage("ijkl.png"), width/1.27, height/1.8, 120, 80);
       }
+      
       jugador.checkCollisions(roomActual);
       // Verificar colisiones con las puertas
       balas.updateBullets(roomActual);

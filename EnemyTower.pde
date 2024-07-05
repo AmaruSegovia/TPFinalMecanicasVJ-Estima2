@@ -50,7 +50,7 @@ class Tower extends Enemy implements IVisualizable {
     PVector vectorDireccion = PVector.sub(player.posicion, centro);
     float productoPunto = vectorDireccion.dot(vectorDireccion);
 
-    float radioDeteccion = 180;
+    float radioDeteccion = 300;
     float radioDeteccionCuadrado = radioDeteccion * radioDeteccion;
 
     if (productoPunto <= radioDeteccionCuadrado) {

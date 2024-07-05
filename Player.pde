@@ -33,7 +33,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
     this.direccion = new Vector("down");
     this.collider = new Colisionador(this.posicion,this.ancho*3);
-    this.lives = 5;
+    this.lives = 12;
     this.isHit = false;
     this.hitTime = 0;
   }
@@ -53,7 +53,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     textSize(20);
     fill(255);
     collider.displayCircle(#1AEEFF);
-    dibujarBarraVida(5,50, 5, 35);
+    dibujarBarraVida(12,50, 5, 35);
     text(lives,this.posicion.x,this.posicion.y);
   }
 

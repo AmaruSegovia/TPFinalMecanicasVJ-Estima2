@@ -86,6 +86,7 @@ void jugando() {
 
 void mostrarMenu() {
   imageMode(CORNER);
+  tint(255);
   image(loadImage("splash.png"), 0,0, 900, 800);
   musicaJuego.pause();
   musicaDerrota.pause();
@@ -102,6 +103,7 @@ void mostrarMenu() {
 
 void mostrarVictoria() {
   imageMode(CORNER);
+  tint(255);
   image(loadImage("victory.png"), 0,0, 900, 800);
   musicaJuego.pause();
   musicaJuego.rewind();
@@ -116,6 +118,7 @@ void mostrarVictoria() {
 
 void mostrarDerrota() {
   imageMode(CORNER);
+  tint(255);
   image(loadImage("defeat.png"), 0,0, 900, 800);
   musicaJuego.pause();
   musicaJuego.rewind();
@@ -129,10 +132,11 @@ void mostrarDerrota() {
 }
 
 boolean jugadorGana() {
-    //if (jugador.row == 1) {
-   // return true;
- // }
-  return false;
+  if(jugador.col == 4 && jugador.row ==1)
+  {
+    return true;
+  }
+   return false;
 }
 
 boolean jugadorPierde() {
