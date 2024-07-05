@@ -8,6 +8,6 @@ Breve descripción o introducción al proyecto.
 
 ## Diagrama de Clases
 
-![Diagrama de Clases](./DATA/DiagramaDeClasesMagIA.png)
+![Diagrama de Clases](./data/DiagramaDeClasesMagIA.png)
 
 Grupo Desestima2, hecho en processing.
