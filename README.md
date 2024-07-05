@@ -21,7 +21,7 @@ El juego es un roguelike de acción y aventura, consta de habitaciones que el ju
 
 [Click aquí para las historias de usuario](https://github.com/users/AmaruSegovia/projects/1/views/1)
 
-Para ver todas las historias de Usuario usadas en este proyecto también puedes consultar el [PDF aquí](./data/HistoriasDeUsuario.pdf).
+Para ver todas las historias de Usuario usadas en este proyecto también puedes consultar el [PDF aquí](./data/HUMagIA.pdf).
 
 ---
 
