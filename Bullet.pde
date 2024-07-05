@@ -13,9 +13,10 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   private SpriteObject spritePlayer;
   private SpriteObject spriteBoss;
 
-  // var para orbitar 
-  float angulo;
-  boolean disparada;
+  /** Representa el angulo de hacia donde va la bala */
+  private float angulo;
+  /* Representa el estado de la bala, si esta disparada o esta orbitando*/
+  private boolean disparada;
   
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
@@ -69,34 +70,33 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     }else{      
       this.spriteBoss.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }
-    //circle(this.posicion.x, this.posicion.y,this.colisionador.ancho);
   }
   
 
-  void orbitar(PVector bossPosition) {
+  public void orbitar(PVector bossPosition) {
     if (!disparada) {
       this.angulo += 0.03; // Velocidad de la órbita
       posicion = bossPosition.copy().add(PVector.fromAngle(angulo).mult(100));
     }
     if (colisionador.isCircle(jugador.collider)&& !jugador.isHit) {
       jugador.reducirVida();
-      }
+    }
   }
   
   public void moverAng() {
-      colisionador.setPosicion(this.posicion);
-      this.posicion.add(PVector.fromAngle(angulo).mult(speed).mult(Time.getDeltaTime(frameRate)));
-      if (colisionador.isCircle(jugador.collider)&& !jugador.isHit) {
+    colisionador.setPosicion(this.posicion);
+    this.posicion.add(PVector.fromAngle(angulo).mult(speed).mult(Time.getDeltaTime(frameRate)));
+    if (colisionador.isCircle(jugador.collider)&& !jugador.isHit) {
       jugador.reducirVida();
-      }
+    }
   }
   
-    void disparar() {
+  public void disparar() {
     disparada = true;
     this.direction = PVector.fromAngle(angulo);
   }
   /** Verifica la colision del colisionador con los enemigos */
-   public boolean verificarColision(Enemy enemigo) {
+  public boolean verificarColision(Enemy enemigo) {
     if (colisionador.isCircle(enemigo.collider)) {
       enemigo.reducirVida();
       return true;

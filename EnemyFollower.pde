@@ -62,17 +62,13 @@ class Follower extends Enemy implements IVisualizable, IMovable{
 
   public void evitarColisiones(ArrayList<Follower> followers) {
     for (Follower follower : followers) {
-      if (follower != this && colisionarCirculo(this, follower)) {
+      if (follower != this && this.collider.isCircle(follower)) {
         PVector direccion = PVector.sub(this.posicion, follower.getPosicion());
         direccion.normalize();
         direccion.mult(velocidad);
         this.posicion.add(direccion);
       }
-    }}
-
-      private boolean colisionarCirculo(GameObject primero, GameObject segundo) {
-    float distancia = PVector.dist(primero.getPosicion(), segundo.getPosicion());
-    float radios = primero.getAncho() / 2 + segundo.getAncho() / 2;
-    return distancia <= radios;
+    }
   }
+
 }
