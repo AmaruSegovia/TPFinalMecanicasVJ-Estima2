@@ -9,12 +9,12 @@ class Boss extends Enemy implements IVisualizable, IMovable{
   
   // Funciones adicionales para fase 2
   private int tiempoUltimoDisparo;
-  private int intervaloDisparo = 2000; // Intervalo de disparo en milisegundos
+  private int intervaloDisparo = 1000; // Intervalo de disparo en milisegundos
   private float radioOrbita = 150; // Radio de la órbita
   
   /* -- CONSTRUCTOR -- */
   public Boss(PVector posicion) {
-    super(posicion, 20, color(0, 0, 255));
+    super(posicion, 60, color(0, 0, 255));
     this.ancho = 41; //valores del sprite sheet no tocar
     this.alto = 38; //valores del sprite sheet no tocar
     this.topSpeed= random(150,200);
@@ -50,7 +50,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{
   float margen = 50; // margen en ambos extremos de la pantalla
   float barraAncho = width - 2 * margen; // ancho total de la barra
   float barraAlto = 20; // alto de la barra
-  float vidasMaximas = 20; // número máximo de vidas
+  float vidasMaximas = 60; // número máximo de vidas
   float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
   float r = map(lives, 0, vidasMaximas, 255, 0);
   float g = map(lives, 0, vidasMaximas, 0, 255);
@@ -63,11 +63,12 @@ class Boss extends Enemy implements IVisualizable, IMovable{
   strokeWeight(7);
   rect(margen, height - barraAlto - 80, barraAncho, barraAlto);
   strokeWeight(0);
+  noFill();
 }
 
   
   public void mover() {
-    if(lives <= 10){
+    if(lives <= 30){
       fase = 2;
     }
     switch (fase) {
@@ -80,7 +81,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{
         moverFase();
         if (millis() > tiempoProximoDisparo) {
           disparar();
-          tiempoProximoDisparo = millis() + int(random(3000, 6000));
+          tiempoProximoDisparo = millis() + int(random(1000, 1500));
         }
       }
       break;
@@ -123,7 +124,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{
         for (int i = 0; i < numBalas; i++) {
           float angulo = PI / 2 + radians(40) / (numBalas - 1) * i - radians(20); // Ajustar los ángulos para las balas
           Bullet bala;
-          bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y+92), angulo);
+          bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y-60), angulo,"enemigo");
           gestorBalas.addBullet(bala);
         }
       break;
@@ -132,11 +133,11 @@ class Boss extends Enemy implements IVisualizable, IMovable{
         
         for (int i = 0; i < 8; i++) {
           float angulo = TWO_PI / 8 * i;
-          Bullet bala = new Bullet(this.posicion.copy(), angulo, radioOrbita);
+          Bullet bala = new Bullet(this.posicion.copy(), angulo, radioOrbita,"enemigo");
           gestorBalas.addBullet(bala);
            //<>//
-        }
-      break; //<>//
+        } //<>//
+      break;
     } //<>//
   }
 

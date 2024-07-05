@@ -23,17 +23,18 @@ public class GestorBullets {
     removableBullets = new ArrayList<Bullet>();
     for (Bullet bullet : this.bulletList) {
       bullet.mover();
-      if (bullet.pertenece != "jugador"){
+      if (bullet.pertenece == "enemigo"){
         bullet.moverAng();
-        
       } 
       bullet.display();
 
       for (Enemy enemigo : room.getAllEnemies()) {
         if (bullet.verificarColision(enemigo)) {
           removableBullets.add(bullet);
+          if (bullet.pertenece == "jugador"){
           if(enemigo.lives <= 0){
            room.removeEnemy(enemigo);
+          }
           }
           break;
         }
