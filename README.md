@@ -23,6 +23,24 @@ El juego es un roguelike de acción y aventura, consta de habitaciones que el ju
 
 Para ver todas las historias de Usuario usadas en este proyecto también puedes consultar el [PDF aquí](./data/HUMagIA.pdf).
 
+## Mecanicas del Juego
+
+![PlayerMovement](./data/player.png)
+
+![PlayerFire](./data/player2.png)
+
+![Rooms](./data/rooms.png)
+
+![FollowerEnemy](./data/follower.png)
+
+![EnemySubBoss](./data/subBoss.png)
+
+![EnemyTower](./data/tower.png)
+
+![EnemyBoss1](./data/boss1.png)
+
+![EnemyBoss2](./data/boss2.png)
+
 ---
 
 © 2024 Desestima2. Todos los derechos reservados.
