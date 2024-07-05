@@ -4,6 +4,8 @@ public class GestorBullets {
   /** Define el Array que almacenará las balas */
   private ArrayList<Bullet> bulletList;
 
+
+ private ArrayList<Bullet> removableBullets;
   /* -- CONSTRUCTORES -- */
   /** Constructor sin parámetros */
   public GestorBullets() {
@@ -18,13 +20,13 @@ public class GestorBullets {
 
   /** Método para actualizar el estado de las balas */
  public void updateBullets(Room room) {
-    ArrayList<Bullet> removableBullets = new ArrayList<Bullet>();
-
+    removableBullets = new ArrayList<Bullet>();
     for (Bullet bullet : this.bulletList) {
       bullet.mover();
       if (bullet.pertenece != "jugador"){
         bullet.moverAng();
-      }
+        
+      } 
       bullet.display();
 
       for (Enemy enemigo : room.getAllEnemies()) {
@@ -57,6 +59,7 @@ public class GestorBullets {
       if (!b.disparada) {
         b.disparar();
       }
+
     }
   }
   /* mueve las balas del enemigo*/
@@ -65,7 +68,10 @@ public class GestorBullets {
       Bullet b = bulletList.get(i);
       if (!b.disparada) {
         b.orbitar(bossPosition);
-      }
+      } 
     }
   }
+  
+    public ArrayList<Bullet> getRemovableBullets() {  return this.removableBullets;  }
+    public ArrayList<Bullet> getBulletList() {  return this.bulletList;  }
 }

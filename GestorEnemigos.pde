@@ -70,24 +70,29 @@ class GestorEnemigos {
     for (Tower tower : roomActual.getTowers()) {
       tower.display();
       tower.detectar(jugador);
+      tower.checkCollisionWithPlayer(jugador); // Verificar colisión con el jugador
+      
     }
 
     for (Follower follower : roomActual.getFollowers()) {
       follower.display();
-      follower.seguirJugador(jugador);
+      follower.mover();
       follower.evitarColisiones(roomActual.getFollowers());
+      follower.checkCollisionWithPlayer(jugador); // Verificar colisión con el jugador
     }
+
     for (SubBoss subBoss : roomActual.getSubBosses()) {
-      subBoss.display();
-      subBoss.actualizarPosicion(jugador.posicion);
-      subBoss.creacionEliminacionBombas(jugador);
+        subBoss.display();
+    subBoss.mover();
+    subBoss.creacionEliminacionBombas(jugador);
+    subBoss.checkCollisionWithPlayer(jugador);
     }
-      for (Boss boss : roomActual.getBosses()) {
-        boss.display();
-        boss.mover();
-        boss.detectarPlayer(jugador);
-  
-      }
-    
+
+    for (Boss boss : roomActual.getBosses()) {
+      boss.display();
+      boss.mover();
+      boss.detectarPlayer(jugador);
+      boss.checkCollisionWithPlayer(jugador); // Verificar colisión con el jugador
+    }
   }
 }

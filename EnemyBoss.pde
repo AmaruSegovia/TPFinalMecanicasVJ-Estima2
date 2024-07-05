@@ -1,4 +1,4 @@
-class Boss extends Enemy {
+class Boss extends Enemy implements IVisualizable, IMovable{
   private boolean inCenter = true;
   protected float speed;
   protected float topSpeed; 
@@ -6,7 +6,6 @@ class Boss extends Enemy {
   private float tiempoInicio;
   private float tiempoProximoDisparo;  
   private int fase = 1; // Fase del enemigo
-  private SpriteObject sprite;//El objeto sprite del enemigo
   
   // Funciones adicionales para fase 2
   private int tiempoUltimoDisparo;
@@ -66,7 +65,7 @@ class Boss extends Enemy {
     dibujarBarraVida(4, 40, 5, 30);
   }
   public void mover() {
-    if(lives == 10){
+    if(lives <= 10){
       fase = 2;
     }
     switch (fase) {
@@ -128,10 +127,12 @@ class Boss extends Enemy {
       break;
       case 2:
         gestorBalas.dispararBalas();
+        
         for (int i = 0; i < 8; i++) {
           float angulo = TWO_PI / 8 * i;
           Bullet bala = new Bullet(this.posicion.copy(), angulo, radioOrbita);
           gestorBalas.addBullet(bala);
+           //<>//
         }
       break;
     }

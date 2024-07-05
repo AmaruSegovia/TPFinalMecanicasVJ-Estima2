@@ -2,23 +2,23 @@ class Tower extends Enemy implements IVisualizable {
   private float fireRate;
   private float lastFireTime;
   private ArrayList<Bala> balas;
-    
-  private SpriteObject sprite;//El objeto sprite del enemigo
+  private float currentAngle;  // Nuevo campo para guardar el ángulo actual de la torreta
 
-  /* -- CONSTRUCTOR --*/
+  /* -- CONSTRUCTOR -- */
   public Tower(PVector posicion) {
-    super(posicion, 2, color(255, 255, 255)); 
-    this.ancho=22;
-    this.alto=22;
-    this.fireRate = 0.5;
-    this.lastFireTime = millis() / 1000.0;
+    super(posicion, 2, color(255, 255, 255));
+    this.ancho = 22;
+    this.alto = 22;
+    this.fireRate = 0.5f;
+    this.lastFireTime = millis() / 1000.0f;
     this.balas = new ArrayList<Bala>();
-    this.collider = new Colisionador(this.posicion, this.ancho*3);
+    this.collider = new Colisionador(this.posicion, this.ancho * 3);
     this.sprite = new SpriteObject("turret.png", ancho, alto, 3);
+    this.currentAngle = 0;  // Inicializamos el ángulo actual
   }
 
-  /* -- METODOS -- */
-  /** Metodo que dibuja a la Torre */
+  /* -- MÉTODOS -- */
+  /** Método que dibuja a la Torre */
   public void display() {
     if (isHit) {
       float elapsed = millis() - hitTime;
@@ -35,17 +35,13 @@ class Tower extends Enemy implements IVisualizable {
 
     tint(currentColor);
     noStroke();
-    // dibuja a la torreta
-    imageMode(CENTER);
-    tint(#FFFFFF);
-    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
-    //dibuja elarea de colision con la torre
-    //this.collider.displayCircle(#DE3EFF);
+
+    // Rotamos la torreta hacia el jugador
+    rotateTower(jugador);
 
     for (Bala bala : balas) {
       bala.display();
     }
-
     dibujarBarraVida(2, 40, 5, 35);
   }
 
@@ -69,40 +65,21 @@ class Tower extends Enemy implements IVisualizable {
     for (int i = balas.size() - 1; i >= 0; i--) {
       Bala b = balas.get(i);
       b.mover();
-      if (b.estaFuera()) {
+      if (b.checkCollisionWithPlayer(player) || b.estaFuera()) {
         balas.remove(i);
       }
     }
   }
 
-  public class Bala extends GameObject implements IMovable, IVisualizable {
-    private float x, y;
-    private float dirX, dirY;
-    private float velocidad = 5;
-    private SpriteObject sprite;
+  public void rotateTower(Player jugador) {
+    PVector direccion = PVector.sub(jugador.posicion, this.posicion);
+    float angulo = atan2(direccion.y, direccion.x);  // Calcula el ángulo entre la torreta y el jugador
+    this.currentAngle = angulo;
 
-    Bala(float xInicial, float yInicial, PVector objetivo) {
-      this.x = xInicial;
-      this.y = yInicial;
-      float vectorX = objetivo.x - xInicial;
-      float vectorY = objetivo.y - yInicial;
-      float magnitud = sqrt(vectorX * vectorX + vectorY * vectorY);
-      this.dirX = vectorX / magnitud;
-      this.dirY = vectorY / magnitud;
-      this.sprite = new SpriteObject("enemyBullet.png", 10, 10, 2);
-    }
-
-    public void mover() {
-      this.x += this.dirX * this.velocidad;
-      this.y += this.dirY * this.velocidad;
-    }
-
-    public void display() {
-      this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.x, this.y));
-    }
-
-    public boolean estaFuera() {
-      return (x < 0 || x > width || y < 0 || y > height);
-    }
+    pushMatrix();
+    translate(this.posicion.x, this.posicion.y);
+    rotate(this.currentAngle);
+    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(0, 0));  // Dibujamos la torreta rotada en el origen de la transformación
+    popMatrix();
   }
 }

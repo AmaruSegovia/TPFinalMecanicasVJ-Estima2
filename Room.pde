@@ -42,6 +42,7 @@ class Room extends GameObject {
   public void display() {
     noStroke();
     imageMode(CORNER);
+    tint(255);
     image(background, 0, 0, 900, 800);
     for (Door door : this.doorList) {
       if (door != null) door.display();

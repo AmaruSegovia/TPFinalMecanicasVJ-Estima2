@@ -7,7 +7,7 @@ class Enemy extends GameObject {
   protected color originalColor;
   protected color currentColor;
   protected Colisionador collider;
-  
+  protected SpriteObject sprite;
   /* -- CONSTRUCTOR -- */
   public Enemy(PVector posicion, int vidas, color colorInicial) {
     this.posicion = posicion; // constructor de clase GameObject con la pos y tamaño
@@ -39,6 +39,12 @@ class Enemy extends GameObject {
     noFill();
     stroke(0);
     rect(posicion.x - barraAncho / 2, posicion.y - offsetY, barraAncho, barraAlto);
+  }
+  
+   public void checkCollisionWithPlayer(Player player) {
+    if (collider.isCircle(player.collider) && !player.isHit) {
+      player.reducirVida();
+    }
   }
   
   /* -- ASESOERS -- */

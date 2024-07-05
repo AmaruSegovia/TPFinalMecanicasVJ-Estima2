@@ -1,37 +1,40 @@
-/** Clase que representa a las bombas del juego */
-class Bomb extends GameObject{
-  private float radioActual;//El radio actual de la bomba
-  private float radioMaximo;//El radio maximo de la bomba
-  private boolean haExplotado = false;//Nos va a indicar si la bomba a explotado o no
-  private int duracionExplosion = 60;//La duracion de la bomba
+public class Bomb extends GameObject {
+  private float radioActual;
+  private float radioMaximo;
+  private boolean haExplotado = false;
+  private int duracionExplosion = 60;
+  private Colisionador collider;
 
-  /* -- CONSTRUCTOR -- */
-  /** Contructor parametrizado*/
-  Bomb(PVector posicion) {
-    this.posicion = posicion;
+  public Bomb(PVector posicion) {
+    super(posicion, 0, 0);
     this.radioActual = 0;
-    this.radioMaximo = 60;//El tamanio maximo que alcanzara la bomba
+    this.radioMaximo = 60;
+    this.collider = new Colisionador(this.posicion, (int)radioActual * 2);
   }
 
-  /** Creacion de la explosion*/
   public void dibujar() {
     if (radioActual < radioMaximo) {
       fill(255, 0, 0, 100);
-      //Dibuja la explosion y expandimo el diametro por 2.5
       circle(posicion.x, posicion.y, radioActual * 2.5);
-      //Calcula el crecimiento del radio de la bomba, dividiendo por su duracion de la explosion para saber cuanto debe aumentar el radio en cada frame
-      //El radio actual se incrementa por cada interacion, haciendo que la bomba se expanda se expanda hasta su radio maximo
       radioActual += radioMaximo / duracionExplosion;
+      collider.setAncho((int)radioActual * 2); // Actualizar el tamaño del collider
     } else {
-      //Se ejecuta cuando el radio de la bomba alcanzo su maximo expancion
       haExplotado = true;
     }
   }
-  /** Explosion de la bomba y afectar al jugador*/
+
   public void explotar(Player jugador) {
-    //Comparamos la posicion del jugador y bomba con el radio actual, si es menor que el radio actual, entonces exploto cerca del jugador
-    if (dist(posicion.x, posicion.y, jugador.posicion.x, jugador.posicion.y) < radioActual) {
+    if (collider.isCircle(jugador.collider)  && !jugador.isHit) {
+      jugador.reducirVida();
       haExplotado = true;
     }
+  }
+
+  public boolean checkCollisionWithPlayer(Player jugador) {
+    if (collider.isCircle(jugador.collider) && !jugador.isHit) {
+      jugador.reducirVida();
+      return true;
+    }
+    return false;
   }
 }

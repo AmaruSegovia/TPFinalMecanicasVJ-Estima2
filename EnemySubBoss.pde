@@ -1,17 +1,12 @@
-class SubBoss extends Enemy implements IVisualizable{
+class SubBoss extends Enemy implements IVisualizable, IMovable{
   private float velocidad;
   private PVector ultimaPosicionJugador;
-
-  private int tiempoEspera = 200;//El tiempo de espera del enemigo antes de comenzar a persegui al jugador
-  private int tiempoEsperaActual = 0;//El tiempo actual de espera acumulador
-
-  private boolean persiguiendoJugador = false;//Indica si el enemigo esta actualmente persiguiendo al jugador, por defecto esta en falso
-  private ArrayList<Bomb> bombsList;//ArrayList que servira para la creacion de la bombas
-
-  private PVector ultimaPosicionBomba;//La posicion donde el sub-jefe dejo la ultima bomba
-  private float distanciaBomba = 80;//La distancia que debe cumplir el sub-jefe para dejar otra bomba
-    
-  private SpriteObject sprite;//El objeto sprite del enemigo
+  private int tiempoEspera = 200; // El tiempo de espera del enemigo antes de comenzar a perseguir al jugador
+  private int tiempoEsperaActual = 0; // El tiempo actual de espera acumulado
+  private boolean persiguiendoJugador = false; // Indica si el enemigo está actualmente persiguiendo al jugador
+  private ArrayList<Bomb> bombsList; // ArrayList que servirá para la creación de las bombas
+  private PVector ultimaPosicionBomba; // La posición donde el sub-jefe dejó la última bomba
+  private float distanciaBomba = 80; // La distancia que debe cumplir el sub-jefe para dejar otra bomba
   
   /* -- CONSTRUCTOR -- */
   public SubBoss(PVector posicion) {
@@ -27,14 +22,14 @@ class SubBoss extends Enemy implements IVisualizable{
   }
 
   /** METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
-  public void actualizarPosicion(PVector posicionJugador) {
+  public void mover() {
     //Si no esta persiguiendo al jugador
     if (persiguiendoJugador == false) {
       tiempoEsperaActual++;//Incrementa el tiempo de espera
       if (tiempoEsperaActual >= tiempoEspera) {
         tiempoEsperaActual = 0;//Reseteamos el contador
         persiguiendoJugador = true;
-        ultimaPosicionJugador = posicionJugador.copy();//Actualiza la ultima posicion obtenida del jugador
+        ultimaPosicionJugador = jugador.getPosicion().copy();//Actualiza la ultima posicion obtenida del jugador
       }
     }
     /*PERSEGUIR AL JUGADOR*/
@@ -81,29 +76,32 @@ class SubBoss extends Enemy implements IVisualizable{
     dibujarBarraVida(10, 50, 5, 35);
   }
 
-  /** Creacion de las Bombas*/
+  
+  /** Creación de las Bombas */
   public void creacionBombas() {
-    //Calcula la distancia recorrida desde la ultima bomba
+    // Calcula la distancia recorrida desde la última bomba
     float distanciaRecorridaSubBoss = PVector.dist(posicion, ultimaPosicionBomba);
-    if(distanciaRecorridaSubBoss >= distanciaBomba){
+    if (distanciaRecorridaSubBoss >= distanciaBomba) {
       bombsList.add(new Bomb(posicion.copy()));
-      //actualizamos la posicion en que el sub-jefe creo la ultima bomba
       ultimaPosicionBomba = posicion.copy();
     }
   }
-  /** Metodo que crea a las bombas y las elimina*/
+
+  /** Método que crea a las bombas y las elimina */
   public void creacionEliminacionBombas(Player jugador) {
-    //Itera en el bucle for la lista bomba desde el ultimo hasta el primero para evitar problemas al eliminar las bombas mientras itera
-    for (int i = bombsList.size() - 1; i >= 0; i--) {
-      Bomb bomba = bombsList.get(i);
-      bomba.dibujar();
-      bomba.explotar(jugador);
-      //Si la bomba exploto entonces usamos la funcion remove de arraylist para eliminar a la bomba de acuerdo a la posicion
-      if (bomba.haExplotado) {
-        bombsList.remove(i);
-      }
+  for (int i = bombsList.size() - 1; i >= 0; i--) {
+    Bomb bomba = bombsList.get(i);
+    bomba.dibujar();
+    // Verificar colisión con el jugador y aplicar daño
+    if (bomba.checkCollisionWithPlayer(jugador)) {
+      bomba.explotar(jugador); // Aplica daño al jugador si colisiona
+    }
+    if (bomba.haExplotado) {
+      bombsList.remove(i);
     }
   }
+}
+
 
   /** Movimiento Oscilatorio del sub Jefe al detenerse*/
   public void movimientoOscilatorioY() {

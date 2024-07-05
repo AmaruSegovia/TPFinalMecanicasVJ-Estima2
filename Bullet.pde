@@ -72,24 +72,41 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     //circle(this.posicion.x, this.posicion.y,this.colisionador.ancho);
   }
   
-  void disparar() {
-    disparada = true;
-    this.direction = PVector.fromAngle(angulo);
-  }
+
   void orbitar(PVector bossPosition) {
     if (!disparada) {
       this.angulo += 0.03; // Velocidad de la órbita
       posicion = bossPosition.copy().add(PVector.fromAngle(angulo).mult(100));
     }
+    if (colisionador.isCircle(jugador.collider)&& !jugador.isHit) {
+      jugador.reducirVida();
+      }
   }
   
   public void moverAng() {
+      colisionador.setPosicion(this.posicion);
       this.posicion.add(PVector.fromAngle(angulo).mult(speed).mult(Time.getDeltaTime(frameRate)));
+      if (colisionador.isCircle(jugador.collider)&& !jugador.isHit) {
+      jugador.reducirVida();
+      }
+  }
+  
+    void disparar() {
+    disparada = true;
+    this.direction = PVector.fromAngle(angulo);
   }
   /** Verifica la colision del colisionador con los enemigos */
    public boolean verificarColision(Enemy enemigo) {
     if (colisionador.isCircle(enemigo.collider)) {
       enemigo.reducirVida();
+      return true;
+    }
+    return false;
+  }
+  
+   public boolean verificarColisionJugador(Player player) {
+    if (colisionador.isCircle(player.collider)) {
+      player.reducirVida();
       return true;
     }
     return false;

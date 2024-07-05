@@ -15,6 +15,11 @@ class Player extends GameObject implements IMovable, IVisualizable {
   /** Representa el estado de la animación del sprite del jugador */
   private int animationState;
   private Colisionador collider;
+  
+  private int lives;
+  private boolean isHit; // bandera para el impacto
+  private int hitTime; // tiempo del impacto
+  private int hitDuration = 500; // duración del impacto en milisegundos
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
@@ -28,18 +33,28 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
     this.direccion = new Vector("down");
     this.collider = new Colisionador(this.posicion,this.ancho*3);
+    this.lives = 5;
+    this.isHit = false;
+    this.hitTime = 0;
   }
 
   /* -- METODOS -- */
   /** Metodo que dibuja al jugador en pantalla */
   public void display() {
+     if (isHit && millis() - hitTime < hitDuration) {
+      tint(255, 0, 0); // el jugador se torna rojo cuando está en estado de impacto
+    } else {
+      tint(255);
+      isHit = false; // restablecer la bandera
+    }
     stroke(0);
     fill(200, 30);
-    tint(#FFFFFF);
     this.sprite.render(this.animationState, new PVector(this.posicion.x, this.posicion.y));
     textSize(20);
     fill(255);
     collider.displayCircle(#1AEEFF);
+    dibujarBarraVida(5,50, 5, 35);
+    text(lives,this.posicion.x,this.posicion.y);
   }
 
   /** Metodo que mueve al jugador */
@@ -132,6 +147,36 @@ class Player extends GameObject implements IMovable, IVisualizable {
     if (input == 'l') return new Bullet(this.posicion.copy(), 10, 10, new PVector(1, 0), 400,"jugador");
     return null;
   }
+  
+  public boolean verificarColision(Enemy enemigo, Bala bala) {
+    if ((collider.isCircle(enemigo.collider) || collider.isCircle(bala.collider)) && !isHit) {
+      enemigo.reducirVida();
+      return true;
+    }
+    return false;
+  }
+  
+  public void dibujarBarraVida(float vidasMaximas, float barraAncho, float barraAlto, float offsetY) {
+    float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
+
+    // Interpolación lineal del color de verde (0, 255, 0) a rojo (255, 0, 0)
+    float r = map(lives, 0, vidasMaximas, 255, 0);
+    float g = map(lives, 0, vidasMaximas, 0, 255);
+    fill(r, g, 0); // color interpolado para la barra de vida
+
+    rect(posicion.x - barraAncho / 2, posicion.y - offsetY, anchoActual, barraAlto); // posición de la barra encima del enemigo
+
+    // Dibujar el contorno de la barra de vida
+    noFill();
+    stroke(0);
+    rect(posicion.x - barraAncho / 2, posicion.y - offsetY, barraAncho, barraAlto);
+  }
+  
+  public void reducirVida() {
+    this.lives--;
+    this.isHit = true; // establecer bandera de impacto
+    this.hitTime = millis(); // iniciar temporizador
+  }
 
    /* Getters */
   /** Devuelve la velocidad maxima del jugador */
@@ -157,6 +202,8 @@ class Player extends GameObject implements IMovable, IVisualizable {
   
   /** Devuelve el estado de la animación del jugador */
   public int getAnimationState() {  return this.animationState;  }
+  
+  public int getLives() {  return lives;  }
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
@@ -170,5 +217,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   
   /** Actualiza el estado de la animación del jugador */
   public void setAnimationState(int animationState) {  this.animationState = animationState;  }
+  
+  public void setLives(int lives) {  this.lives = lives;  }
 
 }

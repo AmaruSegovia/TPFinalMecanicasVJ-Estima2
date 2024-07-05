@@ -1,8 +1,6 @@
-class Follower extends Enemy implements IVisualizable {
+class Follower extends Enemy implements IVisualizable, IMovable{
   /** Representa la velocidad del enemigo */
   private float velocidad;
-  
-  private SpriteObject sprite;//El objeto sprite del enemigo
 
   /* -- CONSTRUCTOR -- */
   public Follower(PVector posicion) {
@@ -54,8 +52,8 @@ class Follower extends Enemy implements IVisualizable {
     dibujarBarraVida(4, 40, 5, 30);
   }
 
-  public void seguirJugador(Player player) {
-    PVector direccion = PVector.sub(player.getPosicion(), this.posicion); // calcula la dirección hacia el jugador
+  public void mover() {
+    PVector direccion = PVector.sub(jugador.getPosicion(), this.posicion); // calcula la dirección hacia el jugador
     direccion.normalize(); // normaliza la dirección
     direccion.mult(velocidad); // multiplica por la velocidad
 

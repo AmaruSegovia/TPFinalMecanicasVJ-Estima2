@@ -122,9 +122,9 @@ boolean jugadorGana() {
 
 boolean jugadorPierde() {
   // Comprueba si la columna del jugador es 3
- // if (jugador.col == 2) {
-  //  return true;
-  //}
+  if (jugador.lives <= 0) {
+    return true;
+  }
   return false;
 }
 
