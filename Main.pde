@@ -10,6 +10,8 @@ import ddf.minim.*;
 private Minim minim;
 private AudioPlayer musicaTitulo;
 private AudioPlayer musicaJuego;
+private AudioPlayer musicaDerrota;
+private AudioPlayer musicaVictoria;
 
 private Dungeon dungeon;
 private Player jugador;
@@ -25,8 +27,12 @@ public void setup()
   minim = new Minim(this);
   musicaTitulo = minim.loadFile("musicaTitulo.mp3");
   musicaJuego = minim.loadFile("musicaJuego.mp3");
+  musicaDerrota = minim.loadFile("musicaDerrota.mp3");
+  musicaVictoria = minim.loadFile("musicaVictoria.mp3");
   musicaTitulo.setGain(-10);
   musicaJuego.setGain(-10);
+  musicaDerrota.setGain(-10);
+  musicaVictoria.setGain(-10);
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);
@@ -79,38 +85,47 @@ void jugando() {
 }
 
 void mostrarMenu() {
+  imageMode(CORNER);
+  image(loadImage("splash.png"), 0,0, 900, 800);
   musicaJuego.pause();
+  musicaDerrota.pause();
+  musicaVictoria.pause();
   musicaJuego.rewind();
+  musicaDerrota.rewind();
+  musicaVictoria.rewind();
   musicaTitulo.play();
-  background(0, 0, 128);
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(32);
-  text("MENU PRINCIPAL", width / 2, height / 2 - 40);
-  textSize(16);
-  text("Presiona ENTER para jugar", width / 2, height / 2);
+  text("Presiona ENTER para jugar", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
 }
 
 void mostrarVictoria() {
+  imageMode(CORNER);
+  image(loadImage("victory.png"), 0,0, 900, 800);
   musicaJuego.pause();
-  background(0, 128, 0);
-  fill(255);
+  musicaJuego.rewind();
+  musicaVictoria.play();
+  fill(#12DB94);
   textAlign(CENTER, CENTER);
-  textSize(32);
-  text("¡VICTORIA!", width / 2, height / 2 - 40);
-  textSize(16);
-  text("Presiona ENTER para volver al menú", width / 2, height / 2);
+  textSize(20*(sin(millis()*0.005)+5));
+  text("¡VICTORIA!", width / 2, height / 6.5);
+  textSize(20);
+  text("Presiona ENTER para volver al menú", width / 2, height / 4.3);
 }
 
 void mostrarDerrota() {
+  imageMode(CORNER);
+  image(loadImage("defeat.png"), 0,0, 900, 800);
   musicaJuego.pause();
-  background(128, 0, 0);
-  fill(255);
+  musicaJuego.rewind();
+  musicaDerrota.play();
+  fill(#FF1265);
   textAlign(CENTER, CENTER);
-  textSize(32);
-  text("DERROTA", width / 2, height / 2 - 40);
+  textSize(36);
+  text("Has muerto", width / 2.5 + 20*(sin(millis()*0.001)+5), height / 6);
   textSize(16);
-  text("Presiona ENTER para volver al menú", width / 2, height / 2);
+  text("Presiona ENTER para volver al menú", width / 2, height / 5);
 }
 
 boolean jugadorGana() {
