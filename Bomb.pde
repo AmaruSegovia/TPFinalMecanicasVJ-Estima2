@@ -1,4 +1,4 @@
-public class Bomb extends GameObject {
+public class Bomb extends GameObject implements IVisualizable{
   private float radioActual;
   private float radioMaximo;
   private boolean haExplotado = false;
@@ -12,7 +12,7 @@ public class Bomb extends GameObject {
     this.collider = new Colisionador(this.posicion, (int)radioActual * 2);
   }
 
-  public void dibujar() {
+  public void display() {
     if (radioActual < radioMaximo) {
       fill(255, 0, 0, 100);
       circle(posicion.x, posicion.y, radioActual * 2.5);

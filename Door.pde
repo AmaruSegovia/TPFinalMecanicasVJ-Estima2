@@ -43,8 +43,6 @@ class Door extends GameObject {
       fill(255, 0, 0); // Color rojo para puertas cerradas
     }
     circle(this.posicion.x, this.posicion.y, this.ancho);
-    
-    collider.displayCircle(#135CCE);  
   }
 
   /* -- ASESORES -- */

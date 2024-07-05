@@ -52,9 +52,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.sprite.render(this.animationState, new PVector(this.posicion.x, this.posicion.y));
     textSize(20);
     fill(255);
-    collider.displayCircle(#1AEEFF);
     dibujarBarraVida(12,50, 5, 35);
-    text(lives,this.posicion.x,this.posicion.y);
   }
 
   /** Metodo que mueve al jugador */

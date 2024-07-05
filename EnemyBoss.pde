@@ -15,23 +15,20 @@ class Boss extends Enemy implements IVisualizable, IMovable{
   /* -- CONSTRUCTOR -- */
   public Boss(PVector posicion) {
     super(posicion, 20, color(0, 0, 255));
-    this.ancho = 41;
-    this.alto = 38;
+    this.ancho = 41; //valores del sprite sheet no tocar
+    this.alto = 38; //valores del sprite sheet no tocar
     this.topSpeed= random(150,200);
     this.direccion = new Vector(random(2) < 1 ? "right" : "left");
-    this.collider = new Colisionador(this.posicion, this.ancho*3);
-    this.sprite = new SpriteObject("jefe.png", ancho, alto, 3);
+    this.collider = new Colisionador(this.posicion, this.ancho*4);
+    this.sprite = new SpriteObject("jefe.png", ancho, alto, 4);
     this.tiempoInicio = millis();
     this.tiempoProximoDisparo = millis() + int(random(4000, 6000));
   }
   public void display() {
     noStroke();
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
-    text(lives, this.posicion.x, this.posicion.y);
     collider.setPosicion(this.posicion);
-    collider.displayCircle(0);
     this.direccion.setOrigen(posicion);
-    this.direccion.display();
     
     //Cambio de color cuando le hacen daño
     if (isHit) {
@@ -121,7 +118,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{
         for (int i = 0; i < numBalas; i++) {
           float angulo = PI / 2 + radians(40) / (numBalas - 1) * i - radians(20); // Ajustar los ángulos para las balas
           Bullet bala;
-          bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y+80), angulo);
+          bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y+92), angulo);
           gestorBalas.addBullet(bala);
         }
       break;
@@ -142,7 +139,6 @@ class Boss extends Enemy implements IVisualizable, IMovable{
     //area de deteccion dibujada
     noFill();
     stroke(200);
-    rect(0, 0, width, 100);
 
     if (player.getPosicion().y < 100) {
       if (this.posicion.dist(player.getPosicion()) < 1000) {

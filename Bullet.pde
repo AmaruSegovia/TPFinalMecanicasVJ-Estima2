@@ -103,27 +103,4 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     }
     return false;
   }
-  
-   public boolean verificarColisionJugador(Player player) {
-    if (colisionador.isCircle(player.collider)) {
-      player.reducirVida();
-      return true;
-    }
-    return false;
-  }
-
-  /* -- ACCESORES (GETTERS Y SETTERS) -- */
-  /* Getters */
-  /** Devuelve la velocidad de la bala */
-  public float getSpeed() {  return this.speed;  }
-
-  /** Devuelve la dirección de la bala */
-  public PVector getDirection() {  return this.direction;  }
-
-  /* Setters */
-  /** Cambia la velocidad de la bala */
-  public void setSpeed() {  this.speed = speed;  }
-
-  /** Cambia la dirección de la bala */
-  public void setDirection() {  this.direction = direction;  }
 }

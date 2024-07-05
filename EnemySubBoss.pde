@@ -91,7 +91,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
   public void creacionEliminacionBombas(Player jugador) {
   for (int i = bombsList.size() - 1; i >= 0; i--) {
     Bomb bomba = bombsList.get(i);
-    bomba.dibujar();
+    bomba.display();
     // Verificar colisión con el jugador y aplicar daño
     if (bomba.checkCollisionWithPlayer(jugador)) {
       bomba.explotar(jugador); // Aplica daño al jugador si colisiona

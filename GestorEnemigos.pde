@@ -4,7 +4,6 @@ class GestorEnemigos {
   private ArrayList<Tower> towers;
   private ArrayList<Follower> followers;
   private ArrayList<SubBoss> subBosses;
-  private ArrayList<Boss> boss;
   /** Representa la maxima cantidad de tipos de enemigo x room */
   private int maxEnemigos = 2;
 

@@ -73,7 +73,7 @@ class Tower extends Enemy implements IVisualizable {
 
   public void rotateTower(Player jugador) {
     PVector direccion = PVector.sub(jugador.posicion, this.posicion);
-    float angulo = atan2(direccion.y, direccion.x);  // Calcula el ángulo entre la torreta y el jugador
+    float angulo = atan2(direccion.y, direccion.x); 
     this.currentAngle = angulo;
 
     pushMatrix();
