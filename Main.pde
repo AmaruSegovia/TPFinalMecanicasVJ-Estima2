@@ -31,8 +31,6 @@ public void setup()
   musicaVictoria = minim.loadFile("musicaVictoria.mp3");
   musicaTitulo.setGain(-10);
   musicaJuego.setGain(-10);
-  musicaDerrota.setGain(-10);
-  musicaVictoria.setGain(-10);
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);

@@ -2,7 +2,6 @@ class Tower extends Enemy implements IVisualizable {
   private float fireRate;
   private float lastFireTime;
   private ArrayList<Bala> balas;
-  private float currentAngle;  // Nuevo campo para guardar el ángulo actual de la torreta
 
   /* -- CONSTRUCTOR -- */
   public Tower(PVector posicion) {
@@ -14,7 +13,6 @@ class Tower extends Enemy implements IVisualizable {
     this.balas = new ArrayList<Bala>();
     this.collider = new Colisionador(this.posicion, this.ancho * 3);
     this.sprite = new SpriteObject("turret.png", ancho, alto, 3);
-    this.currentAngle = 0;  // Inicializamos el ángulo actual
   }
 
   /* -- MÉTODOS -- */
@@ -70,16 +68,33 @@ class Tower extends Enemy implements IVisualizable {
       }
     }
   }
+  
 
   public void rotateTower(Player jugador) {
+    // Vector desde la torre hacia el jugador
     PVector direccion = PVector.sub(jugador.posicion, this.posicion);
-    float angulo = atan2(direccion.y, direccion.x); 
-    this.currentAngle = angulo;
 
+    // Vector que representa la dirección original de la torre (hacia la derecha, por ejemplo)
+    PVector direccionInicial = new PVector(1, 0);
+
+    // Calcular el ángulo entre los dos vectores
+    float angulo = PVector.angleBetween(direccionInicial, direccion);
+
+    // Calcular el producto cruz entre la dirección inicial y la dirección hacia el jugador
+    PVector productoCruz = direccionInicial.cross(direccion);
+
+    // Determinar el sentido de rotación
+    int sentidoHorario = 1;
+    if (productoCruz.z < 0) {
+        sentidoHorario = -1;
+    }
+
+    // Rotar y dibujar la torre
     pushMatrix();
     translate(this.posicion.x, this.posicion.y);
-    rotate(this.currentAngle);
+    rotate(angulo * sentidoHorario);
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(0, 0));  // Dibujamos la torreta rotada en el origen de la transformación
     popMatrix();
-  }
+}
+
 }

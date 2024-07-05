@@ -10,8 +10,8 @@ class Boss extends Enemy implements IVisualizable, IMovable{
   // Funciones adicionales para fase 2
   private int tiempoUltimoDisparo;
   private int intervaloDisparo = 2000; // Intervalo de disparo en milisegundos
-  private float radioOrbita = 100; // Radio de la órbita
-
+  private float radioOrbita = 150; // Radio de la órbita
+  
   /* -- CONSTRUCTOR -- */
   public Boss(PVector posicion) {
     super(posicion, 20, color(0, 0, 255));
@@ -25,42 +25,47 @@ class Boss extends Enemy implements IVisualizable, IMovable{
     this.tiempoProximoDisparo = millis() + int(random(4000, 6000));
   }
   public void display() {
-    noStroke();
-    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
-    collider.setPosicion(this.posicion);
-    this.direccion.setOrigen(posicion);
-    
-    //Cambio de color cuando le hacen daño
-    if (isHit) {
-      float elapsed = millis() - hitTime;
-      if (elapsed < hitDuration) {
-        float lerpFactor = elapsed / hitDuration;
-        currentColor = lerpColor(color(255, 0, 0), originalColor, lerpFactor);
-      } else {
-        isHit = false;
-        currentColor = originalColor;
-      }
+  noStroke();
+  this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
+  collider.setPosicion(this.posicion);
+  this.direccion.setOrigen(posicion);
+  
+  // Cambio de color cuando le hacen daño
+  if (isHit) {
+    float elapsed = millis() - hitTime;
+    if (elapsed < hitDuration) {
+      float lerpFactor = elapsed / hitDuration;
+      currentColor = lerpColor(color(255, 0, 0), originalColor, lerpFactor);
     } else {
+      isHit = false;
       currentColor = originalColor;
     }
-
-    fill(currentColor);
-    noStroke();
-    
-    float barraAncho = 40; // ancho total de la barra
-    float barraAlto = 5; // alto de la barra
-    float vidasMaximas = 4; // número máximo de vidas
-    float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
-  
-    fill(255, 0, 0); // color rojo para la barra de vida
-    rect(posicion.x - barraAncho / 2, posicion.y - 30, anchoActual, barraAlto); // posición de la barra encima del enemigo
-  
-    // Dibujar el contorno de la barra de vida
-    noFill();
-    stroke(0);
-    
-    dibujarBarraVida(4, 40, 5, 30);
+  } else {
+    currentColor = originalColor;
   }
+
+  fill(currentColor);
+  noStroke();
+  
+  float margen = 50; // margen en ambos extremos de la pantalla
+  float barraAncho = width - 2 * margen; // ancho total de la barra
+  float barraAlto = 20; // alto de la barra
+  float vidasMaximas = 20; // número máximo de vidas
+  float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
+  float r = map(lives, 0, vidasMaximas, 255, 0);
+  float g = map(lives, 0, vidasMaximas, 0, 255);
+  fill(r, g, 0); // color interpolado para la barra de vida
+  rect(margen, height - barraAlto - 80, anchoActual, barraAlto); // posición de la barra en la parte inferior
+
+  // Dibujar el contorno de la barra de vida
+  noFill();
+  stroke(0);
+  strokeWeight(7);
+  rect(margen, height - barraAlto - 80, barraAncho, barraAlto);
+  strokeWeight(0);
+}
+
+  
   public void mover() {
     if(lives <= 10){
       fase = 2;
@@ -131,7 +136,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{
           gestorBalas.addBullet(bala);
            //<>//
         }
-      break;
+      break; //<>//
     } //<>//
   }
 
