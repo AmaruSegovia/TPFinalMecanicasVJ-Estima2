@@ -30,22 +30,24 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     this.disparada = true;
   }
   /** Constructor para balas con angulo para el enemigo */
-  public Bullet(PVector pos, float angulo){
+  public Bullet(PVector pos, float angulo,String pertenece){
+    this.pertenece = pertenece; 
     this.posicion = pos;
     this.ancho = 8;
     this.alto = 8;
     this.angulo = angulo;
-    this.speed = 150;
+    this.speed = 400;
     this.spriteBoss = new SpriteObject("bossBullet1.png", ancho, alto, 3);
     this.disparada = true;
     this.colisionador = new Colisionador(this.posicion, ancho*3); 
   }
   
   /** Constructor para balas que orbitan para el enemigo */
-  Bullet(PVector posicion, float angulo, float radioOrbita) {
+  Bullet(PVector posicion, float angulo, float radioOrbita,String pertenece) {
+    this.pertenece = pertenece; 
     this.posicion = posicion.copy().add(PVector.fromAngle(angulo).mult(radioOrbita));
     this.angulo = angulo;
-    this.speed = 300;
+    this.speed = 150;
     this.alto = 8;
     this.ancho = 8;
     this.spriteBoss = new SpriteObject("bossBullet2.png", ancho, alto, 4);
@@ -97,10 +99,12 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   }
   /** Verifica la colision del colisionador con los enemigos */
   public boolean verificarColision(Enemy enemigo) {
-    if (colisionador.isCircle(enemigo.collider)) {
-      enemigo.reducirVida();
-      return true;
+    // Verifica que el enemigo no sea el propietario de la bala
+    if (this.pertenece == "jugador" && colisionador.isCircle(enemigo.collider)) {
+        enemigo.reducirVida();
+        return true;
     }
     return false;
-  }
+}
+
 }

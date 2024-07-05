@@ -42,7 +42,7 @@ class Enemy extends GameObject {
   }
   
    public void checkCollisionWithPlayer(Player player) {
-    if (collider.isCircle(player.collider) && !player.isHit) {
+    if (  collider.isCircle(player.collider) && !player.isHit) {
       player.reducirVida();
     }
   }

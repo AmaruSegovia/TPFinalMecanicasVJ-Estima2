@@ -5,7 +5,7 @@ class Tower extends Enemy implements IVisualizable {
 
   /* -- CONSTRUCTOR -- */
   public Tower(PVector posicion) {
-    super(posicion, 2, color(255, 255, 255));
+    super(posicion, 5, color(255, 255, 255));
     this.ancho = 22;
     this.alto = 22;
     this.fireRate = 0.5f;
@@ -40,7 +40,7 @@ class Tower extends Enemy implements IVisualizable {
     for (Bala bala : balas) {
       bala.display();
     }
-    dibujarBarraVida(2, 40, 5, 35);
+    dibujarBarraVida(5, 40, 5, 35);
   }
 
   public void detectar(Player player) {
@@ -74,7 +74,7 @@ class Tower extends Enemy implements IVisualizable {
     // Vector desde la torre hacia el jugador
     PVector direccion = PVector.sub(jugador.posicion, this.posicion);
 
-    // Vector que representa la dirección original de la torre (hacia la derecha, por ejemplo)
+    // Vector que representa la dirección original de la torre (hacia la derecha)
     PVector direccionInicial = new PVector(1, 0);
 
     // Calcular el ángulo entre los dos vectores
