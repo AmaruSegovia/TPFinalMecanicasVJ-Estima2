@@ -6,6 +6,10 @@
   
   El juego lleva a los jugadores a explorar y limpiar habitaciones llenas de enemigos con el objetivo de avanzar hasta el enfrentamiento con el Jefe Final.
 
+## Link de descarga
+
+[Descargar por Google Drive](https://drive.google.com/drive/folders/1SSDek47nh3VaGA3BW1ag3nB9bgXHwsbc?usp=sharing)
+
 ## Integrantes del Grupo
 
 - Joaquín Amaru Segovia / TUV000684 / 44645340
