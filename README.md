@@ -3,6 +3,7 @@
 ![SplashArt](./data/splash1.png)
 
   MagIA es un juego roguelike de acción y aventura, desarrollado por el grupo Desestima2 como parte del proyecto final para la materia Planeamiento de Mecánicas y Dinámicas de Juegos en la Tecnicatura Universitaria en Desarrollo Integral de Videojuegos FIUNJU.
+  
   El juego lleva a los jugadores a explorar y limpiar habitaciones llenas de enemigos con el objetivo de avanzar hasta el enfrentamiento con el Jefe Final.
 
 ## Integrantes del Grupo
