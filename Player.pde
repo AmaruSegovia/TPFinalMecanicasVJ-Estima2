@@ -33,7 +33,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
     this.direccion = new Vector("down");
     this.collider = new Colisionador(this.posicion,this.ancho*3);
-    this.lives = 25;
+    this.lives = 15;
     this.isHit = false;
     this.hitTime = 0;
   }
@@ -52,7 +52,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.sprite.render(this.animationState, new PVector(this.posicion.x, this.posicion.y));
     textSize(20);
     fill(255);
-    dibujarBarraVida(25,50, 5, 35);
+    dibujarBarraVida(15,50, 5, 35);
   }
 
   /** Metodo que mueve al jugador */
@@ -97,6 +97,12 @@ class Player extends GameObject implements IMovable, IVisualizable {
     for (Door door : roomActual.doorList) {
       //Si colisiono con una puerta preparar nuevas posiciones
       if (door != null && door.collider.isCircle(this.collider) && door.getIsOpen()) {
+         jugador.lives = jugador.lives + 2;
+        if (jugador.lives >= 15)
+        {
+          jugador.lives = 15;
+        }
+        
         int newCol = this.col, newRow = this.row;
         PVector newPos = new PVector(0, 0);
         Door newDoor;

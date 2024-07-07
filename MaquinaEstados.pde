@@ -12,4 +12,7 @@ class EstadoJuego {
 
   /** Estado de Victoria (Juego Finalizado) */
   public static final int DERROTA = 3;
+  
+    /** Estado de Creditos (Post Juego Finalizado) */
+  public static final int CREDITOS = 4;
 }

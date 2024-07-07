@@ -8,7 +8,7 @@ class Tower extends Enemy implements IVisualizable {
     super(posicion, 5, color(255, 255, 255));
     this.ancho = 22;
     this.alto = 22;
-    this.fireRate = 0.5f;
+    this.fireRate = 0.8f;
     this.lastFireTime = millis() / 1000.0f;
     this.balas = new ArrayList<Bala>();
     this.collider = new Colisionador(this.posicion, this.ancho * 3);
@@ -48,7 +48,7 @@ class Tower extends Enemy implements IVisualizable {
     PVector vectorDireccion = PVector.sub(player.posicion, centro);
     float productoPunto = vectorDireccion.dot(vectorDireccion);
 
-    float radioDeteccion = 300;
+    float radioDeteccion = 500;
     float radioDeteccionCuadrado = radioDeteccion * radioDeteccion;
 
     if (productoPunto <= radioDeteccionCuadrado) {

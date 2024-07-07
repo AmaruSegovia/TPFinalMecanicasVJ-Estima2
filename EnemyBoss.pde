@@ -1,4 +1,4 @@
-class Boss extends Enemy implements IVisualizable, IMovable{
+class Boss extends Enemy implements IVisualizable, IMovable{ //<>//
   private boolean inCenter = true;
   protected float speed;
   protected float topSpeed; 
@@ -9,7 +9,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{
   
   // Funciones adicionales para fase 2
   private int tiempoUltimoDisparo;
-  private int intervaloDisparo = 1000; // Intervalo de disparo en milisegundos
+  private int intervaloDisparo = 1200; // Intervalo de disparo en milisegundos
   private float radioOrbita = 150; // Radio de la órbita
   
   /* -- CONSTRUCTOR -- */
@@ -120,7 +120,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{
   public void disparar() {
     switch (fase){
       case 1:
-        int numBalas = int(random(4, 8)); // Número aleatorio de balas entre 4 y 7
+        int numBalas = int(random(4, 7)); // Número aleatorio de balas entre 4 y 7
         for (int i = 0; i < numBalas; i++) {
           float angulo = PI / 2 + radians(40) / (numBalas - 1) * i - radians(20); // Ajustar los ángulos para las balas
           Bullet bala;
@@ -146,7 +146,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{
     noFill();
     stroke(200);
 
-    if (player.getPosicion().y < 100) {
+    if (player.getPosicion().y < 160) {
       if (this.posicion.dist(player.getPosicion()) < 1000) {
         fill(255);
         embestir(player);
@@ -156,13 +156,13 @@ class Boss extends Enemy implements IVisualizable, IMovable{
   }
   public void embestir(Player player) {
     PVector newDireccion = new PVector(player.posicion.x - this.posicion.x, 0).normalize();
-    this.topSpeed = 500; // Velocidad de la embestida
+    this.topSpeed = 400; // Velocidad de la embestida
     this.direccion.setDestino(newDireccion);
   }
 
   public void checkCollitionPlayer(Player player) {
     if (collider.isCircle(player)) {
-      text("HAY COLICION ", 30, 400);
+      
       if (this.posicion.x - player.posicion.x < 1) {
         this.direccion.setDestino(new PVector(random(2) < 1 ? 1 : -1, 0).normalize());
         resetSpeed();

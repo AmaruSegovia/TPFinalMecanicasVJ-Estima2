@@ -39,24 +39,27 @@ public void setup()
   gestorEnemigos= new GestorEnemigos();
 }
 
-public void draw()
-{
+public void draw() {
   println(frameRate);
   switch (estadoJuego) {
     case EstadoJuego.MENU:
       mostrarMenu();
       break;
-    case EstadoJuego.JUGANDO:
+      case EstadoJuego.JUGANDO:
       jugando();
+      break;
+       case EstadoJuego.DERROTA:
+      mostrarDerrota();
       break;
     case EstadoJuego.VICTORIA:
       mostrarVictoria();
       break;
-    case EstadoJuego.DERROTA:
-      mostrarDerrota();
+    case EstadoJuego.CREDITOS:
+      mostrarCreditos();
       break;
   }
 }
+
 
 void jugando() {
   dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
@@ -111,7 +114,8 @@ void mostrarVictoria() {
   textSize(20*(sin(millis()*0.005)+5));
   text("¡VICTORIA!", width / 2, height / 6.5);
   textSize(20);
-  text("Presiona ENTER para volver al menú", width / 2, height / 4.3);
+  text("Presiona ENTER para continuar", width / 2, height / 4.3);
+  textSize(30);
 }
 
 void mostrarDerrota() {
@@ -127,6 +131,11 @@ void mostrarDerrota() {
   text("Has muerto", width / 2.5 + 20*(sin(millis()*0.001)+5), height / 6);
   textSize(16);
   text("Presiona ENTER para volver al menú", width / 2, height / 5);
+}
+
+void mostrarCreditos() {
+  imageMode(CORNER);
+  image(loadImage("creditos.png"), 0,0, 900, 800);
 }
 
 boolean jugadorGana() {
@@ -202,10 +211,12 @@ public void keyPressed() {
   
   if (estadoJuego == EstadoJuego.MENU && key == ENTER) {
     iniciarJuego();
-  } else if ((estadoJuego == EstadoJuego.VICTORIA || estadoJuego == EstadoJuego.DERROTA) && key == ENTER) {
+    } else if ((estadoJuego == EstadoJuego.DERROTA || estadoJuego == EstadoJuego.CREDITOS) && key == ENTER) {
     estadoJuego = EstadoJuego.MENU;
-  }
-  
+    }else if (estadoJuego == EstadoJuego.VICTORIA && key == ENTER)
+    {
+    estadoJuego = EstadoJuego.CREDITOS;
+    }
 }
 
 void iniciarJuego() {

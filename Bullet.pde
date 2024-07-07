@@ -77,22 +77,51 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
 
   public void orbitar(PVector bossPosition) {
     if (!disparada) {
-      this.angulo += 0.03; // Velocidad de la órbita
-      this.posicion.x = bossPosition.x + 150 * cos(angulo);
-      this.posicion.y = bossPosition.y + 150 * sin(angulo);
+        this.angulo += 0.03; // Velocidad de la órbita
+
+        // Parámetros para la oscilación radial
+        float baseRadio = 100; // Radio base de la órbita
+        float amplitude = 250; // Amplitud de la oscilación
+        float frequency = 0.7; // Frecuencia de la oscilación
+
+        // Calcular la oscilación radial
+        float radialOscillation = baseRadio + amplitude * sin(frequency * (millis() / 1000.0));
+
+        // Actualizar la posición de la bala con la oscilación radial
+        this.posicion.x = bossPosition.x + radialOscillation * cos(angulo);
+        this.posicion.y = bossPosition.y + radialOscillation * sin(angulo);
     }
-    if (colisionador.isCircle(jugador.collider)&& !jugador.isHit) {
-      jugador.reducirVida();
+    
+    if (colisionador.isCircle(jugador.collider) && !jugador.isHit) {
+        jugador.reducirVida();
     }
-  }
+}
+
   
-  public void moverAng() {
+ public void moverAng() {
     colisionador.setPosicion(this.posicion);
-    this.posicion.add(PVector.fromAngle(angulo).mult(speed).mult(Time.getDeltaTime(frameRate)));
-    if (colisionador.isCircle(jugador.collider)&& !jugador.isHit) {
-      jugador.reducirVida();
+    
+    // Cálculo del movimiento en ángulo
+    PVector moveVector = PVector.fromAngle(angulo).mult(speed).mult(Time.getDeltaTime(frameRate));
+    
+    // Añadir oscilación sinusoidal al movimiento
+    float amplitude = 2; // Amplitud de la oscilación
+    float frequency = 0.5; // Frecuencia de la oscilación
+    float oscillation = amplitude * sin(frequency * (millis() / 1000.0));
+    
+    // Ajustar el movimiento según la oscilación
+    PVector oscillationVector = new PVector(oscillation * cos(angulo + HALF_PI), oscillation * sin(angulo + HALF_PI));
+    moveVector.add(oscillationVector);
+    
+    // Actualizar la posición de la bala
+    this.posicion.add(moveVector);
+    
+    // Verificar colisión con el jugador
+    if (colisionador.isCircle(jugador.collider) && !jugador.isHit) {
+        jugador.reducirVida();
     }
-  }
+}
+
   
   public void disparar() {
     disparada = true;
