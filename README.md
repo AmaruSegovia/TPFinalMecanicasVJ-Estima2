@@ -1,6 +1,6 @@
 # MagIA - Juego desarrollado en Processing
 
-![SplashArt](./data/splash1.png)
+![SplashArt](./data/splash.png)
 
   MagIA es un juego roguelike de acción y aventura, desarrollado por el grupo Desestima2 como parte del proyecto final para la materia Planeamiento de Mecánicas y Dinámicas de Juegos en la Tecnicatura Universitaria en Desarrollo Integral de Videojuegos FIUNJU.
   
@@ -9,6 +9,10 @@
 ## Link de descarga
 
 [Descargar por Google Drive](https://drive.google.com/drive/folders/1SSDek47nh3VaGA3BW1ag3nB9bgXHwsbc?usp=sharing)
+
+## Gameplay
+
+[![Video de MagIA](https://img.youtube.com/vi/LcFEntFbSEc/0.jpg)](https://www.youtube.com/watch?v=LcFEntFbSEc)
 
 ## Integrantes del Grupo
 
