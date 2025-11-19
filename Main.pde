@@ -14,11 +14,11 @@ InputManager input;
 
 // --- estados de Juego ---
 GameState currentState;
-MenuState menuState;
-PlayingState playingState;
-//VictoryState victoryState;
-//DefeatState defeatState;
-//CreditsState creditsState;
+MenuState menu;
+PlayingState jugando;
+VictoryState victoria;
+GameOverState derrota;
+CreditsState creditos;
 
 private Dungeon dungeon;
 private Player jugador;
@@ -45,20 +45,20 @@ public void setup()
   gestorEnemigos= new GestorEnemigos();
   
   // Inicializar estados
-  playingState = new PlayingState(audio,input);
-  menuState = new MenuState(audio);     // Colocarlo al final de los inicializados para que no no se ejecuten otros audios luego del menu
-  //victoryState = new VictoryState(audio);
-  //defeatState = new DefeatState(audio);
-  //creditsState = new CreditsState(audio);
+  jugando = new PlayingState(audio,input);
+  victoria = new VictoryState(audio);
+  derrota = new GameOverState(audio);
+  creditos = new CreditsState(audio);
+  menu = new MenuState(audio);     // Colocarlo al final de los inicializados para que no no se ejecuten otros audios luego del menu
+  
   
    // Estado inicial
-  currentState = menuState;
+  changeState(menu); 
 }
 
 public void draw() {
   background(0);
   currentState.update();
-  currentState.render();
   //println(frameRate);
   //switch (estadoJuego) {
   //  case EstadoJuego.MENU:
@@ -77,6 +77,11 @@ public void draw() {
   //    mostrarCreditos();
   //    break;
   //}
+}
+
+void changeState(GameState newState) {
+  currentState = newState;
+  currentState.onEnter(); // activa lo inicial, como el setup al momenbto de cambiar de estado
 }
 
 
@@ -104,41 +109,6 @@ void jugando() {
   }
 }
 
-void mostrarVictoria() {
-  imageMode(CORNER);
-  tint(255);
-  image(loadImage("victory.png"), 0,0, 900, 800);
-  //musicaJuego.pause();
-  //musicaJuego.rewind();
-  //musicaVictoria.play();
-  fill(#12DB94);
-  textAlign(CENTER, CENTER);
-  textSize(20*(sin(millis()*0.005)+5));
-  text("¡VICTORIA!", width / 2, height / 6.5);
-  textSize(20);
-  text("Presiona ENTER para continuar", width / 2, height / 4.3);
-  textSize(30);
-}
-
-void mostrarDerrota() {
-  imageMode(CORNER);
-  tint(255);
-  image(loadImage("defeat.png"), 0,0, 900, 800);
-  //musicaJuego.pause();
-  //musicaJuego.rewind();
-  //musicaDerrota.play();
-  fill(#FF1265);
-  textAlign(CENTER, CENTER);
-  textSize(36);
-  text("Has muerto", width / 2.5 + 20*(sin(millis()*0.001)+5), height / 6);
-  textSize(16);
-  text("Presiona ENTER para volver al menú", width / 2, height / 5);
-}
-
-void mostrarCreditos() {
-  imageMode(CORNER);
-  image(loadImage("creditos.png"), 0,0, 900, 800);
-}
 
 boolean jugadorGana() {
   if(jugador.col == 4 && jugador.row ==1)
