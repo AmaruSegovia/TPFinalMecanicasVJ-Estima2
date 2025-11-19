@@ -18,19 +18,19 @@ public class AudioManager {
         juego.setGain(-10);
     }
 
-    // --- Métodos públicos ---
+    // --- Metodos publicos ---
     public void playTitulo() { stopAll(); titulo.play(); }
     public void playJuego() { stopAll(); juego.loop(); }
     public void playDerrota() { stopAll(); derrota.play(); }
     public void playVictoria() { stopAll(); victoria.play(); }
 
-    // --- Getters (si necesitas acceder desde fuera) ---
+    // --- Getters ---
     public AudioPlayer getTitulo() { return titulo; }
     public AudioPlayer getJuego() { return juego; }
     public AudioPlayer getDerrota() { return derrota; }
     public AudioPlayer getVictoria() { return victoria; }
 
-    // --- Método privado ---
+    // --- Metodo privado ---
     private void stopAll() {
         titulo.pause(); juego.pause(); derrota.pause(); victoria.pause();
         titulo.rewind(); juego.rewind(); derrota.rewind(); victoria.rewind();

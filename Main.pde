@@ -15,7 +15,7 @@ InputManager input;
 // --- estados de Juego ---
 GameState currentState;
 MenuState menuState;
-//PlayingState playingState;
+PlayingState playingState;
 //VictoryState victoryState;
 //DefeatState defeatState;
 //CreditsState creditsState;
@@ -45,8 +45,8 @@ public void setup()
   gestorEnemigos= new GestorEnemigos();
   
   // Inicializar estados
-  menuState = new MenuState(audio);
-  //playingState = new PlayingState(audio);
+  playingState = new PlayingState(audio,input);
+  menuState = new MenuState(audio);     // Colocarlo al final de los inicializados para que no no se ejecuten otros audios luego del menu
   //victoryState = new VictoryState(audio);
   //defeatState = new DefeatState(audio);
   //creditsState = new CreditsState(audio);
@@ -54,62 +54,6 @@ public void setup()
    // Estado inicial
   currentState = menuState;
 }
-
-interface GameState {
-  void update();
-  void render();
-  void handleInput(char key);
-}
-
-class MenuState implements GameState {
-  AudioManager audio;
-  MenuState(AudioManager audio) { 
-    this.audio = audio; 
-    this.audio.playTitulo(); 
-  }
-  
-  void update() { }
-  void render() {
-    fill(255);
-    textAlign(CENTER, CENTER);
-    text("Presiona ENTER para jugar", width/2, height/2);
-  }
-  void handleInput(char key) {
-    if (key == ENTER) 
-      println("ASDASDASDASD");
-      //currentState = playingState;
-  }
-}
-
-//public class PlayingState implements GameState {
-//  AudioManager audio;
-//  InputManager input;
-//  Player jugador;
-//  Dungeon dungeon;
-  
-//  PlayingState(AudioManager audio, InputManager input) {
-//    this.audio = audio;
-//    this.input = input;
-//    audio.playJuego();
-//    dungeon = new Dungeon(1);
-//    jugador = new Player(new PVector(width/2, height/2));
-//  }
-  
-//  void update() {
-//    jugador.update(input);
-//    dungeon.update(jugador);
-//    if (jugador.hasWon()) currentState = victoryState;
-//    else if (jugador.hasLost()) currentState = defeatState;
-//  }
-  
-//  void render() {
-//    dungeon.render();
-//    jugador.render();
-//  }
-  
-//  void handleInput(char key) { /* disparos, etc. */ }
-//}
-
 
 public void draw() {
   background(0);
@@ -158,23 +102,6 @@ void jugando() {
   } else if (jugadorPierde()) {
     estadoJuego = EstadoJuego.DERROTA;
   }
-}
-
-void mostrarMenu() {
-  imageMode(CORNER);
-  tint(255);
-  image(loadImage("splash.png"), 0,0, 900, 800);
-  //musicaJuego.pause();
-  //musicaDerrota.pause();
-  //musicaVictoria.pause();
-  //musicaJuego.rewind();
-  //musicaDerrota.rewind();
-  //musicaVictoria.rewind();
-  //musicaTitulo.play();
-  fill(255);
-  textAlign(CENTER, CENTER);
-  textSize(32);
-  text("Presiona ENTER para jugar", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
 }
 
 void mostrarVictoria() {
@@ -233,6 +160,9 @@ boolean jugadorPierde() {
 void keyPressed() {
   input.keyPressed(key);
   currentState.handleInput(key);
+}
+void keyReleased() {
+  input.keyReleased(key);
 }
 
 /*public void keyPressed() {
@@ -311,31 +241,31 @@ void iniciarJuego() {
    gestorEnemigos = new GestorEnemigos();
 }
 
-public void keyReleased() {
-  switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula 
-    case 'w':
-      W_PRESSED = false;
-      break;
-    case 's':
-      S_PRESSED = false;
-      break;
-    case 'a':
-      A_PRESSED = false;
-      break;
-    case 'd':
-      D_PRESSED = false;
-      break;
-  }
+//public void keyReleased() {
+//  switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula 
+//    case 'w':
+//      W_PRESSED = false;
+//      break;
+//    case 's':
+//      S_PRESSED = false;
+//      break;
+//    case 'a':
+//      A_PRESSED = false;
+//      break;
+//    case 'd':
+//      D_PRESSED = false;
+//      break;
+//  }
   
-  if (!A_PRESSED == !S_PRESSED == !W_PRESSED == !D_PRESSED){
-    if (jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_DERECHA){
-      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_DERECHA);
-    }
-    else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_IZQUIERDA){
-      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA);
-    }
-  }
-}
+//  if (!A_PRESSED == !S_PRESSED == !W_PRESSED == !D_PRESSED){
+//    if (jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_DERECHA){
+//      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_DERECHA);
+//    }
+//    else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_IZQUIERDA){
+//      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA);
+//    }
+//  }
+//}
 
 public void displayPlayerPosition() {
   fill(0);
