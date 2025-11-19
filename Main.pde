@@ -7,11 +7,18 @@ public int nivel = 1;
 public int estadoJuego = 0;
 
 import ddf.minim.*;
-private Minim minim;
-private AudioPlayer musicaTitulo;
-private AudioPlayer musicaJuego;
-private AudioPlayer musicaDerrota;
-private AudioPlayer musicaVictoria;
+
+// --- Managers ---
+AudioManager audio;
+InputManager input;
+
+// --- estados de Juego ---
+GameState currentState;
+MenuState menuState;
+//PlayingState playingState;
+//VictoryState victoryState;
+//DefeatState defeatState;
+//CreditsState creditsState;
 
 private Dungeon dungeon;
 private Player jugador;
@@ -20,44 +27,112 @@ private GestorEnemigos gestorEnemigos;
 
 PImage background;
 
+// --- Setup Global ---
 public void setup()
 {
   noSmooth();
   size(900, 800);
-  minim = new Minim(this);
-  musicaTitulo = minim.loadFile("musicaTitulo.mp3");
-  musicaJuego = minim.loadFile("musicaJuego.mp3");
-  musicaDerrota = minim.loadFile("musicaDerrota.mp3");
-  musicaVictoria = minim.loadFile("musicaVictoria.mp3");
-  musicaTitulo.setGain(-10);
-  musicaJuego.setGain(-10);
+  
+  // Inicializar Managers
+  audio = new AudioManager(this);
+  input = new InputManager();
+  
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
   dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));
   gestorBalas = new GestorBullets();
   gestorEnemigos= new GestorEnemigos();
+  
+  // Inicializar estados
+  menuState = new MenuState(audio);
+  //playingState = new PlayingState(audio);
+  //victoryState = new VictoryState(audio);
+  //defeatState = new DefeatState(audio);
+  //creditsState = new CreditsState(audio);
+  
+   // Estado inicial
+  currentState = menuState;
 }
 
-public void draw() {
-  println(frameRate);
-  switch (estadoJuego) {
-    case EstadoJuego.MENU:
-      mostrarMenu();
-      break;
-      case EstadoJuego.JUGANDO:
-      jugando();
-      break;
-       case EstadoJuego.DERROTA:
-      mostrarDerrota();
-      break;
-    case EstadoJuego.VICTORIA:
-      mostrarVictoria();
-      break;
-    case EstadoJuego.CREDITOS:
-      mostrarCreditos();
-      break;
+interface GameState {
+  void update();
+  void render();
+  void handleInput(char key);
+}
+
+class MenuState implements GameState {
+  AudioManager audio;
+  MenuState(AudioManager audio) { 
+    this.audio = audio; 
+    this.audio.playTitulo(); 
   }
+  
+  void update() { }
+  void render() {
+    fill(255);
+    textAlign(CENTER, CENTER);
+    text("Presiona ENTER para jugar", width/2, height/2);
+  }
+  void handleInput(char key) {
+    if (key == ENTER) 
+      println("ASDASDASDASD");
+      //currentState = playingState;
+  }
+}
+
+//public class PlayingState implements GameState {
+//  AudioManager audio;
+//  InputManager input;
+//  Player jugador;
+//  Dungeon dungeon;
+  
+//  PlayingState(AudioManager audio, InputManager input) {
+//    this.audio = audio;
+//    this.input = input;
+//    audio.playJuego();
+//    dungeon = new Dungeon(1);
+//    jugador = new Player(new PVector(width/2, height/2));
+//  }
+  
+//  void update() {
+//    jugador.update(input);
+//    dungeon.update(jugador);
+//    if (jugador.hasWon()) currentState = victoryState;
+//    else if (jugador.hasLost()) currentState = defeatState;
+//  }
+  
+//  void render() {
+//    dungeon.render();
+//    jugador.render();
+//  }
+  
+//  void handleInput(char key) { /* disparos, etc. */ }
+//}
+
+
+public void draw() {
+  background(0);
+  currentState.update();
+  currentState.render();
+  //println(frameRate);
+  //switch (estadoJuego) {
+  //  case EstadoJuego.MENU:
+  //    mostrarMenu();
+  //    break;
+  //    case EstadoJuego.JUGANDO:
+  //    jugando();
+  //    break;
+  //     case EstadoJuego.DERROTA:
+  //    mostrarDerrota();
+  //    break;
+  //  case EstadoJuego.VICTORIA:
+  //    mostrarVictoria();
+  //    break;
+  //  case EstadoJuego.CREDITOS:
+  //    mostrarCreditos();
+  //    break;
+  //}
 }
 
 
@@ -89,13 +164,13 @@ void mostrarMenu() {
   imageMode(CORNER);
   tint(255);
   image(loadImage("splash.png"), 0,0, 900, 800);
-  musicaJuego.pause();
-  musicaDerrota.pause();
-  musicaVictoria.pause();
-  musicaJuego.rewind();
-  musicaDerrota.rewind();
-  musicaVictoria.rewind();
-  musicaTitulo.play();
+  //musicaJuego.pause();
+  //musicaDerrota.pause();
+  //musicaVictoria.pause();
+  //musicaJuego.rewind();
+  //musicaDerrota.rewind();
+  //musicaVictoria.rewind();
+  //musicaTitulo.play();
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(32);
@@ -106,9 +181,9 @@ void mostrarVictoria() {
   imageMode(CORNER);
   tint(255);
   image(loadImage("victory.png"), 0,0, 900, 800);
-  musicaJuego.pause();
-  musicaJuego.rewind();
-  musicaVictoria.play();
+  //musicaJuego.pause();
+  //musicaJuego.rewind();
+  //musicaVictoria.play();
   fill(#12DB94);
   textAlign(CENTER, CENTER);
   textSize(20*(sin(millis()*0.005)+5));
@@ -122,9 +197,9 @@ void mostrarDerrota() {
   imageMode(CORNER);
   tint(255);
   image(loadImage("defeat.png"), 0,0, 900, 800);
-  musicaJuego.pause();
-  musicaJuego.rewind();
-  musicaDerrota.play();
+  //musicaJuego.pause();
+  //musicaJuego.rewind();
+  //musicaDerrota.play();
   fill(#FF1265);
   textAlign(CENTER, CENTER);
   textSize(36);
@@ -154,8 +229,13 @@ boolean jugadorPierde() {
   return false;
 }
 
+// --- Control de teclas ---
+void keyPressed() {
+  input.keyPressed(key);
+  currentState.handleInput(key);
+}
 
-public void keyPressed() {
+/*public void keyPressed() {
   char input = Character.toLowerCase(key);
   switch (input) { // convierte la tecla a minuscula
   case 'w':
@@ -181,7 +261,7 @@ public void keyPressed() {
   }
   
   /* Verificando que el jugador mantenga su orientación al moverese arriba o abajo */
-  if (S_PRESSED || W_PRESSED){
+  /*if (S_PRESSED || W_PRESSED){
     if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ESTATICO_DERECHA){
       jugador.setAnimationState(MaquinaEstadosAnimacion.MOV_DERECHA);
     }
@@ -191,14 +271,14 @@ public void keyPressed() {
   }
   
   /* Disparando y seteando el tiempo de disparo */
-  if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && !jugador.getIsShooting()) {
+  /*if ((input == 'i' || input == 'j' || input == 'k' || input == 'l') && !jugador.getIsShooting()) {
     gestorBalas.addBullet(jugador.shoot(input));
     jugador.setTimeSinceLastShot(millis());
     jugador.setIsShooting(true);    
   }  
   
   /* Verificando que el jugador mantenga su orientación al disparar mientras se mueve arriba o abajo */
-  if (input == 'i' || input == 'k'){
+  /*if (input == 'i' || input == 'k'){
     if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ESTATICO_DERECHA ||
         jugador.getAnimationState() == MaquinaEstadosAnimacion.MOV_DERECHA){
       jugador.setAnimationState(MaquinaEstadosAnimacion.ATAQUE_DERECHA);
@@ -210,20 +290,20 @@ public void keyPressed() {
   }
   
   if (estadoJuego == EstadoJuego.MENU && key == ENTER) {
-    iniciarJuego();
-    } else if ((estadoJuego == EstadoJuego.DERROTA || estadoJuego == EstadoJuego.CREDITOS) && key == ENTER) {
-    estadoJuego = EstadoJuego.MENU;
-    }else if (estadoJuego == EstadoJuego.VICTORIA && key == ENTER)
-    {
-    estadoJuego = EstadoJuego.CREDITOS;
+      iniciarJuego();
+      } else if ((estadoJuego == EstadoJuego.DERROTA || estadoJuego == EstadoJuego.CREDITOS) && key == ENTER) {
+      estadoJuego = EstadoJuego.MENU;
+      }else if (estadoJuego == EstadoJuego.VICTORIA && key == ENTER)
+      {
+      estadoJuego = EstadoJuego.CREDITOS;
     }
-}
+}*/
 
 void iniciarJuego() {
   estadoJuego = EstadoJuego.JUGANDO;
-  musicaTitulo.pause();
-  musicaTitulo.rewind();
-  musicaJuego.loop();
+  //musicaTitulo.pause();
+  //musicaTitulo.rewind();
+  //musicaJuego.loop();
     // Aqui deberiamos reiniciar el estado del juego
   dungeon = new Dungeon(nivel);
   jugador = new Player(new PVector(width/2, height/2));
