@@ -7,17 +7,19 @@ interface GameState {
 
 // Estado del juego que representa la pantalla de juego
 public class PlayingState implements GameState {
-  AudioManager audio;
-  InputManager input;
-  Player jugador;
-  Dungeon dungeon;
+  private AudioManager audio;
+  private InputManager input;
+  private Player jugador;
+  private Dungeon dungeon;
+  private RoomRenderer renderer;
   
   // Constructor, recibe el gestor de audio
   public PlayingState(AudioManager audio, InputManager input) {
     this.audio = audio;
     this.input = input;
-    dungeon = new Dungeon(1);
-    jugador = new Player(new PVector(width/2, height/2));
+    this.dungeon = new Dungeon(1);
+    this.renderer = new RoomRenderer(dungeon,  new GestorEnemigos(), new GestorBullets());
+    this.jugador = new Player(new PVector(width/2, height/2),0,0);
   }
   /* inicializa al entrar al juego */
   public void onEnter() {
@@ -27,11 +29,13 @@ public class PlayingState implements GameState {
   /* Dibujando la pantalla */
   void update() {
     text("Estando en el juego", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
-    jugador.display();
+    
     jugador.mover(input);
-    dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
-    //if (jugador.hasWon()) currentState = victoryState;
-    //else if (jugador.hasLost()) currentState = defeatState;
+    renderer.render(jugador);
+    jugador.display();
+    //dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
+    //if (jugadorGana()) changeState(victoria);
+    //else if (jugadorPierde()) changeState(derrota);
   }
   
   /* reconociendo inputs */

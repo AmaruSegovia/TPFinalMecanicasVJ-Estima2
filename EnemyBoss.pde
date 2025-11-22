@@ -93,7 +93,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{ //<>// //<>// //<>/
           disparar();
           tiempoUltimoDisparo = millis();
         }
-        gestorBalas.moverBalas(this.posicion);
+        //gestorBalas.moverBalas(this.posicion);
       break;
       default: break;
     }
@@ -125,16 +125,16 @@ class Boss extends Enemy implements IVisualizable, IMovable{ //<>// //<>// //<>/
           float angulo = PI / 2 + radians(40) / (numBalas - 1) * i - radians(20); // Ajustar los ángulos para las balas
           Bullet bala;
           bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y-60), angulo,"enemigo");
-          gestorBalas.addBullet(bala);
+          //gestorBalas.addBullet(bala);
         }
       break;
       case 2:
-        gestorBalas.dispararBalas();
+        //gestorBalas.dispararBalas();
         
         for (int i = 0; i < 8; i++) {
           float angulo = TWO_PI / 8 * i;
           Bullet bala = new Bullet(this.posicion.copy(), angulo, radioOrbita,"enemigo");
-          gestorBalas.addBullet(bala);
+          //gestorBalas.addBullet(bala);
            //<>// //<>// //<>//
         } //<>// //<>// //<>//
       break;

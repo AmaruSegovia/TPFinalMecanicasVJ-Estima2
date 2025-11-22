@@ -20,10 +20,7 @@ VictoryState victoria;
 GameOverState derrota;
 CreditsState creditos;
 
-private Dungeon dungeon;
 private Player jugador;
-private GestorBullets gestorBalas;
-private GestorEnemigos gestorEnemigos;
 
 PImage background;
 
@@ -41,9 +38,6 @@ public void setup()
   textFont(pixelFont);
   
   
-  gestorBalas = new GestorBullets();
-  gestorEnemigos= new GestorEnemigos();
-  
   // Inicializar estados
   menu = new MenuState(audio);     
   jugando = new PlayingState(audio,input);
@@ -59,23 +53,6 @@ public void draw() {
   background(0);
   currentState.update();
   //println(frameRate);
-  //switch (estadoJuego) {
-  //  case EstadoJuego.MENU:
-  //    mostrarMenu();
-  //    break;
-  //    case EstadoJuego.JUGANDO:
-  //    jugando();
-  //    break;
-  //     case EstadoJuego.DERROTA:
-  //    mostrarDerrota();
-  //    break;
-  //  case EstadoJuego.VICTORIA:
-  //    mostrarVictoria();
-  //    break;
-  //  case EstadoJuego.CREDITOS:
-  //    mostrarCreditos();
-  //    break;
-  //}
 }
 
 void changeState(GameState newState) {
@@ -85,7 +62,7 @@ void changeState(GameState newState) {
 
 
 void jugando() {
-  dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
+  //dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
   jugador.display(); 
   jugador.mover(input);
   
@@ -99,23 +76,16 @@ void jugando() {
       jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA);
     }
   }
-
-  
-  if (jugadorGana()) {
-    estadoJuego = EstadoJuego.VICTORIA;
-  } else if (jugadorPierde()) {
-    estadoJuego = EstadoJuego.DERROTA;
-  }
 }
 
 
-boolean jugadorGana() {
-  if(jugador.col == 4 && jugador.row ==1)
-  {
-    return true;
-  }
-   return false;
-}
+//boolean jugadorGana() {
+//  if(jugador.col == 4 && jugador.row ==1)
+//  {
+//    return true;
+//  }
+//   return false;
+//}
 
 boolean jugadorPierde() {
   // Comprueba si la columna del jugador es 3
@@ -204,10 +174,10 @@ void iniciarJuego() {
   //musicaTitulo.rewind();
   //musicaJuego.loop();
     // Aqui deberiamos reiniciar el estado del juego
-  dungeon = new Dungeon(nivel);
-  jugador = new Player(new PVector(width/2, height/2));
-   gestorBalas = new GestorBullets();
-   gestorEnemigos = new GestorEnemigos();
+  //dungeon = new Dungeon(nivel);
+  //jugador = new Player(new PVector(width/2, height/2),0,0);
+   //gestorBalas = new GestorBullets();
+   //gestorEnemigos = new GestorEnemigos();
 }
 
 //public void keyReleased() {

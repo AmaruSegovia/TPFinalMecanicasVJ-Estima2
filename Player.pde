@@ -23,7 +23,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
-  public Player(PVector posicion) {
+  public Player(PVector posicion, int startCol, int startRow) {
     this.posicion = posicion;
     this.alto = 20;
     this.ancho = 20;
@@ -36,6 +36,11 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.lives = 15;
     this.isHit = false;
     this.hitTime = 0;
+    
+    
+    // Inicializar posición en la dungeon
+    this.col = startCol;
+    this.row = startRow;
   }
 
   /* -- METODOS -- */
@@ -94,16 +99,12 @@ class Player extends GameObject implements IMovable, IVisualizable {
 
   public void checkCollisions(Room roomActual) {
     // Si en la habitacion actual no hay puertas salir
-    if (roomActual.hasDoors() == false) return;
+    if (!roomActual.hasDoors()) return;
 
     for (Door door : roomActual.doorList) {
       //Si colisiono con una puerta preparar nuevas posiciones
       if (door != null && door.collider.isCircle(this.collider) && door.getIsOpen()) {
-         jugador.lives = jugador.lives + 2;
-        if (jugador.lives >= 15)
-        {
-          jugador.lives = 15;
-        }
+         lives = min(lives + 2, 15);
         
         int newCol = this.col, newRow = this.row;
         PVector newPos = new PVector(0, 0);
@@ -131,10 +132,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
           break;
         }
         //si la proxima habitacion esta en el rango de la matriz actualizar posiciones
-        Room nextRoom = dungeon.getRoom(newCol, newRow);
-        if (nextRoom != null) {
           updatePosition(newCol, newRow, newPos);
-        }
       }
     }
   }
@@ -142,7 +140,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   private void updatePosition(int newCol, int newRow, PVector newPos) {
     this.col = newCol;
     this.row = newRow;
-    this.posicion = newPos;
+    this.posicion = newPos.copy();
   }
 
   /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */
