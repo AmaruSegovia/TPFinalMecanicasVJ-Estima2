@@ -37,8 +37,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.isHit = false;
     this.hitTime = 0;
     
-    
-    // Inicializar posición en la dungeon
+    // Inicializar posición en la dungeon para no crashear
     this.col = startCol;
     this.row = startRow;
   }
@@ -96,46 +95,18 @@ class Player extends GameObject implements IMovable, IVisualizable {
     
   }// end mover
 
-
-  public void checkCollisions(Room roomActual) {
-    // Si en la habitacion actual no hay puertas salir
-    if (!roomActual.hasDoors()) return;
-
+  
+  public Door checkCollision(Room roomActual) {
+    if (!roomActual.hasDoors()) return null;
+  
     for (Door door : roomActual.doorList) {
-      //Si colisiono con una puerta preparar nuevas posiciones
       if (door != null && door.collider.isCircle(this.collider) && door.getIsOpen()) {
-         lives = min(lives + 2, 15);
-        
-        int newCol = this.col, newRow = this.row;
-        PVector newPos = new PVector(0, 0);
-        Door newDoor;
-        switch (door.direction) {
-        case "UP":
-          newRow = row - 1;
-          newDoor= new Door("DOWN");
-          newPos = new PVector(newDoor.getPosicion().x, newDoor.getPosicion().y - newDoor.getAncho() * 1.05);
-          break;
-        case "DOWN":
-          newRow = row + 1;
-          newDoor = new Door("UP");
-          newPos = new PVector(newDoor.getPosicion().x, newDoor.getPosicion().y + newDoor.getAncho() * 1.05);
-          break;
-        case "LEFT":
-          newCol = col - 1;
-          newDoor = new Door("RIGHT");
-          newPos = new PVector(newDoor.getPosicion().x - newDoor.getAncho() * 1.05, newDoor.getPosicion().y );
-          break;
-        case "RIGHT":
-          newCol = col + 1;
-          newDoor = new Door("LEFT");
-          newPos = new PVector(newDoor.getPosicion().x + newDoor.getAncho()*1.05, newDoor.getPosicion().y );
-          break;
-        }
-        //si la proxima habitacion esta en el rango de la matriz actualizar posiciones
-          updatePosition(newCol, newRow, newPos);
+        return door; // devuelve el evento
       }
     }
+    return null;
   }
+
   /** Actualiza la posicion del jugador segun los parametros anteriores */
   private void updatePosition(int newCol, int newRow, PVector newPos) {
     this.col = newCol;

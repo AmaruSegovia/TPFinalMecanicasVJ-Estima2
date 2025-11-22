@@ -33,7 +33,6 @@ public class PlayingState implements GameState {
     jugador.mover(input);
     renderer.render(jugador);
     jugador.display();
-    //dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
     //if (jugadorGana()) changeState(victoria);
     //else if (jugadorPierde()) changeState(derrota);
   }

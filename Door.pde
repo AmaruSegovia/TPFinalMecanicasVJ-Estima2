@@ -1,7 +1,12 @@
 /** Clase que Puerta se dibuja y verifica colisiones con el jugador */
 class Door extends GameObject {
+  // --- Constantes ---
+  private static final int DEFAULT_SIZE = 60;
+  private static final float ENTRY_OFFSET = 1.2f;
+  
+  // --- Atributos ---
   /** Representa el nombre de la direccion de la puerta */
-  private String direction;
+  private Direction direction;
   /** Representa el estado de la puerta, si esta abierta o cerrada */
   private boolean isOpen;
   /** Representa el area de colision de la puerta */
@@ -9,29 +14,31 @@ class Door extends GameObject {
 
   /* -- CONSTRUCTORES -- */
   /** Constructor para puertas con posicion variada */
-  public Door(PVector posicion, String direction) {
+  public Door(PVector posicion, Direction direction) {
     this.posicion = posicion;
-    this.ancho = 60;
+    this.ancho = DEFAULT_SIZE;
     this.isOpen = true;
     this.direction = direction;
     this.collider = new Colisionador(this.posicion,this.ancho-20);
   }
   /** Constructor para puertas con posiciones fijas */
-  public Door(String direction) {
-    this.ancho = 60;
-    this.direction = direction;
+  public Door(Direction direction) {
+    this.posicion = directionToPosition(direction);
+    this.ancho = DEFAULT_SIZE;
     this.isOpen = true;
-    
-    if (this.direction.equals("UP")){
-      this.posicion = new PVector(width / 2, 35);
-    } else if(this.direction.equals("RIGHT")) {
-      this.posicion = new PVector(width-35, height / 2);
-    } else if(this.direction.equals("DOWN")){
-      this.posicion = new PVector(width / 2, height-35);
-    }else if (this.direction.equals("LEFT")){
-      this.posicion = new PVector(35, height / 2);
+    this.direction = direction;
+    this.collider = new Colisionador(this.posicion, this.ancho - 20);
+  }
+
+  // --- Métodos auxiliares ---
+  private PVector directionToPosition(Direction dir) {
+    switch (dir) {
+      case UP:    return new PVector(width / 2, 35);
+      case RIGHT: return new PVector(width - 35, height / 2);
+      case DOWN:  return new PVector(width / 2, height - 35);
+      case LEFT:  return new PVector(35, height / 2);
+      default:    return new PVector(width / 2, height / 2);
     }
-    this.collider = new Colisionador(this.posicion,this.ancho-20);
   }
   /* -- METODOS -- */
   /** Metodo que dibuja a la habitacion*/
@@ -48,14 +55,25 @@ class Door extends GameObject {
   /* -- ASESORES -- */
   /* Getters */
   /** Devuelve el nombre de la direccion en donde se encuentra la puerta*/
-  public String getDirection() {
+  public Direction getDirection() {
     return this.direction;
   }
   /** Devuelve si la puerta esta abierta */
   public boolean getIsOpen() {
     return this.isOpen;
   }
-  
+  /** Obtener la posicion de entrada **/
+  public PVector getEntryPosition() {
+    float offset = this.ancho * ENTRY_OFFSET;
+    switch (direction) {
+      case UP:    return new PVector(posicion.x, posicion.y + offset);
+      case DOWN:  return new PVector(posicion.x, posicion.y - offset);
+      case LEFT:  return new PVector(posicion.x + offset, posicion.y);
+      case RIGHT: return new PVector(posicion.x - offset, posicion.y);
+      default:    return posicion.copy();
+    }
+  }
+
   /* Setings */
   /** Asigna un nuevo estado a la puerta */
   public void setIsOpen(boolean state) {

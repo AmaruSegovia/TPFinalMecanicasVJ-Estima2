@@ -8,7 +8,7 @@ class Dungeon {
   /* -- CONSTRUCTORES -- */
   /** Constructor por defecto*/
   public Dungeon() {
-    this.nivel = 1;
+    println("Aun no has inicializado nada");
   }
   /** constructor parametrizado */
   public Dungeon(int nivel) {

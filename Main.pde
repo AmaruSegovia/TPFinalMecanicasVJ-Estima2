@@ -79,17 +79,17 @@ void jugando() {
 }
 
 
-//boolean jugadorGana() {
-//  if(jugador.col == 4 && jugador.row ==1)
-//  {
-//    return true;
-//  }
-//   return false;
-//}
+boolean jugadorGana() {
+  if(jugador.col == 4 && jugador.row ==1)
+  {
+    return true;
+  }
+   return false;
+}
 
 boolean jugadorPierde() {
   // Comprueba si la columna del jugador es 3
-  if (jugador.lives <= 0) {
+  if (jugador.getLives() <= 0) {
     return true;
   }
   return false;
@@ -168,17 +168,6 @@ void keyReleased() {
     }
 }*/
 
-void iniciarJuego() {
-  estadoJuego = EstadoJuego.JUGANDO;
-  //musicaTitulo.pause();
-  //musicaTitulo.rewind();
-  //musicaJuego.loop();
-    // Aqui deberiamos reiniciar el estado del juego
-  //dungeon = new Dungeon(nivel);
-  //jugador = new Player(new PVector(width/2, height/2),0,0);
-   //gestorBalas = new GestorBullets();
-   //gestorEnemigos = new GestorEnemigos();
-}
 
 //public void keyReleased() {
 //  switch (Character.toLowerCase(key)) { // convierte la tecla a minuscula 

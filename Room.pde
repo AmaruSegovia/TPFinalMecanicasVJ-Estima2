@@ -32,10 +32,10 @@ class Room extends GameObject {
   public void generateDoors() {
     // Comprobacion AND bit a bit para saber si hay una puerta en X direccion
     // Se comparan los bits del valor de la matriz con otro para limpiar bits
-    if ((this.doors & 1) != 0) this.doorList[0] = new Door("UP");
-    if ((this.doors & 2) != 0) this.doorList[1] = new Door("RIGHT");
-    if ((this.doors & 4) != 0) this.doorList[2] = new Door("DOWN");
-    if ((this.doors & 8) != 0) this.doorList[3] = new Door("LEFT");
+    if ((this.doors & 1) != 0) this.doorList[0] = new Door(Direction.UP);
+    if ((this.doors & 2) != 0) this.doorList[1] = new Door(Direction.RIGHT);
+    if ((this.doors & 4) != 0) this.doorList[2] = new Door(Direction.DOWN);
+    if ((this.doors & 8) != 0) this.doorList[3] = new Door(Direction.LEFT);
   }
 
   /** Metodo que dibuja la room y las puertas */
@@ -109,7 +109,18 @@ class Room extends GameObject {
   }
   
   /* -- ASESORES -- */
-  /* Getters*/
+  
+  /** Devuelve la puerta de la direccion solicitada */
+  public Door getDoor(Direction dir) {
+    for (Door d : doorList) {
+      if (d != null && d.getDirection() == dir) {
+        return d;
+      }
+    }
+    return null;
+  }
+
+  /* Getters enemigos*/
   public ArrayList<SubBoss> getSubBosses() {  return this.subBosses;  }
 
   public ArrayList<Tower> getTowers() {  return this.towers;  }

@@ -19,8 +19,35 @@ class RoomRenderer {
     if (roomActual == dungeon.getRoom(0,0)) {
       mostrarTutorial();
     }
-
-    player.checkCollisions(roomActual);
+    
+    Door door = player.checkCollision(roomActual);
+    if (door != null) {
+      int newCol = player.getCol();
+      int newRow = player.getRow();
+    
+      switch (door.getDirection()) {
+        case UP:    newRow--; break;
+        case DOWN:  newRow++; break;
+        case LEFT:  newCol--; break;
+        case RIGHT: newCol++; break;
+      }
+    
+      Room nextRoom = dungeon.getRoom(newCol, newRow);
+      if (nextRoom != null) {
+        // Buscando la puerta opuesta
+        Door entryDoor = nextRoom.getDoor(door.getDirection().getOpposite());
+        PVector entryPos;
+        // Si existe la puerta usar su posicion
+        if (entryDoor != null) {
+          entryPos = entryDoor.getEntryPosition();
+        } else {
+          // Si no tiene puertas, colocar al jugador en el centro
+          entryPos = new PVector(width/2, height/2);
+        }
+          player.updatePosition(newCol, newRow, entryPos);
+      }
+    }
+    
     bullets.updateBullets(roomActual);
     bullets.dibujarBalas();
     enemies.actualizar(roomActual);
