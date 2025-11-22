@@ -45,7 +45,7 @@ class Follower extends Enemy implements IVisualizable, IMovable{
     dibujarBarraVida(6, 40, 5, 30);
   }
 
-  public void mover() {
+  public void mover(InputManager input) {
     PVector direccion = PVector.sub(jugador.getPosicion(), this.posicion); // calcula la dirección hacia el jugador
     direccion.normalize(); // normaliza la dirección
     direccion.mult(velocidad); // multiplica por la velocidad

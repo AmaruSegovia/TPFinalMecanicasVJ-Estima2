@@ -39,18 +39,17 @@ public void setup()
   
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
-  dungeon = new Dungeon(nivel);
-  jugador = new Player(new PVector(width/2, height/2));
+  
+  
   gestorBalas = new GestorBullets();
   gestorEnemigos= new GestorEnemigos();
   
   // Inicializar estados
+  menu = new MenuState(audio);     
   jugando = new PlayingState(audio,input);
   victoria = new VictoryState(audio);
   derrota = new GameOverState(audio);
   creditos = new CreditsState(audio);
-  menu = new MenuState(audio);     // Colocarlo al final de los inicializados para que no no se ejecuten otros audios luego del menu
-  
   
    // Estado inicial
   changeState(menu); 
@@ -88,7 +87,7 @@ void changeState(GameState newState) {
 void jugando() {
   dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
   jugador.display(); 
-  jugador.mover();
+  jugador.mover(input);
   
   /* Regulando disparo a la vez que mantiene la animación de disparo mientras no se pueda disparar */
   if (millis() - jugador.getTimeSinceLastShot() >= 310) {

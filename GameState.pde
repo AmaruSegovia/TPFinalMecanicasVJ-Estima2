@@ -5,6 +5,46 @@ interface GameState {
   void handleInput(char key); // Manejo de los inputs, especificamente poara cada estado
 }
 
+// Estado del juego que representa la pantalla de juego
+public class PlayingState implements GameState {
+  AudioManager audio;
+  InputManager input;
+  Player jugador;
+  Dungeon dungeon;
+  
+  // Constructor, recibe el gestor de audio
+  public PlayingState(AudioManager audio, InputManager input) {
+    this.audio = audio;
+    this.input = input;
+    dungeon = new Dungeon(1);
+    jugador = new Player(new PVector(width/2, height/2));
+  }
+  /* inicializa al entrar al juego */
+  public void onEnter() {
+    this.audio.playJuego();
+  }
+  
+  /* Dibujando la pantalla */
+  void update() {
+    text("Estando en el juego", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
+    jugador.display();
+    jugador.mover(input);
+    dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
+    //if (jugador.hasWon()) currentState = victoryState;
+    //else if (jugador.hasLost()) currentState = defeatState;
+  }
+  
+  /* reconociendo inputs */
+  void handleInput(char key) { 
+    if (key == ENTER) 
+      changeState(victoria);
+    if (keyCode == UP) 
+      changeState(creditos);
+    if (keyCode == DOWN) 
+      changeState(derrota);
+  }
+}
+
 // Estado del juego que representa el menu inicial
 public class MenuState implements GameState {
   private AudioManager audio;
@@ -35,44 +75,6 @@ public class MenuState implements GameState {
   void handleInput(char key) {
     if (key == ENTER) 
       changeState(jugando);
-  }
-}
-// Estado del juego que representa la pantalla de juego
-public class PlayingState implements GameState {
-  AudioManager audio;
-  InputManager input;
-  Player jugador;
-  Dungeon dungeon;
-  
-  // Constructor, recibe el gestor de audio
-  public PlayingState(AudioManager audio, InputManager input) {
-    this.audio = audio;
-    this.input = input;
-    dungeon = new Dungeon(1);
-    jugador = new Player(new PVector(width/2, height/2));
-  }
-  /* inicializa al entrar al juego */
-  public void onEnter() {
-    this.audio.playJuego();
-  }
-  
-  /* Dibujando la pantalla */
-  void update() {
-    text("Estando en el juego", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
-    //jugador.update(input);
-    //dungeon.update(jugador);
-    //if (jugador.hasWon()) currentState = victoryState;
-    //else if (jugador.hasLost()) currentState = defeatState;
-  }
-  
-  /* reconociendo inputs */
-  void handleInput(char key) { 
-    if (key == ENTER) 
-      changeState(victoria);
-    if (keyCode == UP) 
-      changeState(creditos);
-    if (keyCode == DOWN) 
-      changeState(derrota);
   }
 }
 

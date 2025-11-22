@@ -62,7 +62,7 @@ class Tower extends Enemy implements IVisualizable {
 
     for (int i = balas.size() - 1; i >= 0; i--) {
       Bala b = balas.get(i);
-      b.mover();
+      b.mover(input);
       if (b.checkCollisionWithPlayer(player) || b.estaFuera()) {
         balas.remove(i);
       }

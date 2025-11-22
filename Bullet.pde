@@ -57,7 +57,7 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
 
   /* -- MÉTODOS -- */
   /** Método para mover las balas (implementando la interfaz IMovable) */
-  public void mover() {
+  public void mover(InputManager input) {
     if (this.direction != null){
       this.posicion.add(this.direction.copy().mult(this.speed).copy().mult(Time.getDeltaTime(frameRate)));
     }

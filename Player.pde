@@ -31,7 +31,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.topSpeed = 250;
     this.sprite = new SpriteObject("mage.png", ancho, alto, 4);
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
-    this.direccion = new Vector("down");
+    this.direccion = new Vector(posicion, Direction.DOWN); // Vector inicial hacia abajo
     this.collider = new Colisionador(this.posicion,this.ancho*3);
     this.lives = 15;
     this.isHit = false;
@@ -49,43 +49,45 @@ class Player extends GameObject implements IMovable, IVisualizable {
     }
     stroke(0);
     fill(200, 30);
-    this.sprite.render(this.animationState, new PVector(this.posicion.x, this.posicion.y));
+    this.sprite.render(this.animationState, this.posicion.copy());
     textSize(20);
     fill(255);
-    dibujarBarraVida(15,50, 5, 35);
+    dibujarBarraVida(lives,50, 5, 35);
   }
 
   /** Metodo que mueve al jugador */
-  public void mover() {
-    this.direccion.setOrigen(this.posicion);
+  public void mover(InputManager input) {
+    this.direccion.setOrigen(this.posicion.copy());
 
     float acceleration = 60;
     float deceleration = 10;
 
     // Operador ternario para acelerar o desacelerar segun si se apreta una tecla
-    this.speed = W_PRESSED || D_PRESSED || S_PRESSED || A_PRESSED ? this.speed+acceleration : this.speed-deceleration;
+    speed = input.isMoving() ? speed + acceleration : speed - deceleration;
 
-    //  Verificar si se están presionando las teclas 'w', 'a', 's' o 'd'
-    if (W_PRESSED)  this.direccion = this.direccion.sumar(new Vector("up"));
-    if (S_PRESSED)  this.direccion = this.direccion.sumar(new Vector("down"));
-    if (A_PRESSED)  this.direccion = this.direccion.sumar(new Vector("left"));
-    if (D_PRESSED)  this.direccion = this.direccion.sumar(new Vector("right"));
-
-    if (this.direccion.obtenerMagnitud() != 0) {
-      this.direccion.getDestino().normalize(); // Normalizar la dirección para que el movimiento diagonal no sea mas rapido
+    
+    // Sumar todas las direcciones activas como vectores
+    for (Direction dir : input.getActiveDirections()) {
+      direccion = direccion.sumar(new Vector(posicion, dir));
     }
+    
+    // Normalizar para diagonales
+    if (direccion.obtenerMagnitud() != 0) {
+      this.direccion.normalizar(); // Normalizar la dirección para que el movimiento diagonal no sea mas rapido
+    }
+    
     // Limitar la velocidad
     this.speed = constrain(this.speed, 0, this.topSpeed);
 
     // Actualizar la posicion del jugador
-    this.posicion.add(this.direccion.getDestino().copy().mult(this.speed * Time.getDeltaTime(frameRate)));
+    this.posicion.add(direccion.getDestino().copy().mult(speed * Time.getDeltaTime(frameRate)));
 
-    // Limitar el movimiento del jugador
-    this.posicion.x = constrain(this.posicion.x, 0 + this.ancho*2, width - this.ancho*2);
-    this.posicion.y = constrain(this.posicion.y, 0 + this.ancho*2, height - this.ancho*2);
+    // Limitar el movimiento dentro de la pantalla
+    posicion.x = constrain(posicion.x, ancho * 2, width - ancho * 2);
+    posicion.y = constrain(posicion.y, alto * 2, height - alto * 2);
     
     //Actualizando la posición del collider
-    this.collider.setPosicion(this.posicion);
+    collider.setPosicion(posicion);
     
   }// end mover
 
@@ -159,6 +161,20 @@ class Player extends GameObject implements IMovable, IVisualizable {
     }
     return false;
   }
+  
+  public Bullet shoot(InputManager input) {
+    if (input.isShooting()) {
+      return new Bullet(
+        posicion.copy(),
+        10, 10,
+        input.getShootDirection().toVector(), // Cambia a vector
+        400,
+        "jugador"
+      );
+    }
+    return null;
+  }
+
   
   public void dibujarBarraVida(float vidasMaximas, float barraAncho, float barraAlto, float offsetY) {
     float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas

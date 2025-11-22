@@ -15,7 +15,7 @@ public class Bala extends GameObject implements IVisualizable, IMovable {
     this.collider = new Colisionador(this.posicion, this.ancho);
   }
 
-  public void mover() {
+  public void mover(InputManager input) {
     this.posicion.x += this.dirX * this.velocidad;
     this.posicion.y += this.dirY * this.velocidad;
   }

@@ -75,21 +75,21 @@ class GestorEnemigos {
 
     for (Follower follower : roomActual.getFollowers()) {
       follower.display();
-      follower.mover();
+      follower.mover(input);
       follower.evitarColisiones(roomActual.getFollowers());
       follower.checkCollisionWithPlayer(jugador); // Verificar colisión con el jugador
     }
 
     for (SubBoss subBoss : roomActual.getSubBosses()) {
         subBoss.display();
-    subBoss.mover();
+    subBoss.mover(input);
     subBoss.creacionEliminacionBombas(jugador);
     subBoss.checkCollisionWithPlayer(jugador);
     }
 
     for (Boss boss : roomActual.getBosses()) {
       boss.display();
-      boss.mover();
+      boss.mover(input);
       boss.detectarPlayer(jugador);
       boss.checkCollisionWithPlayer(jugador); // Verificar colisión con el jugador
     }

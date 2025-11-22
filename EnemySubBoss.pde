@@ -22,7 +22,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
   }
 
   /** METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
-  public void mover() {
+  public void mover(InputManager input) {
     //Si no esta persiguiendo al jugador
     if (persiguiendoJugador == false) {
       tiempoEsperaActual++;//Incrementa el tiempo de espera

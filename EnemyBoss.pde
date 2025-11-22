@@ -1,4 +1,4 @@
-class Boss extends Enemy implements IVisualizable, IMovable{ //<>//
+class Boss extends Enemy implements IVisualizable, IMovable{ //<>// //<>// //<>//
   private boolean inCenter = true;
   protected float speed;
   protected float topSpeed; 
@@ -18,7 +18,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{ //<>//
     this.ancho = 41; //valores del sprite sheet no tocar
     this.alto = 38; //valores del sprite sheet no tocar
     this.topSpeed= random(150,200);
-    this.direccion = new Vector(random(2) < 1 ? "right" : "left");
+    //this.direccion = new Vector(random(2) < 1 ? Direction.RIGHT : Direction.LEFT);
     this.collider = new Colisionador(this.posicion, this.ancho*4);
     this.sprite = new SpriteObject("jefe.png", ancho, alto, 4);
     this.tiempoInicio = millis();
@@ -67,7 +67,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{ //<>//
 }
 
   
-  public void mover() {
+  public void mover(InputManager input) {
     if(lives <= 30){
       fase = 2;
     }
@@ -135,10 +135,10 @@ class Boss extends Enemy implements IVisualizable, IMovable{ //<>//
           float angulo = TWO_PI / 8 * i;
           Bullet bala = new Bullet(this.posicion.copy(), angulo, radioOrbita,"enemigo");
           gestorBalas.addBullet(bala);
-           //<>//
-        } //<>//
+           //<>// //<>// //<>//
+        } //<>// //<>// //<>//
       break;
-    } //<>//
+    } //<>// //<>// //<>//
   }
 
   public void detectarPlayer(Player player) {

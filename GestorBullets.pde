@@ -22,7 +22,7 @@ public class GestorBullets {
  public void updateBullets(Room room) {
     removableBullets = new ArrayList<Bullet>();
     for (Bullet bullet : this.bulletList) {
-      bullet.mover();
+      bullet.mover(input);
       if (bullet.pertenece == "enemigo"){
         bullet.moverAng();
       } 
