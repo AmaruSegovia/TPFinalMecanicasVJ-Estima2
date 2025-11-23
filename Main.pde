@@ -1,6 +1,8 @@
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 
 /**Variables Globales--------*/
@@ -72,15 +74,15 @@ void jugando() {
   jugador.mover(input);
   
   /* Regulando disparo a la vez que mantiene la animación de disparo mientras no se pueda disparar */
-  if (millis() - jugador.getTimeSinceLastShot() >= 310) {
-    jugador.setIsShooting(false);
-    if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_DERECHA){
-      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_DERECHA);
-    }
-    else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA){
-      jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA);
-    }
-  }
+  //if (millis() - jugador.getTimeSinceLastShot() >= 310) {
+  //  jugador.setIsShooting(false);
+  //  if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_DERECHA){
+  //    jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_DERECHA);
+  //  }
+  //  else if (jugador.getAnimationState() == MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA){
+  //    jugador.setAnimationState(MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA);
+  //  }
+  //}
 }
 
 

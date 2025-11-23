@@ -6,10 +6,14 @@ class Player extends GameObject implements IMovable, IVisualizable {
   private Vector direccion;
   /** Representa la posicion del jugador con respecto a la dungeon*/
   private int col, row;
+  
   /** Controla si el jugador está disparando o no */
   private boolean isShooting;
-  /** Representa el tiempo transcurrido tras el último disparo */
-  private float timeSinceLastShot;
+  /** Representa el ultimo disparo */
+  private long lastShotTime = 0;       
+  /** Representa el tiempo minimo entre cada disparo */
+  private int shootCooldown = 310; 
+  
   /** Representa el sprite del jugador */
   private SpriteObject sprite;
   /** Representa el estado de la animación del sprite del jugador */
@@ -117,9 +121,19 @@ class Player extends GameObject implements IMovable, IVisualizable {
 
   /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */
   public void shoot(GestorBullets gestor, InputManager input) {
-    if (input.isShooting()) {
-      Bullet b = new Bullet(this.posicion.copy(), 10, 10, input.getShootDirection().toVector(), 400);
-      gestor.addBullet(b);
+    if (input.isShooting() && input.getShootDirection() != null) {
+      long now = millis();
+      if (now - lastShotTime >= shootCooldown) {
+        // Crear bala
+        Bullet b = new Bullet(
+          this.posicion.copy(),
+          10, 10,
+          input.getShootDirection().toVector(),
+          400
+        );
+        gestor.addBullet(b);
+        lastShotTime = now; // actualizar temporizador
+      }
     }
   }
 
@@ -173,10 +187,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   
   /** Devuelve si el jugador está disparando o no */
   public boolean getIsShooting() {  return this.isShooting;  }
-  
-  /** Devuelve si el jugador está disparando o no */
-  public float getTimeSinceLastShot() {  return this.timeSinceLastShot;  }
-  
+    
   /** Devuelve el estado de la animación del jugador */
   public int getAnimationState() {  return this.animationState;  }
   
@@ -189,10 +200,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   
   /** Actualiza si el jugador está disparando o no */
   public void setIsShooting(boolean isShooting) {  this.isShooting = isShooting;  }
-  
-  /** Actualiza si el jugador está disparando o no */
-  public void setTimeSinceLastShot(float timeSinceLastShot) {  this.timeSinceLastShot = timeSinceLastShot;  }
-  
+    
   /** Actualiza el estado de la animación del jugador */
   public void setAnimationState(int animationState) {  this.animationState = animationState;  }
   
