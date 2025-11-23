@@ -1,3 +1,8 @@
+import java.util.Collection;
+import java.util.Map;
+import java.util.HashMap;
+
+
 /**Variables Globales--------*/
 public boolean W_PRESSED;
 public boolean D_PRESSED;

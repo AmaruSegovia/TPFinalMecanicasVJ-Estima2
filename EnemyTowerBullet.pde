@@ -28,12 +28,12 @@ public class Bala extends GameObject implements IVisualizable, IMovable {
     return (posicion.x < 0 || posicion.x > width || posicion.y < 0 || posicion.y > height);
   }
   
-   public boolean checkCollisionWithPlayer(Player player) {
-    if (collider.isCircle(player.collider) && !player.isHit) {
-      player.reducirVida();
-      return true;
-    }
-    return false;
-  }
+  // public boolean checkCollisionWithPlayer(Player player) {
+  //  if (collider.isCircle(player.collider) && !player.isHit) {
+  //    player.reducirVida();
+  //    return true;
+  //  }
+  //  return false;
+  //}
   
 }

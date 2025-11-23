@@ -79,4 +79,5 @@ class Door extends GameObject {
   public void setIsOpen(boolean state) {
     this.isOpen = state;
   }
+  public Colisionador getCollider() { return collider; }
 }

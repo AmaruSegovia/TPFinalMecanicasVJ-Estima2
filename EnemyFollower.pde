@@ -55,7 +55,8 @@ class Follower extends Enemy implements IVisualizable, IMovable{
 
   public void evitarColisiones(ArrayList<Follower> followers) {
     for (Follower follower : followers) {
-      if (follower != this && this.collider.isCircle(follower)) {
+      //if (follower != this && this.collider.isCircle(follower)) 
+      {
         PVector direccion = PVector.sub(this.posicion, follower.getPosicion());
         direccion.normalize();
         direccion.mult(velocidad);

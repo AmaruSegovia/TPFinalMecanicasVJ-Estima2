@@ -14,7 +14,6 @@ class RoomRenderer {
     if (roomActual == null) return;
 
     roomActual.display();
-    roomActual.updateDoors();
 
     if (roomActual == dungeon.getRoom(0,0)) {
       mostrarTutorial();
@@ -48,9 +47,9 @@ class RoomRenderer {
       }
     }
     
-    bullets.updateBullets(roomActual);
+    bullets.update(roomActual, jugador);
     bullets.dibujarBalas();
-    enemies.actualizar(roomActual);
+    //enemies.actualizar(roomActual);
   }
 
   private void mostrarTutorial() {
@@ -64,4 +63,9 @@ class RoomRenderer {
     image(loadImage("wasd.png"), width/4.8, height/1.8, 120, 80);        
     image(loadImage("ijkl.png"), width/1.27, height/1.8, 120, 80);
   }
+  
+  public GestorBullets getBullets() {
+    return bullets;
+  }
+
 }

@@ -124,7 +124,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{ //<>// //<>// //<>/
         for (int i = 0; i < numBalas; i++) {
           float angulo = PI / 2 + radians(40) / (numBalas - 1) * i - radians(20); // Ajustar los ángulos para las balas
           Bullet bala;
-          bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y-60), angulo,"enemigo");
+          //bala = new Bullet(new PVector(this.posicion.copy().x, this.posicion.copy().y-60), angulo,"enemigo");
           //gestorBalas.addBullet(bala);
         }
       break;
@@ -133,7 +133,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{ //<>// //<>// //<>/
         
         for (int i = 0; i < 8; i++) {
           float angulo = TWO_PI / 8 * i;
-          Bullet bala = new Bullet(this.posicion.copy(), angulo, radioOrbita,"enemigo");
+          //Bullet bala = new Bullet(this.posicion.copy(), angulo, radioOrbita,"enemigo");
           //gestorBalas.addBullet(bala);
            //<>// //<>// //<>//
         } //<>// //<>// //<>//
@@ -150,7 +150,7 @@ class Boss extends Enemy implements IVisualizable, IMovable{ //<>// //<>// //<>/
       if (this.posicion.dist(player.getPosicion()) < 1000) {
         fill(255);
         embestir(player);
-        checkCollitionPlayer(player);
+        //checkCollitionPlayer(player);
       }
     }
   }
@@ -160,15 +160,15 @@ class Boss extends Enemy implements IVisualizable, IMovable{ //<>// //<>// //<>/
     this.direccion.setDestino(newDireccion);
   }
 
-  public void checkCollitionPlayer(Player player) {
-    if (collider.isCircle(player)) {
+  //public void checkCollitionPlayer(Player player) {
+  //  if (collider.colisionaCon(player)) {
       
-      if (this.posicion.x - player.posicion.x < 1) {
-        this.direccion.setDestino(new PVector(random(2) < 1 ? 1 : -1, 0).normalize());
-        resetSpeed();
-      }
-    }
-  }
+  //    if (this.posicion.x - player.posicion.x < 1) {
+  //      this.direccion.setDestino(new PVector(random(2) < 1 ? 1 : -1, 0).normalize());
+  //      resetSpeed();
+  //    }
+  //  }
+  //}
 
   public void resetSpeed() {
     this.topSpeed= random(100, 200);

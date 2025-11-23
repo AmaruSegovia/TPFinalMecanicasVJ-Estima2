@@ -42,9 +42,9 @@ class Enemy extends GameObject {
   }
   
    public void checkCollisionWithPlayer(Player player) {
-    if (  collider.isCircle(player.collider) && !player.isHit) {
-      player.reducirVida();
-    }
+    //if (  collider.isCircle(player.collider) && !player.isHit) {
+    //  player.reducirVida();
+    //}
   }
   
   /* -- ASESOERS -- */
@@ -55,4 +55,6 @@ class Enemy extends GameObject {
   public void setLives(int lives) {
     this.lives = lives;
   }
+  
+  public Colisionador getCollider() { return collider; }
 }

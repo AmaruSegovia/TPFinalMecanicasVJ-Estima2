@@ -31,10 +31,16 @@ public class PlayingState implements GameState {
     text("Estando en el juego", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
     
     jugador.mover(input);
+    jugador.shoot(renderer.getBullets(), input);
     renderer.render(jugador);
     jugador.display();
     //if (jugadorGana()) changeState(victoria);
     //else if (jugadorPierde()) changeState(derrota);
+    
+    // ************************   DEPURADOR
+    fill(255);
+    textSize(20);
+    text("Balas: " + renderer.getBullets().getBulletCount(), 200, 30);
   }
   
   /* reconociendo inputs */

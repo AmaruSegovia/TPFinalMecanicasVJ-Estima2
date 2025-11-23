@@ -1,5 +1,11 @@
+/** Enum para identificar el duenioo de la bala */
+enum BulletOwner {
+  PLAYER,
+  ENEMY
+}
+
 /** Clase que representa las balas del jugador */
-private class Bullet extends GameObject implements IMovable, IVisualizable {
+private class Bullet extends GameObject implements IVisualizable {
   /* -- ATRIBUTOS -- */
   /** Representa la velocidad de la bala */
   private float speed;
@@ -7,7 +13,7 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   private PVector direction;
   /** Representa el area de colision de la bala */
   private Colisionador colisionador;
-  private String pertenece;
+  private BulletOwner pertenece;
   
   /** Representan los sprites de las balas del jugador y del jefe respectivamente */
   private SpriteObject spritePlayer;
@@ -20,9 +26,9 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
-  public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed, String pertenece) {
+  public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed){
     super(pos, ancho, alto);
-    this.pertenece = pertenece; 
+    this.pertenece = BulletOwner.PLAYER; 
     this.direction = direction;
     this.speed = speed;
     this.spritePlayer = new SpriteObject("playerBullet.png", ancho, alto, 3);
@@ -30,11 +36,9 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     this.disparada = true;
   }
   /** Constructor para balas con angulo para el enemigo */
-  public Bullet(PVector pos, float angulo,String pertenece){
-    this.pertenece = pertenece; 
-    this.posicion = pos;
-    this.ancho = 8;
-    this.alto = 8;
+  public Bullet(PVector pos, float angulo){
+    super(pos, 8, 8);
+    this.pertenece = BulletOwner.ENEMY; 
     this.angulo = angulo;
     this.speed = 400;
     this.spriteBoss = new SpriteObject("bossBullet1.png", ancho, alto, 3);
@@ -43,37 +47,36 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   }
   
   /** Constructor para balas que orbitan para el enemigo */
-  Bullet(PVector posicion, float angulo, float radioOrbita,String pertenece) {
-    this.pertenece = pertenece; 
-    this.posicion = posicion.copy().add(PVector.fromAngle(angulo).mult(radioOrbita));
+  public Bullet(PVector posicion, float angulo, float radioOrbita) {
+    super(posicion.copy().add(PVector.fromAngle(angulo).mult(radioOrbita)), 8, 8);
+    this.pertenece = BulletOwner.ENEMY; 
     this.angulo = angulo;
     this.speed = 150;
-    this.alto = 8;
-    this.ancho = 8;
     this.spriteBoss = new SpriteObject("bossBullet2.png", ancho, alto, 4);
     this.disparada = false;
     this.colisionador = new Colisionador(this.posicion, ancho*4); 
   }
 
-  /* -- MÉTODOS -- */
-  /** Método para mover las balas (implementando la interfaz IMovable) */
-  public void mover(InputManager input) {
-    if (this.direction != null){
-      this.posicion.add(this.direction.copy().mult(this.speed).copy().mult(Time.getDeltaTime(frameRate)));
-    }
-  }
-
+  /* -- METODOS -- */
   /** Método para dibujar las balas (implementando la interfaz IVisualizable) */
   public void display() {
     imageMode(CENTER);
-    if(this.pertenece == "jugador"){
+    if(this.pertenece == BulletOwner.PLAYER){
     tint(#FFFFFF);
       this.spritePlayer.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }else{      
       this.spriteBoss.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }
+    colisionador.display(color(255,0,0));
   }
   
+  /** Metodo para mover las balas */
+  public void mover() {
+    if (this.direction != null){
+      this.posicion.add(this.direction.copy().mult(this.speed).copy().mult(Time.getDeltaTime(frameRate)));
+      colisionador.setPosicion(posicion);
+    }
+  }
 
   public void orbitar(PVector bossPosition) {
     if (!disparada) {
@@ -90,16 +93,16 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
         // Actualizar la posición de la bala con la oscilación radial
         this.posicion.x = bossPosition.x + radialOscillation * cos(angulo);
         this.posicion.y = bossPosition.y + radialOscillation * sin(angulo);
+        colisionador.setPosicion(this.posicion);
     }
     
-    if (colisionador.isCircle(jugador.collider) && !jugador.isHit) {
-        jugador.reducirVida();
-    }
+    //if (colisionador.isCircle(jugador.collider) && !jugador.isHit) {
+    //    jugador.reducirVida();
+    //}
 }
 
   
  public void moverAng() {
-    colisionador.setPosicion(this.posicion);
     
     // Cálculo del movimiento en ángulo
     PVector moveVector = PVector.fromAngle(angulo).mult(speed).mult(Time.getDeltaTime(frameRate));
@@ -115,13 +118,17 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
     
     // Actualizar la posición de la bala
     this.posicion.add(moveVector);
+    this.colisionador.setPosicion(this.posicion);
+
     
     // Verificar colisión con el jugador
-    if (colisionador.isCircle(jugador.collider) && !jugador.isHit) {
-        jugador.reducirVida();
-    }
+    //if (colisionador.isCircle(jugador.collider) && !jugador.isHit) {
+    //    jugador.reducirVida();
+    //}
 }
-
+  public boolean balaFuera() {
+    return posicion.x < 0 || posicion.x > width || posicion.y < 0 || posicion.y > height;
+  }
   
   public void disparar() {
     disparada = true;
@@ -130,11 +137,15 @@ private class Bullet extends GameObject implements IMovable, IVisualizable {
   /** Verifica la colision del colisionador con los enemigos */
   public boolean verificarColision(Enemy enemigo) {
     // Verifica que el enemigo no sea el propietario de la bala
-    if (this.pertenece == "jugador" && colisionador.isCircle(enemigo.collider)) {
-        enemigo.reducirVida();
-        return true;
-    }
+    //if (this.pertenece == "jugador" && colisionador.isCircle(enemigo.collider)) {
+    //    enemigo.reducirVida();
+    //    return true;
+    //}
     return false;
-}
-
+  }
+  
+  public BulletOwner getOwner() { return this.pertenece; }
+  public Colisionador getCollider() { return this.colisionador; }
+  public PVector getDirection() { return this.direction; }
+  public boolean isDisparada() { return this.disparada; }
 }

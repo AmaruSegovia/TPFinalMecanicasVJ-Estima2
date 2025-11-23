@@ -1,55 +1,78 @@
+/** Tipos de colisionadores disponibles */
+enum ColliderType {
+  CIRCLE,
+  RECT
+}
+
 /** Clase que verifica las colisiones entre objetos */
-class Colisionador extends GameObject{
+class Colisionador{
+  private PVector posicion;
+  private float ancho;
+  private float alto;
+  private ColliderType tipo;
 
   /* -- CONSTRUCTORES -- */
-  /** Constructor para circulos y cuadrados */
+  /** Constructor para circulos */
   public Colisionador(PVector posicion, int ancho) {
-    super(posicion, ancho, ancho);
+    this.posicion = posicion.copy();
+    this.ancho = ancho;
+    this.alto = ancho;
+    this.tipo = ColliderType.CIRCLE;
   }
-  /** Constructor para circulos y cuadrados */
+  /** Constructor para rectangulos */
   public Colisionador(PVector posicion, int ancho, int alto) {
-    super(posicion, ancho, alto);
+    this.posicion = posicion.copy();
+    this.ancho = ancho;
+    this.alto = alto;
+    this.tipo = ColliderType.RECT;
   }
 
   /* -- MÉTODOS -- */
   /** Dibuja el area de colision circular*/
-  public void displayCircle(color Color) {
-    stroke(Color);
+  public void display(color c) {
+    stroke(c);
     strokeWeight(2);
     noFill();
-    circle( this.posicion.x, this.posicion.y, this.ancho);
+    if (tipo == ColliderType.CIRCLE) {
+      circle(posicion.x, posicion.y, ancho);
+    } else {
+      rect(posicion.x - ancho/2, posicion.y - alto/2, ancho, alto);
+      rect( this.posicion.x, this.posicion.y, this.ancho, this.alto);
+    }
   }
-  /** Dibuja el area de colision rect */
-  public void displayRect(color Color) {
-    stroke(Color);
-    strokeWeight(2);
-    noFill();
-    rect( this.posicion.x, this.posicion.y, this.ancho, this.alto);
+  /** Metodo de colision general **/
+  public boolean colisionaCon(Colisionador otro) {
+    if (this.tipo == ColliderType.CIRCLE && otro.tipo == ColliderType.CIRCLE) {
+      return colisionarCirculo(otro);
+    }
+    if (this.tipo == ColliderType.RECT && otro.tipo == ColliderType.RECT) {
+      return colisionarRectangulo(otro);
+    }
+    if (this.tipo == ColliderType.CIRCLE && otro.tipo == ColliderType.RECT) {
+      return colisionarCircRect(this, otro);
+    }
+    if (this.tipo == ColliderType.RECT && otro.tipo == ColliderType.CIRCLE) {
+      return colisionarCircRect(otro, this);
+    }
+    return false;
   }
   /** Metodo que comprueba la colision entre dos objetos rectangulos */
-  public boolean colisionarRectangulo(GameObject primero, GameObject segundo) {
-    return !(primero.getPosicion().x + primero.getAncho() < segundo.getPosicion().x ||
-      primero.getPosicion().x > segundo.getPosicion().x + segundo.getAncho() ||
-      primero.getPosicion().y + primero.getAlto() < segundo.getPosicion().y ||
-      primero.getPosicion().y > segundo.getPosicion().y + segundo.getAlto());
+  public boolean colisionarRectangulo(Colisionador otro) {
+    return !(this.getPosicion().x + this.getAncho() < otro.getPosicion().x ||
+      this.getPosicion().x > otro.getPosicion().x + otro.getAncho() ||
+      this.getPosicion().y + this.getAlto() < otro.getPosicion().y ||
+      this.getPosicion().y > otro.getPosicion().y + otro.getAlto());
   }
 
   /** Metodo que comprueba la colisión entre dos objetos círculares */
-  public boolean colisionarCirculo(GameObject primero, GameObject segundo) {
-    float distancia = PVector.dist(primero.getPosicion(), segundo.getPosicion());
-    float radios = primero.getAncho()/2+segundo.getAncho()/2;
-    return distancia <= radios;
-  }
-  
-  /** Metodo que comprueba la colisión entre ente colisionador y otro objeto */
-  public boolean isCircle( GameObject segundo) {
-    float distancia = PVector.dist(this.getPosicion(), segundo.getPosicion());
-    float radios = (this.getAncho()+segundo.getAncho())/2;
+  public boolean colisionarCirculo( Colisionador otro) {
+    float distancia = PVector.dist(this.posicion, otro.getPosicion());
+    float radios = (this.getAncho() + otro.getAncho())/2;
     return distancia <= radios;
   }
   
   /** Metodo que comprueba la colicion de un objeto rectangulo con otro objeto circular */
-  public boolean colisionarCircRect(GameObject circulo, GameObject rectangulo) {
+  public boolean colisionarCircRect(Colisionador circulo, Colisionador rectangulo) {
     // Genera una variable que guarda la posicion(x,y) del circulo, que representara el punto mas cercano entre el rectangulo y el circulo
     PVector point = new PVector(circulo.getPosicion().x, circulo.getPosicion().y);
 
@@ -69,5 +92,19 @@ class Colisionador extends GameObject{
     }
     float distance = point.dist(circulo.getPosicion()); //Calcula la distancia entre el punto cercano y la posicion del circulo
     return distance <= circulo.getAncho()/2;
+  }
+  
+  /*  --- Geters ---  */
+  public PVector getPosicion(){ return this.posicion.copy(); }
+  public float getAncho(){ return this.ancho; }
+  public float getAlto(){ return this.alto; }
+  
+  /* Actualizar posicion */
+  public void setPosicion(PVector nuevaPos) {
+    this.posicion = nuevaPos.copy();
+  }
+  /** Actualizar ancho **/
+  public void setAncho(float ancho) {
+    this.ancho = ancho;
   }
 }

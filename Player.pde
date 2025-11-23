@@ -57,6 +57,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     textSize(20);
     fill(255);
     dibujarBarraVida(lives,50, 5, 35);
+    collider.display(255);
   }
 
   /** Metodo que mueve al jugador */
@@ -99,8 +100,8 @@ class Player extends GameObject implements IMovable, IVisualizable {
   public Door checkCollision(Room roomActual) {
     if (!roomActual.hasDoors()) return null;
   
-    for (Door door : roomActual.doorList) {
-      if (door != null && door.collider.isCircle(this.collider) && door.getIsOpen()) {
+    for (Door door : roomActual.getAllDoors()) {
+      if (door != null && door.collider.colisionaCon(this.collider) && door.getIsOpen()) {
         return door; // devuelve el evento
       }
     }
@@ -115,34 +116,21 @@ class Player extends GameObject implements IMovable, IVisualizable {
   }
 
   /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */
-  public Bullet shoot(char input) {
-    if (input == 'i') return new Bullet(this.posicion.copy(), 10, 10, new PVector(0, -1), 400,"jugador");
-    if (input == 'j') return new Bullet(this.posicion.copy(), 10, 10, new PVector(-1, 0), 400,"jugador");
-    if (input == 'k') return new Bullet(this.posicion.copy(), 10, 10, new PVector(0, 1), 400,"jugador");
-    if (input == 'l') return new Bullet(this.posicion.copy(), 10, 10, new PVector(1, 0), 400,"jugador");
-    return null;
-  }
-  
-  public boolean verificarColision(Enemy enemigo, Bala bala) {
-    if ((collider.isCircle(enemigo.collider) || collider.isCircle(bala.collider)) && !isHit) {
-      enemigo.reducirVida();
-      return true;
-    }
-    return false;
-  }
-  
-  public Bullet shoot(InputManager input) {
+  public void shoot(GestorBullets gestor, InputManager input) {
     if (input.isShooting()) {
-      return new Bullet(
-        posicion.copy(),
-        10, 10,
-        input.getShootDirection().toVector(), // Cambia a vector
-        400,
-        "jugador"
-      );
+      Bullet b = new Bullet(this.posicion.copy(), 10, 10, input.getShootDirection().toVector(), 400);
+      gestor.addBullet(b);
     }
-    return null;
   }
+
+  
+  //public boolean verificarColision(Enemy enemigo, Bala bala) {
+  //  if ((collider.isCircle(enemigo.collider) || collider.isCircle(bala.collider)) && !isHit) {
+  //    reducirVida();
+  //    return true;
+  //  }
+  //  return false;
+  //}
 
   
   public void dibujarBarraVida(float vidasMaximas, float barraAncho, float barraAlto, float offsetY) {
@@ -193,6 +181,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   public int getAnimationState() {  return this.animationState;  }
   
   public int getLives() {  return lives;  }
+  public Colisionador getCollider() { return collider; }
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
