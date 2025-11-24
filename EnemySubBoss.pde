@@ -24,6 +24,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
   @Override
   public void update(Player player, GestorEnemigos enemies){
     mover(player, enemies);
+    //checkCollisionWithPlayer(player);
   }
   /** Metodo que dibuja al subjefe */
   @Override

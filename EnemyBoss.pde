@@ -35,6 +35,7 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
   @Override
   public void update(Player player, GestorEnemigos enemies){
     mover(player);
+    checkCollisionWithPlayer(player);
   }
   @Override
   public void display() {

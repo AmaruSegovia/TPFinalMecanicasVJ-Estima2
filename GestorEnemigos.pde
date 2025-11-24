@@ -17,9 +17,9 @@ class GestorEnemigos {
   /* Inicializa a todos los enemigos */
   public void inicializarEnemigos(){
     //inicializarTowers();
-    inicializarFollowers();
+    //inicializarFollowers();
     //inicializarSubBosses();
-    //inicializarBoss();
+    inicializarBoss();
   }
   
   public void createEnemies (int nameRoom) {
@@ -28,7 +28,7 @@ class GestorEnemigos {
     if (this.enemigosGenerados[nameRoom]) {
       return; // Salir si ya han sido generados
     }
-    inicializarFollowers();
+    inicializarEnemigos();
     this.enemigosGenerados[nameRoom] = true;
   }
 

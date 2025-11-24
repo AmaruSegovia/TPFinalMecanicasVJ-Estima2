@@ -16,10 +16,6 @@ class RoomRenderer {
     roomActual.display();
     roomActual.updateDoors(gestorEnemigos.hayEnemigos());
     Room roomInicial = dungeon.getRoom(0,0);
-    // Inicializar enemigos solo si la Room está vacía
-    if (roomActual != roomInicial && gestorEnemigos.getAllEnemies().isEmpty()) {
-      //gestorEnemigos.inicializarEnemigos(roomActual);
-    }
 
     if (roomActual == roomInicial) {
       mostrarTutorial();

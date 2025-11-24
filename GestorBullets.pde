@@ -40,17 +40,24 @@ public class GestorBullets {
 
 
     // verificar colisiones con jugador
-    for (Bullet b : bullets) {
+    Iterator<Bullet> it2 = bullets.iterator();
+    while (it2.hasNext()) {
+      Bullet b = it2.next();
       if (b.getOwner() == BulletOwner.ENEMY) {
-        b.getCollider().colisionaCon(player.getCollider());
+        //b.getCollider().colisionaCon(player.getCollider());
+        if (b.getCollider().colisionaCon(player.getCollider())) {
+          player.reducirVida();
+          it2.remove();         
+          break;
+        }
       }
     }
-
-      // Fuera de pantalla
-      bullets.removeIf(b -> b.balaFuera() );
+    
+    // Fuera de pantalla
+    bullets.removeIf(b -> b.balaFuera() );
    
   }
-  
+
   void dibujarBalas() {
     for (Bullet b : bullets) {
       b.display();
