@@ -27,8 +27,6 @@ VictoryState victoria;
 GameOverState derrota;
 CreditsState creditos;
 
-private Player jugador;
-
 PImage background;
 
 // --- Setup Global ---
@@ -70,8 +68,8 @@ void changeState(GameState newState) {
 
 void jugando() {
   //dungeon.displayRoom(jugador, gestorEnemigos, gestorBalas);
-  jugador.display(); 
-  jugador.mover(input);
+  //jugador.display(); 
+  //jugador.mover(input);
   
   /* Regulando disparo a la vez que mantiene la animación de disparo mientras no se pueda disparar */
   //if (millis() - jugador.getTimeSinceLastShot() >= 310) {
@@ -86,21 +84,7 @@ void jugando() {
 }
 
 
-boolean jugadorGana() {
-  if(jugador.col == 4 && jugador.row ==1)
-  {
-    return true;
-  }
-   return false;
-}
 
-boolean jugadorPierde() {
-  // Comprueba si la columna del jugador es 3
-  if (jugador.getLives() <= 0) {
-    return true;
-  }
-  return false;
-}
 
 // --- Control de teclas ---
 void keyPressed() {
@@ -201,9 +185,3 @@ void keyReleased() {
 //    }
 //  }
 //}
-
-public void displayPlayerPosition() {
-  fill(0);
-  textSize(16);
-  text("pos: "+jugador.getPosicion(), 10, 20);
-}

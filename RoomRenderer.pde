@@ -1,11 +1,11 @@
 class RoomRenderer {
   private Dungeon dungeon;
-  private GestorEnemigos enemies;
+  private GestorEnemigos gestorEnemigos;
   private GestorBullets bullets;
 
-  public RoomRenderer(Dungeon dungeon, GestorEnemigos enemies, GestorBullets bullets) {
+  public RoomRenderer(Dungeon dungeon, GestorBullets bullets) {
     this.dungeon = dungeon;
-    this.enemies = enemies;
+    this.gestorEnemigos = new GestorEnemigos() ;
     this.bullets = bullets;
   }
 
@@ -14,8 +14,13 @@ class RoomRenderer {
     if (roomActual == null) return;
 
     roomActual.display();
+    Room roomInicial = dungeon.getRoom(0,0);
+    // Inicializar enemigos solo si la Room está vacía
+    if (roomActual != roomInicial && roomActual.getAllEnemies().isEmpty()) {
+      gestorEnemigos.inicializarEnemigos(roomActual);
+    }
 
-    if (roomActual == dungeon.getRoom(0,0)) {
+    if (roomActual == roomInicial) {
       mostrarTutorial();
     }
     
@@ -47,9 +52,10 @@ class RoomRenderer {
       }
     }
     
-    bullets.update(roomActual, jugador);
+    bullets.update(roomActual, player);
     bullets.dibujarBalas();
-    //enemies.actualizar(roomActual);
+    // Actualizar enemigos
+    gestorEnemigos.actualizar(roomActual, player, bullets);
   }
 
   private void mostrarTutorial() {

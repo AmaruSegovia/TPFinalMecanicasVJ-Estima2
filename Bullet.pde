@@ -8,33 +8,38 @@ enum BulletOwner {
 private class Bullet extends GameObject implements IVisualizable {
   /* -- ATRIBUTOS -- */
   /** Representa la velocidad de la bala */
-  private float speed;
+  protected float speed;
   /** Representa la dirección de la bala */
-  private PVector direction;
+  protected PVector direction;
   /** Representa el area de colision de la bala */
-  private Colisionador colisionador;
+  protected Colisionador colisionador;
   private BulletOwner pertenece;
   
   /** Representan los sprites de las balas del jugador y del jefe respectivamente */
-  private SpriteObject spritePlayer;
-  private SpriteObject spriteBoss;
+  protected SpriteObject spritePlayer;
+  protected SpriteObject spriteBoss;
 
   /** Representa el angulo de hacia donde va la bala */
-  private float angulo;
+  protected float angulo;
   /* Representa el estado de la bala, si esta disparada o esta orbitando*/
-  private boolean disparada;
+  protected boolean disparada;
   
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
-  public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed){
+  public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed, BulletOwner owner){
     super(pos, ancho, alto);
-    this.pertenece = BulletOwner.PLAYER; 
+    this.pertenece = owner;
     this.direction = direction;
     this.speed = speed;
-    this.spritePlayer = new SpriteObject("playerBullet.png", ancho, alto, 3);
+    if(owner == BulletOwner.PLAYER){
+      this.spritePlayer = new SpriteObject("playerBullet.png", ancho, alto, 3);
+    } else {
+      this.spriteBoss = new SpriteObject("enemyBullet.png", ancho, alto, 3);
+    }
     this.colisionador = new Colisionador(this.posicion, ancho*3); 
     this.disparada = true;
   }
+
   /** Constructor para balas con angulo para el enemigo */
   public Bullet(PVector pos, float angulo){
     super(pos, 8, 8);
@@ -55,6 +60,7 @@ private class Bullet extends GameObject implements IVisualizable {
     this.spriteBoss = new SpriteObject("bossBullet2.png", ancho, alto, 4);
     this.disparada = false;
     this.colisionador = new Colisionador(this.posicion, ancho*4); 
+    this.disparada = false;
   }
 
   /* -- METODOS -- */
@@ -68,6 +74,17 @@ private class Bullet extends GameObject implements IVisualizable {
       this.spriteBoss.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }
     colisionador.display(color(255,0,0));
+    
+    //  Dibujar línea de dirección
+    stroke(0, 255, 0); // verde
+    if (disparada && direction != null) {
+      stroke(0, 255, 0);
+      line(
+        posicion.x, posicion.y, 
+        posicion.x + direction.x * 50,
+        posicion.y + direction.y * 50
+      );
+    }
   }
   
   /** Metodo para mover las balas */
@@ -77,29 +94,6 @@ private class Bullet extends GameObject implements IVisualizable {
       colisionador.setPosicion(posicion);
     }
   }
-
-  public void orbitar(PVector bossPosition) {
-    if (!disparada) {
-        this.angulo += 0.03; // Velocidad de la órbita
-
-        // Parámetros para la oscilación radial
-        float baseRadio = 100; // Radio base de la órbita
-        float amplitude = 250; // Amplitud de la oscilación
-        float frequency = 0.7; // Frecuencia de la oscilación
-
-        // Calcular la oscilación radial
-        float radialOscillation = baseRadio + amplitude * sin(frequency * (millis() / 1000.0));
-
-        // Actualizar la posición de la bala con la oscilación radial
-        this.posicion.x = bossPosition.x + radialOscillation * cos(angulo);
-        this.posicion.y = bossPosition.y + radialOscillation * sin(angulo);
-        colisionador.setPosicion(this.posicion);
-    }
-    
-    //if (colisionador.isCircle(jugador.collider) && !jugador.isHit) {
-    //    jugador.reducirVida();
-    //}
-}
 
   
  public void moverAng() {
@@ -137,10 +131,10 @@ private class Bullet extends GameObject implements IVisualizable {
   /** Verifica la colision del colisionador con los enemigos */
   public boolean verificarColision(Enemy enemigo) {
     // Verifica que el enemigo no sea el propietario de la bala
-    //if (this.pertenece == "jugador" && colisionador.isCircle(enemigo.collider)) {
-    //    enemigo.reducirVida();
-    //    return true;
-    //}
+    if (this.pertenece == BulletOwner.PLAYER && colisionador.colisionaCon(enemigo.getCollider())) {
+      enemigo.reducirVida();
+      return true;
+    }
     return false;
   }
   

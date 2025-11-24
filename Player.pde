@@ -1,5 +1,5 @@
 /** Clase que representa al jugador */
-class Player extends GameObject implements IMovable, IVisualizable {
+class Player extends GameObject implements IVisualizable {
   /** Representa la velocidad y maxima velocidad del jugador */
   private float speed,  topSpeed;
   /** Representa la direccion de movimiento del jugador */
@@ -21,6 +21,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   private Colisionador collider;
   
   private int lives;
+  private int maxLives;
   private boolean isHit; // bandera para el impacto
   private int hitTime; // tiempo del impacto
   private int hitDuration = 500; // duración del impacto en milisegundos
@@ -38,6 +39,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.direccion = new Vector(posicion, Direction.DOWN); // Vector inicial hacia abajo
     this.collider = new Colisionador(this.posicion,this.ancho*3);
     this.lives = 15;
+    this.maxLives = lives;
     this.isHit = false;
     this.hitTime = 0;
     
@@ -60,7 +62,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.sprite.render(this.animationState, this.posicion.copy());
     textSize(20);
     fill(255);
-    dibujarBarraVida(lives,50, 5, 35);
+    dibujarBarraVida(50, 5, 35);
     collider.display(255);
   }
 
@@ -120,22 +122,18 @@ class Player extends GameObject implements IMovable, IVisualizable {
   }
 
   /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */
-  public void shoot(GestorBullets gestor, InputManager input) {
-    if (input.isShooting() && input.getShootDirection() != null) {
-      long now = millis();
-      if (now - lastShotTime >= shootCooldown) {
-        // Crear bala
-        Bullet b = new Bullet(
-          this.posicion.copy(),
-          10, 10,
-          input.getShootDirection().toVector(),
-          400
-        );
-        gestor.addBullet(b);
-        lastShotTime = now; // actualizar temporizador
-      }
+  public void shoot(GestorBullets gestor, InputManager input, BulletFactory factory) {
+  if (input.isShooting() && input.getShootDirection() != null) {
+    long now = millis();
+    if (now - lastShotTime >= shootCooldown) {
+      // Usar la fábrica para crear la bala del jugador
+      Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection());
+      gestor.addBullet(b);
+      lastShotTime = now;
     }
   }
+}
+
 
   
   //public boolean verificarColision(Enemy enemigo, Bala bala) {
@@ -147,24 +145,25 @@ class Player extends GameObject implements IMovable, IVisualizable {
   //}
 
   
-  public void dibujarBarraVida(float vidasMaximas, float barraAncho, float barraAlto, float offsetY) {
-    float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
+  public void dibujarBarraVida(float barraAncho, float barraAlto, float offsetY) {
+    float porcentaje = (float) lives / maxLives;   // proporción de vida
+    float anchoActual = porcentaje * barraAncho;   // ancho proporcional
 
-    // Interpolación lineal del color de verde (0, 255, 0) a rojo (255, 0, 0)
-    float r = map(lives, 0, vidasMaximas, 255, 0);
-    float g = map(lives, 0, vidasMaximas, 0, 255);
-    fill(r, g, 0); // color interpolado para la barra de vida
+    // Interpolación lineal del color de verde (vida completa) a rojo (sin vida)
+    float r = map(lives, 0, maxLives, 255, 0);
+    float g = map(lives, 0, maxLives, 0, 255);
+    fill(r, g, 0);
 
-    rect(posicion.x - barraAncho / 2, posicion.y - offsetY, anchoActual, barraAlto); // posición de la barra encima del enemigo
+    rect(posicion.x - barraAncho / 2, posicion.y - offsetY, anchoActual, barraAlto);
 
-    // Dibujar el contorno de la barra de vida
     noFill();
     stroke(0);
     rect(posicion.x - barraAncho / 2, posicion.y - offsetY, barraAncho, barraAlto);
   }
+
   
   public void reducirVida() {
-    this.lives--;
+    this.lives --;
     this.isHit = true; // establecer bandera de impacto
     this.hitTime = millis(); // iniciar temporizador
   }
@@ -193,6 +192,10 @@ class Player extends GameObject implements IMovable, IVisualizable {
   
   public int getLives() {  return lives;  }
   public Colisionador getCollider() { return collider; }
+  
+  public boolean getIsHit(){
+    return this.isHit;
+  }
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */

@@ -34,7 +34,7 @@ public class InputManager {
       case 'l': addShoot(Direction.RIGHT); break;
     }
     // Debug opcional
-    println("Pressed: " + k + " stack=" + shootStack);
+    //println("Pressed: " + k + " stack=" + shootStack);
   }
 
   /** Maneja tecla liberada */
@@ -53,7 +53,7 @@ public class InputManager {
       case 'l': removeShoot(Direction.RIGHT); break;
     }
     // Debug opcional
-    println("Released: " + k + " stack=" + shootStack);
+    //println("Released: " + k + " stack=" + shootStack);
   }
   
   /** Aniadir al listado **/

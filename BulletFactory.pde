@@ -5,17 +5,20 @@ class BulletFactory {
     return new Bullet(
       posicion.copy(),
       10, 10,
-      dir.toVector(),
-      400
+      dir.toVector().normalize(), // dirección fija
+      400,
+      BulletOwner.PLAYER
     );
   }
 
   public Bullet createEnemyBullet(PVector posicion, PVector target) {
+    PVector direccion = target.copy().sub(posicion).normalize();
     return new Bullet(
       posicion.copy(),
       10, 10,
-      target.copy().sub(posicion).normalize(),
-      300
+      direccion,
+      300,
+      BulletOwner.ENEMY
     );
   }
 }

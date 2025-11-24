@@ -12,14 +12,16 @@ public class PlayingState implements GameState {
   private Player jugador;
   private Dungeon dungeon;
   private RoomRenderer renderer;
+  private BulletFactory bulletFactory;
   
   // Constructor, recibe el gestor de audio
   public PlayingState(AudioManager audio, InputManager input) {
     this.audio = audio;
     this.input = input;
     this.dungeon = new Dungeon(1);
-    this.renderer = new RoomRenderer(dungeon,  new GestorEnemigos(), new GestorBullets());
+    this.renderer = new RoomRenderer(dungeon, new GestorBullets());
     this.jugador = new Player(new PVector(width/2, height/2),0,0);
+    this.bulletFactory = new BulletFactory();
   }
   /* inicializa al entrar al juego */
   public void onEnter() {
@@ -31,16 +33,16 @@ public class PlayingState implements GameState {
     text("Estando en el juego", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
     
     jugador.mover(input);
-    jugador.shoot(renderer.getBullets(), input);
+    jugador.shoot(renderer.getBullets(), input, bulletFactory);
     renderer.render(jugador);
     jugador.display();
-    //if (jugadorGana()) changeState(victoria);
-    //else if (jugadorPierde()) changeState(derrota);
+    if (jugadorGana()) changeState(victoria);
+    else if (jugadorPierde()) changeState(derrota);
     
     // ************************   DEPURADOR
     fill(255);
     textSize(20);
-    text("Balas: " + renderer.getBullets().getBulletCount(), 200, 30);
+    text("Balas: " + renderer.getBullets().getBulletCount(), 150, 30);
   }
   
   /* reconociendo inputs */
@@ -51,6 +53,22 @@ public class PlayingState implements GameState {
       changeState(creditos);
     if (keyCode == DOWN) 
       changeState(derrota);
+  }
+  
+  boolean jugadorGana() {
+    if(jugador.col == 4 && jugador.row ==1) { return true; }
+     return false;
+  }
+  
+  boolean jugadorPierde() {
+    // Comprueba si la columna del jugador es 3
+    if (jugador.getLives() <= 0) { return true; }
+    return false;
+  }
+  public void displayPlayerPosition() {
+    fill(0);
+    textSize(16);
+    text("pos: "+jugador.getPosicion(), 10, 20);
   }
 }
 

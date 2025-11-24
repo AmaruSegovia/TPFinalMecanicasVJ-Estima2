@@ -13,51 +13,45 @@ class Follower extends Enemy implements IVisualizable, IMovable{
   }
   
   /* -- METODOS -- */
+  /** Actuliza el estado del enemigo **/
+  @Override
+  public void update(Player player, Room room) {
+    mover(player,room);
+    evitarColisiones(room.getAllEnemies()); // si Room mantiene lista de followers
+    updateHitEffect(); // logica comun de impacto
+    checkCollisionWithPlayer(player);
+    limitarDentroPantalla(70);
+  }
+  
   /** Dibuj al enemigo */
+  @Override
   void display() {
-    //Cambio de color cuando le hacen daño
-    if (isHit) {
-      float elapsed = millis() - hitTime;
-      if (elapsed < hitDuration) {
-        float lerpFactor = elapsed / hitDuration;
-        currentColor = lerpColor(color(255, 0, 0), originalColor, lerpFactor);
-      } else {
-        isHit = false;
-        currentColor = originalColor;
-      }
-    } else {
-      currentColor = originalColor;
-    }
-
     tint(currentColor);
     noStroke();
     // dibuja al enemigo
     imageMode(CENTER);
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     // dibuja el area de colision del enemigo
-    //this.collider.displayCircle(#FF3E78);
+    this.collider.display(#FF3E78);
+    this.collider.setPosicion(this.posicion);
 
-  
     // Dibujar el contorno de la barra de vida
     noFill();
     stroke(0);
-    
     dibujarBarraVida(6, 40, 5, 30);
   }
 
-  public void mover(InputManager input) {
-    PVector direccion = PVector.sub(jugador.getPosicion(), this.posicion); // calcula la dirección hacia el jugador
-    direccion.normalize(); // normaliza la dirección
+  public void mover(Player jugador, Room room) {
+    PVector direccion = PVector.sub(jugador.getPosicion(), this.posicion); // calcula la direccion hacia el jugador
+    direccion.normalize(); // normaliza la direccion
     direccion.mult(velocidad); // multiplica por la velocidad
-
     this.posicion.add(direccion); // actualiza la posición del enemigo
   }
 
-  public void evitarColisiones(ArrayList<Follower> followers) {
-    for (Follower follower : followers) {
-      //if (follower != this && this.collider.isCircle(follower)) 
-      {
-        PVector direccion = PVector.sub(this.posicion, follower.getPosicion());
+  public void evitarColisiones(ArrayList<Enemy> enemies) {
+    for (Enemy e : enemies) {
+      if (e instanceof Follower && e != this) {
+        PVector direccion = PVector.sub(this.posicion, e.getPosicion());
         direccion.normalize();
         direccion.mult(velocidad);
         this.posicion.add(direccion);
