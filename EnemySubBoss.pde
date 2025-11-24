@@ -22,8 +22,8 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
   }
   
   @Override
-  public void update(Player player, Room room){
-    mover(player, room);
+  public void update(Player player, GestorEnemigos enemies){
+    mover(player, enemies);
   }
   /** Metodo que dibuja al subjefe */
   @Override
@@ -39,7 +39,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
   }
   
   /** METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/
-  public void mover(Player player, Room room) {
+  public void mover(Player player, GestorEnemigos enemies) {
     //Si no esta persiguiendo al jugador
     if (persiguiendoJugador == false) {
       tiempoEsperaActual++;//Incrementa el tiempo de espera

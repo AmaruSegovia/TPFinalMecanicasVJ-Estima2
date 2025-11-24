@@ -79,6 +79,6 @@ abstract class Enemy extends GameObject {
   public Colisionador getCollider() { return collider; }
   
   
-  public abstract void update(Player player, Room room);
+  public abstract void update(Player player, GestorEnemigos enemies);
   public abstract void display();
 }

@@ -17,7 +17,7 @@ class Tower extends Enemy implements IVisualizable, IShooter{
 
   /* -- MÉTODOS -- */
   @Override
-  public void update(Player player, Room room){
+  public void update(Player player, GestorEnemigos enemies){
     updateHitEffect();
     checkCollisionWithPlayer(player);
     rotateTower(player);

@@ -66,7 +66,6 @@ private class Bullet extends GameObject implements IVisualizable {
   /* -- METODOS -- */
   /** Método para dibujar las balas (implementando la interfaz IVisualizable) */
   public void display() {
-    imageMode(CENTER);
     if(this.pertenece == BulletOwner.PLAYER){
     tint(#FFFFFF);
       this.spritePlayer.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
@@ -95,7 +94,6 @@ private class Bullet extends GameObject implements IVisualizable {
     }
   }
 
-  
  public void moverAng() {
     
     // Cálculo del movimiento en ángulo

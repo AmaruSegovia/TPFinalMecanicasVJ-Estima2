@@ -4,19 +4,20 @@ class Room extends GameObject {
   private int doors;
   /** Representa la lista de puertas que tiene la habitacion*/
   private Map<Direction, Door> doorsMap = new HashMap<>();
-  /** Representa los enemigos*/
-  private ArrayList<Enemy> enemies;
-
+  
+  /** Representa el nombre de la habitacion */
+  private int nameRoom;
+ 
   /** Representa el fondo de la habitación */
   private PImage background;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
-  public Room(int doors, int ancho, int alto, PVector posicion) {
+  public Room(int doors, int ancho, int alto, PVector posicion, int name) {
     super(posicion, ancho, alto);
     this.doors = doors;
+    this.nameRoom = name;
     background = loadImage("bg.png");
-    this.enemies = new ArrayList<Enemy>();
     generateDoors();
   }
 
@@ -52,17 +53,12 @@ class Room extends GameObject {
   }
   
   /** Metodo que verifica y actualiza el estado de las puertas*/
-  private void onChangedEnemy(){
-    if(getAllEnemies().isEmpty()){
-      stateDoors(true);
-    } else {
+  private void updateDoors(boolean hayEnemies){
+    if(hayEnemies){
       stateDoors(false);
+    } else {
+      stateDoors(true);
     }
-  }
-  
-  /** Devuelve si hay enemigos */
-  public boolean hayEnemigos() {
-    return !getAllEnemies().isEmpty();
   }
   
   /** Metodo que cierra o abre las puertas */
@@ -71,21 +67,10 @@ class Room extends GameObject {
       door.setIsOpen(state);
     }
   }
-  /** Metodos que agregan a los enemigos */
-  public void addEnemy(Enemy e) { 
-    enemies.add(e);
-    onChangedEnemy();
-  }
-  
-  /** Metodo que remueve a los enemigos */
-  public void removeEnemy(Enemy e) {
-    enemies.remove(e);
-    onChangedEnemy();
-  }
   
   /**Imprime cantidad de enemigos y puertas, depuracion **/
   public void debugInfo() {
-    println("Room at " + posicion + " | Doors: " + doorsMap.size() + " | Enemies: " + getAllEnemies().size());
+    println("Room at " + posicion + " | Doors: " + doorsMap.size());
   }
 
   /* -- ASESORES -- */
@@ -98,7 +83,11 @@ class Room extends GameObject {
   public Collection<Door> getAllDoors(){
     return this.doorsMap.values();  
   }
-
-  /* Getters enemigos*/
-  public ArrayList<Enemy> getAllEnemies() { return this.enemies; }
+  
+  public void setNameRoom(int name) {
+    this.nameRoom = name;
+  }
+  public int getNameRoom() {
+    return this.nameRoom;
+  }
 }

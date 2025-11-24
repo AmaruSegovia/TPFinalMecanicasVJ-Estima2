@@ -17,7 +17,7 @@ public class GestorBullets {
   }
 
   /** Metodo para actualizar el estado de las balas */
- public void update(Room room, Player player) {
+ public void update(GestorEnemigos enemies, Player player) {
    // mover todas las balas
     for (Bullet b : bullets) {
         b.mover();
@@ -27,10 +27,10 @@ public class GestorBullets {
     while (it.hasNext()) {
       Bullet b = it.next();
       if (b.getOwner() == BulletOwner.PLAYER) {
-        for (Enemy e : room.getAllEnemies()) {
+        for (Enemy e : enemies.getAllEnemies()) {
           if (b.getCollider().colisionaCon(e.getCollider())) {
             e.reducirVida();
-            if (e.getLives() <= 0) room.removeEnemy(e);
+            if (e.getLives() <= 0) enemies.removeEnemy(e);
             it.remove(); // elimina la bala de forma segura
             break;
           }

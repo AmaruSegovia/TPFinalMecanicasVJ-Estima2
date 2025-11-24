@@ -42,9 +42,11 @@ class Dungeon {
 
   /** Metodo que genera las habitaciones */
   public void generateRooms(int[][] matriz) {
+    int cont = 0;
     for (int i = 0; i < this.rows; i++) {
       for (int j = 0; j < this.cols; j++) {
-        this.rooms[i][j] = new Room(matriz[i][j], width+1, height+1, new PVector(0, 0));
+        this.rooms[i][j] = new Room(matriz[i][j], width+1, height+1, new PVector(0, 0),cont);
+        cont++;
       }
     }
   }
@@ -57,5 +59,16 @@ class Dungeon {
     }
     println("Room Inexistente por estar fuera de rango");
     return null;
+  }
+  
+  /* -- ASESORES -- */
+  /* Getters */
+  /** Devuelve el numero de columnas */
+  public int getCols(){
+    return this.cols;
+  }
+  /** Devuelve el numero de columnas */
+  public int getRows(){
+    return this.rows;
   }
 }

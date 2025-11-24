@@ -33,7 +33,7 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
     this.tiempoProximoDisparo = millis() + int(random(2000, 5000));
   }
   @Override
-  public void update(Player player, Room room){
+  public void update(Player player, GestorEnemigos enemies){
     mover(player);
   }
   @Override
@@ -145,7 +145,7 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
          float angulo = PI / 2 + radians(40) / (numBalas - 1) * i - radians(20); // Ajustar los ángulos para las balas
          PVector direccion = new PVector(cos(angulo), sin(angulo));
            Bullet bala = new Bullet(
-                this.posicion.copy(),
+                new PVector(this.posicion.x, this.posicion.y+65),
                 8, 8,
                 direccion,
                 300,
