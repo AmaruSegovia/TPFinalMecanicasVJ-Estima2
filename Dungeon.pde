@@ -2,7 +2,7 @@
 class Dungeon {
 
   private int nivel;
-  private int cols, rows; // Número de columnas y filas en la matriz de habitaciones
+  private int cols, rows; // Numero de columnas y filas en la matriz de habitaciones
   
   private int[][] matriz;
   private Room[][] rooms; // Matriz de las habitaciones que hay en la dungeon
@@ -20,7 +20,7 @@ class Dungeon {
     
     this.matriz = new int[this.rows][this.cols];
     this.matriz = startDungeon();
-    this.rooms = new Room[this.rows][this.cols];  // Inicialización de las dimenciones de la matriz de habitaciones
+    this.rooms = new Room[this.rows][this.cols];
     
   }
 

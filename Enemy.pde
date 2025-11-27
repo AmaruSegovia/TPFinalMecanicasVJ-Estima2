@@ -1,5 +1,5 @@
 /* Clase que representa a los enemigos por defecto */
-abstract class Enemy extends GameObject {
+public abstract class Enemy extends GameObject {
   protected int lives;
   protected boolean isHit; // bandera para el impacto
   protected int hitTime; // tiempo del impacto

@@ -87,5 +87,9 @@ public class GestorBullets {
     return bullets.size();
   }
   
+  public void clearBullets() {
+    bullets.clear();
+  }
+  
   public ArrayList<Bullet> getBulletList() {  return this.bullets;  }
 }

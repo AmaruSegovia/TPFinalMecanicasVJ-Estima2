@@ -170,7 +170,7 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
   }
   /* =========================
      DETECCION DEL JUGADOR
-  ========================== */ //<>// //<>// //<>//
+  ========================== */ //<>//
   public void detectarPlayer(Player player) {
     //area de deteccion dibujada
     if (player.getPosicion().y < 160) {
@@ -181,17 +181,6 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
       }
     }
   }
-
-
-  //public void checkCollitionPlayer(Player player) {
-  //  if (collider.colisionaCon(player)) {
-      
-  //    if (this.posicion.x - player.posicion.x < 1) {
-  //      this.direccion.setDestino(new PVector(random(2) < 1 ? 1 : -1, 0).normalize());
-  //      resetSpeed();
-  //    }
-  //  }
-  //}
   
   public void moverHaciaCentro() {
     PVector centro = new PVector(width / 2, height / 2);
@@ -213,7 +202,7 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
     float velocidadOscilacion = 2.0f;   // frecuencia de la oscilacion
     float amplitud = 40;                // altura de la oscilacion
 
-    // posición Y oscilando alrededor de baseY
+    // posicion Y oscilando alrededor de baseY
     this.posicion.y = baseY + amplitud * sin(tiempo * velocidadOscilacion);
 }
 
