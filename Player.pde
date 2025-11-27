@@ -12,7 +12,9 @@ class Player extends GameObject implements IVisualizable {
   /** Representa el ultimo disparo */
   private long lastShotTime = 0;       
   /** Representa el tiempo minimo entre cada disparo */
-  private int shootCooldown = 310; 
+  private int shootCooldown = 310;
+  
+  private float damage;
   
   /** Representa el sprite del jugador */
   private SpriteObject sprite;
@@ -36,6 +38,7 @@ class Player extends GameObject implements IVisualizable {
     this.ancho = 20;
     this.speed = 0;
     this.topSpeed = 250;
+    this.damage = 1;
     this.sprite = new SpriteObject("mage.png", ancho, alto, 4);
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
     this.direccion = new Vector(posicion, Direction.DOWN); // Vector inicial hacia abajo
@@ -65,7 +68,7 @@ class Player extends GameObject implements IVisualizable {
     textSize(20);
     fill(255);
     dibujarBarraVida(50, 5, 35);
-    collider.display(255);
+    //collider.display(255);
   }
 
   /** Metodo que mueve al jugador */
@@ -169,7 +172,7 @@ class Player extends GameObject implements IVisualizable {
       long now = millis();
       if (now - lastShotTime >= shootCooldown) {
         // Usar la fábrica para crear la bala del jugador
-        Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection());
+        Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection(), this.damage);
         gestor.addBullet(b);
         lastShotTime = now;
       }
@@ -229,6 +232,7 @@ class Player extends GameObject implements IVisualizable {
   }
   
   public PVector getCurrentPos(){ return new PVector(this.col, this.row); }
+  public float getDamage() {  return this.damage; }
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
@@ -241,5 +245,7 @@ class Player extends GameObject implements IVisualizable {
   public void setAnimationState(int animationState) {  this.animationState = animationState;  }
   
   public void setLives(int lives) {  this.lives = lives;  }
+  
+  public void setDamage(float damage) {  this.damage = damage;  }
 
 }

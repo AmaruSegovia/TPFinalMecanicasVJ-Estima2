@@ -8,6 +8,7 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
   private float tiempoInicio;
   private float tiempoProximoDisparo;  
   private int fase = 1; // Fase del enemigo
+  private float damage = 2f;
   
   // Funciones adicionales para fase 2
   private int tiempoUltimoDisparo;
@@ -20,10 +21,11 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
   
   /* -- CONSTRUCTOR -- */
   public Boss(PVector posicion) {
-    super(posicion, 60, color(0, 0, 255));
+    super(posicion, 60, color(0, 0, 255), 2);
     this.ancho = 41; //valores del sprite sheet no tocar
     this.alto = 38; //valores del sprite sheet no tocar
     this.topSpeed= random(150,200);
+    this.damage = 2;
     
     this.dirX = random(1) < 0.5 ? Direction.LEFT : Direction.RIGHT;
     
@@ -36,15 +38,15 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
   public void update(Player player, GestorEnemigos enemies){
     mover(player);
     checkCollisionWithPlayer(player);
+    collider.setPosicion(this.posicion);
   }
   @Override
   public void display() {
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, this.posicion.copy());
-    collider.setPosicion(this.posicion);
-
+    
     updateHitEffect();
     dibujarBarraVida();
-    this.collider.display(#FF3E78);
+    //this.collider.display(#FF3E78);
   }
 
   private void moverHorizontal() {
@@ -150,7 +152,8 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
                 8, 8,
                 direccion,
                 300,
-                BulletOwner.ENEMY
+                BulletOwner.ENEMY,
+                this.damage
             );
           gestorBalas.addBullet(bala);
         }
@@ -163,7 +166,7 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
       for (int i = 0; i < n; i++) {
         float angulo = TWO_PI / n * i;
           // mitad de las balas orbitan
-          OrbitalBullet orb = new OrbitalBullet(this, angulo, radioOrbita, intervaloDisparo); // radio 60px, orbita 2s
+          OrbitalBullet orb = new OrbitalBullet(this, angulo, radioOrbita, intervaloDisparo, this.damage); // radio 60px, orbita 2s
           gestorBalas.addBullet(orb);
       }
     }

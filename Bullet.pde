@@ -23,13 +23,15 @@ private class Bullet extends GameObject implements IVisualizable {
   protected float angulo;
   /* Representa el estado de la bala, si esta disparada o esta orbitando*/
   protected boolean disparada;
+  protected float damage;
   
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
-  public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed, BulletOwner owner){
+  public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed, BulletOwner owner, float damage){
     super(pos, ancho, alto);
     this.pertenece = owner;
     this.direction = direction;
+    this.damage =damage;
     this.speed = speed;
     if(owner == BulletOwner.PLAYER){
       this.spritePlayer = new SpriteObject("playerBullet.png", ancho, alto, 3);
@@ -72,18 +74,18 @@ private class Bullet extends GameObject implements IVisualizable {
     }else{      
       this.spriteBoss.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }
-    colisionador.display(color(255,0,0));
+    //colisionador.display(color(255,0,0));
     
-    //  Dibujar línea de dirección
+    //  Dibujar linea de direcciion
     stroke(0, 255, 0); // verde
-    if (disparada && direction != null) {
-      stroke(0, 255, 0);
-      line(
-        posicion.x, posicion.y, 
-        posicion.x + direction.x * 50,
-        posicion.y + direction.y * 50
-      );
-    }
+    //if (disparada && direction != null) {
+    //  stroke(0, 255, 0);
+    //  line(
+    //    posicion.x, posicion.y, 
+    //    posicion.x + direction.x * 50,
+    //    posicion.y + direction.y * 50
+    //  );
+    //}
   }
   
   /** Metodo para mover las balas */

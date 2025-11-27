@@ -6,11 +6,12 @@ class OrbitalBullet extends Bullet {
   private int tiempoLanzamientoMs;
   private boolean enOrbita;
 
-  public OrbitalBullet(Boss boss, float anguloInicial, float radio, float tiempoOrbitaSeg) {
+  public OrbitalBullet(Boss boss, float anguloInicial, float radio, float tiempoOrbitaSeg, float damage) {
     super(boss.getPosicion().copy(), anguloInicial, radio);
     this.boss = boss;
     this.angulo = anguloInicial;
     this.radio = radio;
+    this.damage = damage;
     this.velocidadOrbita = 2.0f; // radianes por segundo
     this.tiempoLanzamientoMs = millis() + int(tiempoOrbitaSeg );
     this.enOrbita = true;

@@ -141,9 +141,9 @@ class VictoryDoor extends Door {
     public void display() {
     fill(255, 0, 0); // rojo para diferenciar
     noStroke();
-    circle(posicion.x, posicion.y, 60); // dibujar puerta cuadrada en el centro
+    //circle(posicion.x, posicion.y, 60); // dibujar puerta en el centro
     collider.setPosicion(this.posicion);
-    collider.display(20);
+    //collider.display(20);
   }
 
   @Override
