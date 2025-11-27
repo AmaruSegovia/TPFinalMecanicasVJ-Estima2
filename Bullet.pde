@@ -112,11 +112,6 @@ private class Bullet extends GameObject implements IVisualizable {
     this.posicion.add(moveVector);
     this.colisionador.setPosicion(this.posicion);
 
-    
-    // Verificar colisión con el jugador
-    //if (colisionador.isCircle(jugador.collider) && !jugador.isHit) {
-    //    jugador.reducirVida();
-    //}
 }
   public boolean balaFuera() {
     return posicion.x < 0 || posicion.x > width || posicion.y < 0 || posicion.y > height;

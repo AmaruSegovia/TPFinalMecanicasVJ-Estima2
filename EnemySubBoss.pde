@@ -4,7 +4,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
   private int tiempoEspera = 200; // El tiempo de espera del enemigo antes de comenzar a perseguir al jugador
   private int tiempoEsperaActual = 0; // El tiempo actual de espera acumulado
   private boolean persiguiendoJugador = false; // Indica si el enemigo está actualmente persiguiendo al jugador
-  private ArrayList<Bomb> bombsList; // ArrayList que servirá para la creación de las bombas
+  private ArrayList<Bomb> bombsList; // ArrayList que servira para la creación de las bombas
   private PVector ultimaPosicionBomba; // La posición donde el sub-jefe dejó la última bomba
   private float distanciaBomba = 80; // La distancia que debe cumplir el sub-jefe para dejar otra bomba
   
