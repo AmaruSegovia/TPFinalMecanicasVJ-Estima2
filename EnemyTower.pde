@@ -1,7 +1,7 @@
-class Tower extends Enemy implements IVisualizable {
+class Tower extends Enemy implements IVisualizable, IShooter{
   private float fireRate;
   private float lastFireTime;
-  private ArrayList<Bala> balas;
+  private float anguloRotacion;
 
   /* -- CONSTRUCTOR -- */
   public Tower(PVector posicion) {
@@ -10,42 +10,38 @@ class Tower extends Enemy implements IVisualizable {
     this.alto = 22;
     this.fireRate = 0.8f;
     this.lastFireTime = millis() / 1000.0f;
-    this.balas = new ArrayList<Bala>();
     this.collider = new Colisionador(this.posicion, this.ancho * 3);
     this.sprite = new SpriteObject("turret.png", ancho, alto, 3);
+    this.anguloRotacion = 0;
   }
 
   /* -- MÉTODOS -- */
+  @Override
+  public void update(Player player, GestorEnemigos enemies){
+    updateHitEffect();
+    checkCollisionWithPlayer(player);
+    rotateTower(player);
+  }
   /** Método que dibuja a la Torre */
-  public void display() {
-    if (isHit) {
-      float elapsed = millis() - hitTime;
-      if (elapsed < hitDuration) {
-        float lerpFactor = elapsed / hitDuration;
-        currentColor = lerpColor(color(255, 0, 0), originalColor, lerpFactor);
-      } else {
-        isHit = false;
-        currentColor = originalColor;
-      }
-    } else {
-      currentColor = originalColor;
-    }
-
+  @Override
+  public void display(){
     tint(currentColor);
     noStroke();
 
-    // Rotamos la torreta hacia el jugador
-    rotateTower(jugador);
+    // Rotar y dibujar la torre
+    pushMatrix();
+      translate(this.posicion.x, this.posicion.y);
+      rotate(anguloRotacion);
+      this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(0, 0));  // Dibujamos la torreta rotada en el origen de la transformación
+    popMatrix();
 
-    for (Bala bala : balas) {
-      bala.display();
-    }
     dibujarBarraVida(5, 40, 5, 35);
   }
 
-  public void detectar(Player player) {
-    PVector centro = new PVector(posicion.x, posicion.y);
-    PVector vectorDireccion = PVector.sub(player.posicion, centro);
+  public void shoot(Player player, GestorBullets gestorBalas) {
+    PVector centro = this.posicion.copy();
+    PVector vectorDireccion = PVector.sub(player.getPosicion(), centro);
+    
     float productoPunto = vectorDireccion.dot(vectorDireccion);
 
     float radioDeteccion = 500;
@@ -54,17 +50,19 @@ class Tower extends Enemy implements IVisualizable {
     if (productoPunto <= radioDeteccionCuadrado) {
       float currentTime = millis() / 1000.0f;
       if (currentTime - lastFireTime >= fireRate) {
-        Bala nuevaBala = new Bala(centro.x, centro.y, player.posicion);
-        balas.add(nuevaBala);
-        lastFireTime = currentTime;
-      }
-    }
+        vectorDireccion.normalize();
+        
+        // Crear bala ENEMY con direccion fija hacia el jugador
+            Bullet nuevaBala = new Bullet(
+                centro.copy(),
+                8, 8,
+                vectorDireccion,
+                300,
+                BulletOwner.ENEMY
+            );
 
-    for (int i = balas.size() - 1; i >= 0; i--) {
-      Bala b = balas.get(i);
-      b.mover();
-      if (b.checkCollisionWithPlayer(player) || b.estaFuera()) {
-        balas.remove(i);
+            gestorBalas.addBullet(nuevaBala); // agregar al gestor
+            lastFireTime = currentTime;       // actualizar temporizador
       }
     }
   }
@@ -72,7 +70,7 @@ class Tower extends Enemy implements IVisualizable {
 
   public void rotateTower(Player jugador) {
     // Vector desde la torre hacia el jugador
-    PVector direccion = PVector.sub(jugador.posicion, this.posicion);
+    PVector direccion = PVector.sub(jugador.getPosicion(), this.posicion);
 
     // Vector que representa la dirección original de la torre (hacia la derecha)
     PVector direccionInicial = new PVector(1, 0);
@@ -84,17 +82,8 @@ class Tower extends Enemy implements IVisualizable {
     PVector productoCruz = direccionInicial.cross(direccion);
 
     // Determinar el sentido de rotación
-    int sentidoHorario = 1;
-    if (productoCruz.z < 0) {
-        sentidoHorario = -1;
-    }
-
-    // Rotar y dibujar la torre
-    pushMatrix();
-    translate(this.posicion.x, this.posicion.y);
-    rotate(angulo * sentidoHorario);
-    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(0, 0));  // Dibujamos la torreta rotada en el origen de la transformación
-    popMatrix();
-}
+    int sentidoHorario = (productoCruz.z < 0) ? -1 : 1;
+    anguloRotacion = angulo * sentidoHorario;
+  }
 
 }

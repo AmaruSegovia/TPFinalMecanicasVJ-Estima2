@@ -1,15 +1,19 @@
 /** Clase que representa al jugador */
-class Player extends GameObject implements IMovable, IVisualizable {
+class Player extends GameObject implements IVisualizable {
   /** Representa la velocidad y maxima velocidad del jugador */
   private float speed,  topSpeed;
   /** Representa la direccion de movimiento del jugador */
   private Vector direccion;
   /** Representa la posicion del jugador con respecto a la dungeon*/
   private int col, row;
+  
   /** Controla si el jugador está disparando o no */
   private boolean isShooting;
-  /** Representa el tiempo transcurrido tras el último disparo */
-  private float timeSinceLastShot;
+  /** Representa el ultimo disparo */
+  private long lastShotTime = 0;       
+  /** Representa el tiempo minimo entre cada disparo */
+  private int shootCooldown = 310; 
+  
   /** Representa el sprite del jugador */
   private SpriteObject sprite;
   /** Representa el estado de la animación del sprite del jugador */
@@ -17,13 +21,14 @@ class Player extends GameObject implements IMovable, IVisualizable {
   private Colisionador collider;
   
   private int lives;
+  private int maxLives;
   private boolean isHit; // bandera para el impacto
   private int hitTime; // tiempo del impacto
   private int hitDuration = 500; // duración del impacto en milisegundos
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
-  public Player(PVector posicion) {
+  public Player(PVector posicion, int startCol, int startRow) {
     this.posicion = posicion;
     this.alto = 20;
     this.ancho = 20;
@@ -31,11 +36,16 @@ class Player extends GameObject implements IMovable, IVisualizable {
     this.topSpeed = 250;
     this.sprite = new SpriteObject("mage.png", ancho, alto, 4);
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
-    this.direccion = new Vector("down");
+    this.direccion = new Vector(posicion, Direction.DOWN); // Vector inicial hacia abajo
     this.collider = new Colisionador(this.posicion,this.ancho*3);
     this.lives = 15;
+    this.maxLives = lives;
     this.isHit = false;
     this.hitTime = 0;
+    
+    // Inicializar posición en la dungeon para no crashear
+    this.col = startCol;
+    this.row = startRow;
   }
 
   /* -- METODOS -- */
@@ -49,135 +59,111 @@ class Player extends GameObject implements IMovable, IVisualizable {
     }
     stroke(0);
     fill(200, 30);
-    this.sprite.render(this.animationState, new PVector(this.posicion.x, this.posicion.y));
+    this.sprite.render(this.animationState, this.posicion.copy());
     textSize(20);
     fill(255);
-    dibujarBarraVida(15,50, 5, 35);
+    dibujarBarraVida(50, 5, 35);
+    collider.display(255);
   }
 
   /** Metodo que mueve al jugador */
-  public void mover() {
-    this.direccion.setOrigen(this.posicion);
+  public void mover(InputManager input) {
+    this.direccion.setOrigen(this.posicion.copy());
 
     float acceleration = 60;
     float deceleration = 10;
 
     // Operador ternario para acelerar o desacelerar segun si se apreta una tecla
-    this.speed = W_PRESSED || D_PRESSED || S_PRESSED || A_PRESSED ? this.speed+acceleration : this.speed-deceleration;
+    speed = input.isMoving() ? speed + acceleration : speed - deceleration;
 
-    //  Verificar si se están presionando las teclas 'w', 'a', 's' o 'd'
-    if (W_PRESSED)  this.direccion = this.direccion.sumar(new Vector("up"));
-    if (S_PRESSED)  this.direccion = this.direccion.sumar(new Vector("down"));
-    if (A_PRESSED)  this.direccion = this.direccion.sumar(new Vector("left"));
-    if (D_PRESSED)  this.direccion = this.direccion.sumar(new Vector("right"));
-
-    if (this.direccion.obtenerMagnitud() != 0) {
-      this.direccion.getDestino().normalize(); // Normalizar la dirección para que el movimiento diagonal no sea mas rapido
+    
+    // Sumar todas las direcciones activas como vectores
+    for (Direction dir : input.getActiveDirections()) {
+      direccion = direccion.sumar(new Vector(posicion, dir));
     }
+    
+    // Normalizar para diagonales
+    if (direccion.obtenerMagnitud() != 0) {
+      this.direccion.normalizar(); // Normalizar la dirección para que el movimiento diagonal no sea mas rapido
+    }
+    
     // Limitar la velocidad
     this.speed = constrain(this.speed, 0, this.topSpeed);
 
     // Actualizar la posicion del jugador
-    this.posicion.add(this.direccion.getDestino().copy().mult(this.speed * Time.getDeltaTime(frameRate)));
+    this.posicion.add(direccion.getDestino().copy().mult(speed * Time.getDeltaTime(frameRate)));
 
-    // Limitar el movimiento del jugador
-    this.posicion.x = constrain(this.posicion.x, 0 + this.ancho*2, width - this.ancho*2);
-    this.posicion.y = constrain(this.posicion.y, 0 + this.ancho*2, height - this.ancho*2);
+    // Limitar el movimiento dentro de la pantalla
+    posicion.x = constrain(posicion.x, ancho * 2, width - ancho * 2);
+    posicion.y = constrain(posicion.y, alto * 2, height - alto * 2);
     
     //Actualizando la posición del collider
-    this.collider.setPosicion(this.posicion);
+    collider.setPosicion(posicion);
     
   }// end mover
 
-
-  public void checkCollisions(Room roomActual) {
-    // Si en la habitacion actual no hay puertas salir
-    if (roomActual.hasDoors() == false) return;
-
-    for (Door door : roomActual.doorList) {
-      //Si colisiono con una puerta preparar nuevas posiciones
-      if (door != null && door.collider.isCircle(this.collider) && door.getIsOpen()) {
-         jugador.lives = jugador.lives + 2;
-        if (jugador.lives >= 15)
-        {
-          jugador.lives = 15;
-        }
-        
-        int newCol = this.col, newRow = this.row;
-        PVector newPos = new PVector(0, 0);
-        Door newDoor;
-        switch (door.direction) {
-        case "UP":
-          newRow = row - 1;
-          newDoor= new Door("DOWN");
-          newPos = new PVector(newDoor.getPosicion().x, newDoor.getPosicion().y - newDoor.getAncho() * 1.05);
-          break;
-        case "DOWN":
-          newRow = row + 1;
-          newDoor = new Door("UP");
-          newPos = new PVector(newDoor.getPosicion().x, newDoor.getPosicion().y + newDoor.getAncho() * 1.05);
-          break;
-        case "LEFT":
-          newCol = col - 1;
-          newDoor = new Door("RIGHT");
-          newPos = new PVector(newDoor.getPosicion().x - newDoor.getAncho() * 1.05, newDoor.getPosicion().y );
-          break;
-        case "RIGHT":
-          newCol = col + 1;
-          newDoor = new Door("LEFT");
-          newPos = new PVector(newDoor.getPosicion().x + newDoor.getAncho()*1.05, newDoor.getPosicion().y );
-          break;
-        }
-        //si la proxima habitacion esta en el rango de la matriz actualizar posiciones
-        Room nextRoom = dungeon.getRoom(newCol, newRow);
-        if (nextRoom != null) {
-          updatePosition(newCol, newRow, newPos);
-        }
+  
+  public Door checkCollision(Room roomActual) {
+    if (!roomActual.hasDoors()) return null;
+  
+    for (Door door : roomActual.getAllDoors()) {
+      if (door != null && door.collider.colisionaCon(this.collider) && door.getIsOpen()) {
+        return door; // devuelve el evento
       }
     }
+    return null;
   }
+
   /** Actualiza la posicion del jugador segun los parametros anteriores */
   private void updatePosition(int newCol, int newRow, PVector newPos) {
     this.col = newCol;
     this.row = newRow;
-    this.posicion = newPos;
+    this.posicion = newPos.copy();
   }
 
   /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */
-  public Bullet shoot(char input) {
-    if (input == 'i') return new Bullet(this.posicion.copy(), 10, 10, new PVector(0, -1), 400,"jugador");
-    if (input == 'j') return new Bullet(this.posicion.copy(), 10, 10, new PVector(-1, 0), 400,"jugador");
-    if (input == 'k') return new Bullet(this.posicion.copy(), 10, 10, new PVector(0, 1), 400,"jugador");
-    if (input == 'l') return new Bullet(this.posicion.copy(), 10, 10, new PVector(1, 0), 400,"jugador");
-    return null;
-  }
-  
-  public boolean verificarColision(Enemy enemigo, Bala bala) {
-    if ((collider.isCircle(enemigo.collider) || collider.isCircle(bala.collider)) && !isHit) {
-      enemigo.reducirVida();
-      return true;
+  public void shoot(GestorBullets gestor, InputManager input, BulletFactory factory) {
+  if (input.isShooting() && input.getShootDirection() != null) {
+    long now = millis();
+    if (now - lastShotTime >= shootCooldown) {
+      // Usar la fábrica para crear la bala del jugador
+      Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection());
+      gestor.addBullet(b);
+      lastShotTime = now;
     }
-    return false;
   }
+}
+
+
   
-  public void dibujarBarraVida(float vidasMaximas, float barraAncho, float barraAlto, float offsetY) {
-    float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
+  //public boolean verificarColision(Enemy enemigo, Bala bala) {
+  //  if ((collider.isCircle(enemigo.collider) || collider.isCircle(bala.collider)) && !isHit) {
+  //    reducirVida();
+  //    return true;
+  //  }
+  //  return false;
+  //}
 
-    // Interpolación lineal del color de verde (0, 255, 0) a rojo (255, 0, 0)
-    float r = map(lives, 0, vidasMaximas, 255, 0);
-    float g = map(lives, 0, vidasMaximas, 0, 255);
-    fill(r, g, 0); // color interpolado para la barra de vida
+  
+  public void dibujarBarraVida(float barraAncho, float barraAlto, float offsetY) {
+    float porcentaje = (float) lives / maxLives;   // proporción de vida
+    float anchoActual = porcentaje * barraAncho;   // ancho proporcional
 
-    rect(posicion.x - barraAncho / 2, posicion.y - offsetY, anchoActual, barraAlto); // posición de la barra encima del enemigo
+    // Interpolación lineal del color de verde (vida completa) a rojo (sin vida)
+    float r = map(lives, 0, maxLives, 255, 0);
+    float g = map(lives, 0, maxLives, 0, 255);
+    fill(r, g, 0);
 
-    // Dibujar el contorno de la barra de vida
+    rect(posicion.x - barraAncho / 2, posicion.y - offsetY, anchoActual, barraAlto);
+
     noFill();
     stroke(0);
     rect(posicion.x - barraAncho / 2, posicion.y - offsetY, barraAncho, barraAlto);
   }
+
   
   public void reducirVida() {
-    this.lives--;
+    this.lives --;
     this.isHit = true; // establecer bandera de impacto
     this.hitTime = millis(); // iniciar temporizador
   }
@@ -200,14 +186,16 @@ class Player extends GameObject implements IMovable, IVisualizable {
   
   /** Devuelve si el jugador está disparando o no */
   public boolean getIsShooting() {  return this.isShooting;  }
-  
-  /** Devuelve si el jugador está disparando o no */
-  public float getTimeSinceLastShot() {  return this.timeSinceLastShot;  }
-  
+    
   /** Devuelve el estado de la animación del jugador */
   public int getAnimationState() {  return this.animationState;  }
   
   public int getLives() {  return lives;  }
+  public Colisionador getCollider() { return collider; }
+  
+  public boolean getIsHit(){
+    return this.isHit;
+  }
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
@@ -215,10 +203,7 @@ class Player extends GameObject implements IMovable, IVisualizable {
   
   /** Actualiza si el jugador está disparando o no */
   public void setIsShooting(boolean isShooting) {  this.isShooting = isShooting;  }
-  
-  /** Actualiza si el jugador está disparando o no */
-  public void setTimeSinceLastShot(float timeSinceLastShot) {  this.timeSinceLastShot = timeSinceLastShot;  }
-  
+    
   /** Actualiza el estado de la animación del jugador */
   public void setAnimationState(int animationState) {  this.animationState = animationState;  }
   

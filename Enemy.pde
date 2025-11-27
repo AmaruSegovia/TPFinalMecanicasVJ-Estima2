@@ -1,5 +1,5 @@
 /* Clase que representa a los enemigos por defecto */
-class Enemy extends GameObject {
+abstract class Enemy extends GameObject {
   protected int lives;
   protected boolean isHit; // bandera para el impacto
   protected int hitTime; // tiempo del impacto
@@ -42,8 +42,26 @@ class Enemy extends GameObject {
   }
   
    public void checkCollisionWithPlayer(Player player) {
-    if (  collider.isCircle(player.collider) && !player.isHit) {
+    if (  collider.colisionaCon(player.collider) && !player.isHit) {
       player.reducirVida();
+    }
+  }
+  
+  public void limitarDentroPantalla(int borde) {
+    this.posicion.x = constrain(this.posicion.x, borde, width - borde);
+    this.posicion.y = constrain(this.posicion.y, borde, height - borde);
+  }
+  
+  public void updateHitEffect() {
+    if (isHit) {
+      float elapsed = millis() - hitTime;
+      if (elapsed < hitDuration) {
+        float lerpFactor = elapsed / (float)hitDuration;
+        currentColor = lerpColor(color(255, 0, 0), originalColor, lerpFactor);
+      } else {
+        isHit = false;
+        currentColor = originalColor;
+      }
     }
   }
   
@@ -51,8 +69,16 @@ class Enemy extends GameObject {
   public int getLives() {
     return lives;
   }
+  
+  public boolean isDead() { return lives <= 0; }
 
   public void setLives(int lives) {
     this.lives = lives;
   }
+  
+  public Colisionador getCollider() { return collider; }
+  
+  
+  public abstract void update(Player player, GestorEnemigos enemies);
+  public abstract void display();
 }

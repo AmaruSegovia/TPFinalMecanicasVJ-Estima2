@@ -7,35 +7,22 @@ class  Vector {
   private PVector destino;
   /** Representa el tamaño de la flecha del vector */
   private Integer tamañoFlecha = 12;
-  /** Repreesnta los componentes x e y del vector */
-  private PVector componentes;
 
   /* -- CONSTRUCTORES -- */
-  /** Constructor por defecto */
+  /** Constructor por defecto Vector nulo */
   public Vector() {
     this.origen = new PVector(0, 0);
     this.destino = new PVector(0, 0);
-    this.componentes = this.destino;
   }
   /** Constructor parametrizado, Vector con origen y destino */
   public Vector(PVector origen, PVector destino) {
-    this.origen = origen;
-    this.destino = destino;
-    this.componentes = destino;
+    this.origen = origen.copy();
+    this.destino = destino.copy();
   }
-  /** Constructor parametrizado con origen y nombre de la direccion*/
-  public Vector(String direccion) {
-    this.origen = new PVector(width/2,height/2);
-    if (direccion=="up") {
-      this.destino = new PVector(0, -60);
-    } else if (direccion=="down") {
-      this.destino = new PVector(0, 60);
-    } else if (direccion=="right") {
-      this.destino = new PVector(60, 0);
-    } else if (direccion=="left") {
-      this.destino = new PVector(-60, 0);
-    }
-    this.componentes = this.destino;
+  /** Constructor parametrizado con direccion Predefinida */
+  public Vector(PVector origen, Direction  dir) {
+    this.origen = origen.copy();
+    this.destino = directionToVector(dir,60);
   }
 
   /* -- METODOS --*/
@@ -58,8 +45,7 @@ class  Vector {
 
   /** Metodo que suma dos Vectores*/
   public Vector sumar(Vector sumando) {
-    Vector vectorSuma = new Vector(this.origen, PVector.add(this.destino, sumando.getComponentes()) );
-    return vectorSuma;
+    return new Vector(this.origen, PVector.add(this.destino, sumando.getDestino()) );
   }
 
   /** Metodo que devuelve el producto punto de dos vectores*/
@@ -80,40 +66,41 @@ class  Vector {
   /* Getters */
   /** Devuelve las coordenadas del punto origen del vector */
   public PVector getOrigen() {
-    return this.origen;
+    return this.origen.copy();
   }
   /** Devuelve las coordenadas del punto destino del vector */
   public PVector getDestino() {
-    return this.destino;
-  }
-  /** Devuelve los componentes del vector */
-  public PVector getComponentes() {
-    return this.componentes;
+    return this.destino.copy();
   }
 
   /* Setters */
+  /** Asigna un nuevo origen al vector */
+  public void setOrigen(PVector nuevaPos) {
+    this.origen = nuevaPos.copy();
+  }
+  
   /** Asigna un nuevo destino al vector */
   public void setDestino(PVector nuevaPos) {
-    this.destino = nuevaPos;
-    this.componentes = this.destino;  //los componentes cambian segun el destino
+    this.destino = nuevaPos.copy();
   }
 
   /** Asigna un nuevo destino al vector segun el nombre de la direccion*/
-  public void setDestino(String direccion){
-    if (direccion=="up") {
-      this.destino = new PVector(0, -60);
-    } else if (direccion=="down") {
-      this.destino = new PVector(0, 60);
-    } else if (direccion=="right") {
-      this.destino = new PVector(60, 0);
-    } else if (direccion=="left") {
-      this.destino = new PVector(-60, 0);
-    }
-    this.componentes = this.destino;
+  public void setDestino(Direction dir){
+    this.destino = directionToVector(dir, 60);
   }
   
-  /** Asigna un nuevo origen al vector */
-  public void setOrigen(PVector nuevaPos) {
-    this.origen = nuevaPos;
+  public void setArrowSize(int size) { 
+    this.tamañoFlecha = size; 
   }
+  
+  private PVector directionToVector(Direction dir, int magnitud){
+    switch (dir) {
+      case UP:    return new PVector(0, -magnitud);
+      case DOWN:  return new PVector(0, magnitud);
+      case LEFT:  return new PVector(-magnitud, 0);
+      case RIGHT: return new PVector(magnitud, 0);
+      default: println("No es valido"); return new PVector (0,0);
+    }
+  }
+  
 } //end class Vector
