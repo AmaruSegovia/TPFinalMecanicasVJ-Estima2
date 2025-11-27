@@ -43,7 +43,7 @@ public class PlayingState implements GameState {
   void update() {
     jugador.mover(input);
     jugador.shoot(renderer.getBullets(), input, bulletFactory);
-    renderer.render(jugador);
+    renderer.render(jugador,walker);
     jugador.display();
     //if (jugadorGana()) changeState(victoria);
      if (jugadorPierde()) changeState(derrota);

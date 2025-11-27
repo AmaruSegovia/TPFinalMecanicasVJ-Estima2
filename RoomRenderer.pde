@@ -11,13 +11,17 @@ class RoomRenderer {
     this.miniMap = new MiniMap(180, 180, dungeon); // Crear el mini-mapa
   }
 
-  public void render(Player player) {
+  public void render(Player player, CaminanteAleatorio walker) {
     Room roomActual = dungeon.getRoom(player.getCol(), player.getRow());
     if (roomActual == null) return;
     
     roomActual.display();
     roomActual.updateDoors(gestorEnemigos.hayEnemigos());
-    Room roomInicial = dungeon.getRoom(0,0);
+    
+    PVector startPos = walker.getStartPos();
+    Room roomInicial = dungeon.getRoom((int)startPos.x, (int)startPos.y);
+    gestorEnemigos.enemigosGenerados[roomInicial.getNameRoom()] = true;
+
 
     if (roomActual == roomInicial) {
       mostrarTutorial();
