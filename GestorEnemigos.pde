@@ -41,6 +41,7 @@ class GestorEnemigos {
     } else if (room.getType() == RoomType.TREASURE) {
       // no enemigos, solo cofres
     } else {
+      //inicializarEnemigos();
       generarFormacion(room.getNameRoom());
     }
     

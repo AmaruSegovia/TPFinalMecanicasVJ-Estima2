@@ -16,11 +16,11 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
   private float baseY; // posicion base en Y cuando llega al centro
 
   
-  private int maxLives = 10;
+  private int maxLives = 60;
   
   /* -- CONSTRUCTOR -- */
   public Boss(PVector posicion) {
-    super(posicion, 10, color(0, 0, 255));
+    super(posicion, 60, color(0, 0, 255));
     this.ancho = 41; //valores del sprite sheet no tocar
     this.alto = 38; //valores del sprite sheet no tocar
     this.topSpeed= random(150,200);
