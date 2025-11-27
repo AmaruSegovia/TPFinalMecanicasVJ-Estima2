@@ -115,7 +115,7 @@ class BossRoom extends Room {
   public BossRoom(int doors, int ancho, int alto, PVector posicion, int name) {
     super(doors, ancho, alto, posicion, name);
     setType(RoomType.BOSS);
-    background = loadImage("bg.png");
+    background = loadImage("bgfinalboss.png");
   }
 
   @Override
