@@ -102,6 +102,17 @@ class SpriteObject {
        
     }
   }
+  public int getXFrame() {
+  return this.xFrame;
+}
+public void renderSimple(PVector posicion) {
+  imageMode(CENTER);
+  image(this.spriteSheet.get(this.xFrame, this.yFrame, this.anchoFrame, this.altoFrame),
+        posicion.x, posicion.y, this.anchoFrame * escala, this.altoFrame * escala);
+  moverSprite();
+}
+
+
   /** Mueve la posicion del Frame en x del SpriteSheet */
   public void moverSprite() {
     this.punteroXFrame += anchoFrame*velocidadAnimacion*Time.getDeltaTime(frameRate);

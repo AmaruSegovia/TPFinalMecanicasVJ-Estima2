@@ -93,11 +93,13 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
       bomba.display();
       // Verificar colisión con el jugador y aplicar daño
       if (bomba.checkCollisionWithPlayer(jugador)) {
-        bomba.explotar(jugador); // Aplica daño al jugador si colisiona
-      }
-      if (bomba.haExplotado) {
-        bombsList.remove(i);
-      }
+  bomba.explotar(jugador);
+}
+// eliminar bomba solo cuando su animacion termino
+if (bomba.animacionTerminada) {
+  bombsList.remove(i);
+}
+
     }
   }
 
