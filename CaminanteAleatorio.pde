@@ -2,19 +2,31 @@ class CaminanteAleatorio {
   private PVector pos; // Posicion actual del caminante
   private PVector start; // El inicio del recorrido
   private PVector lastPos;
+  private PVector subPos;
   private color Color;
+  
+  private ArrayList<PVector> recorrido; 
 
   public CaminanteAleatorio(Dungeon m) {
     int x = int(random(m.getCols())); // aleatoria dentro de la matriz
     int y = int(random(m.getRows())); // aleatoria dentro de la matriz
     this.pos = new PVector(x, y); // posicion aleatoria dentro de la matriz
-    this.start = pos.copy();    
+    this.start = pos.copy();
+    this.recorrido = new ArrayList<>(); 
+    this.recorrido.add(pos.copy());
     this.Color = color(0, 0, 255, 100);
     while (m.nonZeroCount() < indexNonZero) {
       move(m);
     }
     
-    println("Dungeon completada con " + m.nonZeroCount() + " celdas distintas de cero");
+    if (recorrido.size() > 2) {
+      int indice = (int) random(1, recorrido.size()-1); 
+      this.subPos = recorrido.get(indice).copy();
+    } else {
+      this.subPos = pos.copy(); // fallback
+    }
+    
+    //println("Dungeon completada con " + m.nonZeroCount() + " celdas distintas de cero");
     m.printMatrix();
   }
 
@@ -42,6 +54,7 @@ class CaminanteAleatorio {
       // Mover el caminante a la nueva posicion
       this.lastPos = pos.copy();
       this.pos = newPos.copy();
+      this.recorrido.add(pos.copy());
     }
   }
 
@@ -58,6 +71,8 @@ class CaminanteAleatorio {
   public PVector getStartPos() {
     return start.copy();              //  para consultar inicio
   }
+  
+  public PVector getSubBossPos() { return subPos.copy(); }
 
   public PVector getCurrentPos() {
     return pos.copy();                // posición actual

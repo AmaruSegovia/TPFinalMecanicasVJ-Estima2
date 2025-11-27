@@ -1,7 +1,7 @@
 class SubBoss extends Enemy implements IVisualizable, IMovable{
   private float velocidad;
   private PVector ultimaPosicionJugador;
-  private int tiempoEspera = 200; // El tiempo de espera del enemigo antes de comenzar a perseguir al jugador
+  private int tiempoEspera; // El tiempo de espera del enemigo antes de comenzar a perseguir al jugador
   private int tiempoEsperaActual = 0; // El tiempo actual de espera acumulado
   private boolean persiguiendoJugador = false; // Indica si el enemigo está actualmente persiguiendo al jugador
   private ArrayList<Bomb> bombsList; // ArrayList que servira para la creación de las bombas
@@ -14,6 +14,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
     this.velocidad = 980;   
     this.ancho=22;
     this.alto=22;
+    this.tiempoEspera = (int) random(200, 500);
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
     this.ultimaPosicionBomba = posicion.copy();//La posicion incial del sub-boss
@@ -48,7 +49,8 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
         tiempoEsperaActual = 0;//Reseteamos el contador
         persiguiendoJugador = true;
         ultimaPosicionJugador = player.getPosicion().copy();//Actualiza la ultima posicion obtenida del jugador
-      }else {
+        tiempoEspera = (int) random(100, 250);  
+    }else {
         movimientoOscilatorioY(); // levita mientras espera
       }
     }

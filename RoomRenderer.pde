@@ -19,7 +19,10 @@ class RoomRenderer {
     roomActual.updateDoors(gestorEnemigos.hayEnemigos());
     
     PVector startPos = walker.getStartPos();
+    PVector subPos = walker.getSubBossPos();
     Room roomInicial = dungeon.getRoom((int)startPos.x, (int)startPos.y);
+    Room subRoom = dungeon.getRoom((int)subPos.x, (int)subPos.y);
+    subRoom.setType(RoomType.SUBBOSS);
     gestorEnemigos.enemigosGenerados[roomInicial.getNameRoom()] = true;
 
 
@@ -57,10 +60,9 @@ class RoomRenderer {
       }
     }
     
-    // --- Lógica BossRoom ---
+    // --- Logica BossRoom ---
     if (roomActual instanceof BossRoom) {
         BossRoom br = (BossRoom) roomActual;
-        //Boss boss = gestorEnemigos.getBoss(); // método que devuelve el boss si existe
         if (gestorEnemigos.hayEnemigos() && !br.hasVictoryDoor()) {
             br.spawnVictoryDoor();
         }

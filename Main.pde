@@ -55,7 +55,7 @@ public void setup()
   
   
   // Inicializar estados
-  menu = new MenuState(audio);     
+  menu = new MenuState(audio);
   jugando = new PlayingState(audio,input);
   victoria = new VictoryState(audio);
   derrota = new GameOverState(audio);
