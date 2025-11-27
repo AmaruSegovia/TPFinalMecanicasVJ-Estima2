@@ -37,15 +37,23 @@ class Dungeon {
   }
 
   /** Metodo que genera las habitaciones */
-  public void generateRooms(int[][] matriz) {
+  public void generateRooms(int[][] matriz, PVector bossPos) {
     int cont = 0;
     for (int i = 0; i < this.rows; i++) {
-      for (int j = 0; j < this.cols; j++) {
-        this.rooms[i][j] = new Room(matriz[i][j], width+1, height+1, new PVector(0, 0),cont);
-        cont++;
-      }
+        for (int j = 0; j < this.cols; j++) {
+            PVector pos = new PVector(j, i);
+            // Si esta celda es la del boss, crear BossRoom
+            if (bossPos != null && pos.equals(bossPos)) {
+                this.rooms[i][j] = new BossRoom(matriz[i][j], width+1, height+1, new PVector(0, 0), cont);
+            } else {
+                // En cualquier otro caso, crear Room normal
+                this.rooms[i][j] = new Room(matriz[i][j], width+1, height+1, new PVector(0, 0), cont);
+            }
+            cont++;
+        }
     }
   }
+
 
   /** Metodo que devuelve el objeto habitacion */
   public Room getRoom(int col, int row) {

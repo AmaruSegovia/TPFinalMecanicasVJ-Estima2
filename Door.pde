@@ -6,13 +6,13 @@ class Door extends GameObject {
   
   // --- Atributos ---
   /** Representa el nombre de la direccion de la puerta */
-  private Direction direction;
+  protected Direction direction;
   /** Representa el estado de la puerta, si esta abierta o cerrada */
-  private boolean isOpen;
+  protected boolean isOpen;
   /** Representa el area de colision de la puerta */
-  private Colisionador collider;
+  protected Colisionador collider;
   
-  private Room targetRoom;
+  protected Room targetRoom;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor para puertas con posicion variada */
@@ -87,4 +87,29 @@ class Door extends GameObject {
     this.isOpen = state;
   }
   public Colisionador getCollider() { return collider; }
+}
+
+class VictoryDoor extends Door {
+  private PVector posicion;   
+  private boolean isOpen = true;
+
+  public VictoryDoor(PVector posicion) {
+    super(Direction.NONE); // llamamos al constructor padre con algo 
+    this.posicion = posicion;
+    this.setIsOpen(true);
+  }
+
+  @Override
+  public void display() {
+    fill(255, 0, 0); // rojo para diferenciar
+    noStroke();
+    circle(posicion.x, posicion.y, 60); // dibujar puerta cuadrada en el centro
+    collider.setPosicion(this.posicion);
+    collider.display(20);
+  }
+
+  @Override
+  public Colisionador getCollider() {
+    return new Colisionador(posicion, 60);
+  }
 }

@@ -9,7 +9,7 @@ class Room extends GameObject {
   /** Representa las posiciones de las puertas en binario */
   private int doors;
   /** Representa la lista de puertas que tiene la habitacion*/
-  private Map<Direction, Door> doorsMap = new HashMap<>();
+  protected Map<Direction, Door> doorsMap = new HashMap<>();
   
   /** Representa el nombre de la habitacion */
   private int nameRoom;
@@ -47,7 +47,7 @@ class Room extends GameObject {
     tint(255);
     
     image(background, 0, 0, 900, 800);
-    for (Door door : this.doorsMap.values()) {
+    for (Door door : getAllDoors()) {
       if (door != null) door.display();
     }
   }
@@ -81,6 +81,11 @@ class Room extends GameObject {
   public void debugInfo() {
     println("Room at " + posicion + " | Doors: " + doorsMap.size());
   }
+  
+  public void addDoor(Direction dir, Door door) {
+    doorsMap.put(dir, door);
+  }
+
 
   /* -- ASESORES -- */
   
@@ -102,4 +107,48 @@ class Room extends GameObject {
   
   public void setType(RoomType type) { this.type = type; }
   public RoomType getType() { return type; }
+}
+
+class BossRoom extends Room {
+  private VictoryDoor victoryDoor;
+
+  public BossRoom(int doors, int ancho, int alto, PVector posicion, int name) {
+    super(doors, ancho, alto, posicion, name);
+    setType(RoomType.BOSS);
+    background = loadImage("bg.png");
+  }
+
+  @Override
+  public void display() {
+    noStroke();
+    imageMode(CORNER);
+    tint(255);
+    image(background, 0, 0, 900, 800);
+
+    // Dibujar puertas normales
+    for (Door door : getAllDoors()) {
+      if (door != null) door.display();
+    }
+
+    // Dibujar puerta de victoria si existe
+    if (victoryDoor != null) {
+      victoryDoor.display();
+    }
+  }
+
+  /** Crear la puerta de victoria en el centro */
+  public void spawnVictoryDoor() {
+    if (victoryDoor == null) {
+      victoryDoor = new VictoryDoor(new PVector(width/2, height/2));
+      addDoor(Direction.UP, victoryDoor); // usamos el método addDoor de Room
+    }
+  }
+
+  public boolean hasVictoryDoor() {
+    return victoryDoor != null;
+  }
+
+  public VictoryDoor getVictoryDoor() {
+    return victoryDoor;
+  }
 }

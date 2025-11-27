@@ -19,6 +19,8 @@ class Player extends GameObject implements IVisualizable {
   /** Representa el estado de la animación del sprite del jugador */
   private int animationState;
   private Colisionador collider;
+  private Direction lastDirection = Direction.RIGHT;
+
   
   private int lives;
   private int maxLives;
@@ -101,6 +103,47 @@ class Player extends GameObject implements IVisualizable {
     collider.setPosicion(posicion);
     
   }// end mover
+  
+  public void updateAnimation(InputManager input) {
+    // Movimiento
+    if (input.isMoving()) {
+        // Tomar la última direccion activa
+        for (Direction dir : input.getActiveDirections()) {
+            lastDirection = dir; // actualizar  direccion
+        }
+
+        switch (lastDirection) {
+            case RIGHT: animationState = MaquinaEstadosAnimacion.MOV_DERECHA; break;
+            case LEFT:  animationState = MaquinaEstadosAnimacion.MOV_IZQUIERDA; break;
+            case UP:    animationState = MaquinaEstadosAnimacion.MOV_DERECHA; break; 
+            case DOWN:  animationState = MaquinaEstadosAnimacion.MOV_IZQUIERDA; break; 
+        }
+    } else {
+        // Idle segun direccion
+        switch (lastDirection) {
+            case RIGHT: animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA; break;
+            case LEFT:  animationState = MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA; break;
+            case UP:    animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA; break; 
+            case DOWN:  animationState = MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA; break; 
+        }
+    }
+
+    // Disparo
+    if (input.isShooting()) {
+        Direction shootDir = input.getShootDirection();
+        if (shootDir != null) {
+            lastDirection = shootDir; // actualizar hacia donde disparo
+        }
+
+        switch (lastDirection) {
+            case RIGHT: animationState = MaquinaEstadosAnimacion.ATAQUE_DERECHA; break;
+            case LEFT:  animationState = MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA; break;
+            case UP:    animationState = MaquinaEstadosAnimacion.ATAQUE_DERECHA; break; 
+            case DOWN:  animationState = MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA; break; 
+        }
+    }
+  }
+
 
   
   public Door checkCollision(Room roomActual) {

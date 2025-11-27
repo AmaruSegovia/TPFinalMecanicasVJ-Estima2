@@ -24,8 +24,8 @@ public class PlayingState implements GameState {
     this.walker = new CaminanteAleatorio(dungeon);
     
     PVector bossPos = walker.getCurrentPos();
-    Room bossRoom = dungeon.getRoom((int)bossPos.x, (int)bossPos.y);
-    bossRoom.setType(RoomType.BOSS);   // ahora esta room es la del jefe
+    
+    dungeon.generateRooms(dungeon.getMatriz(), bossPos);
     
     println("El jefe aparecerá en fila " + bossPos.y + " , columna " + bossPos.x);
     
@@ -43,8 +43,12 @@ public class PlayingState implements GameState {
   void update() {
     jugador.mover(input);
     jugador.shoot(renderer.getBullets(), input, bulletFactory);
+    jugador.updateAnimation(input);
+    
     renderer.render(jugador,walker);
     jugador.display();
+    
+    
     //if (jugadorGana()) changeState(victoria);
      if (jugadorPierde()) changeState(derrota);
     
@@ -55,13 +59,10 @@ public class PlayingState implements GameState {
   }
   
   /* reconociendo inputs */
-  void handleInput(char key) { 
-    if (key == ENTER) 
-      changeState(victoria);
-    if (keyCode == UP) 
-      changeState(creditos);
-    if (keyCode == DOWN) 
-      changeState(derrota);
+  void handleInput(char key) {
+    if (key == 'r' || key == 'R' ) 
+      changeState(new PlayingState(audio, input));
+  
   }
   
   //boolean jugadorGana() {
@@ -110,7 +111,7 @@ public class MenuState implements GameState {
   /* reconociendo inputs */
   void handleInput(char key) {
     if (key == ENTER) 
-      changeState(jugando);
+      changeState(new PlayingState(audio, input));
   }
 }
 
@@ -144,7 +145,7 @@ public class VictoryState implements GameState {
   /* reconociendo inputs */
   void handleInput(char key) {
     if (key == ENTER) {
-      changeState(menu); 
+      changeState(creditos); 
     }
   }
 }

@@ -14,8 +14,6 @@ class CaminanteAleatorio {
       move(m);
     }
     
-    // actualizar las rooms con la matriz final
-    m.generateRooms(m.getMatriz());
     println("Dungeon completada con " + m.nonZeroCount() + " celdas distintas de cero");
     m.printMatrix();
   }

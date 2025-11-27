@@ -239,4 +239,9 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
     rect(margen, height - barraAlto - 80, barraAncho, barraAlto);
     strokeWeight(0);
   }
+  
+  public boolean isDefeated() {
+    return lives <= 0;
+  }
+
 }

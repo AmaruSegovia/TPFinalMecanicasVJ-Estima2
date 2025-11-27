@@ -57,6 +57,20 @@ class RoomRenderer {
       }
     }
     
+    // --- Lógica BossRoom ---
+    if (roomActual instanceof BossRoom) {
+        BossRoom br = (BossRoom) roomActual;
+        //Boss boss = gestorEnemigos.getBoss(); // método que devuelve el boss si existe
+        if (gestorEnemigos.hayEnemigos() && !br.hasVictoryDoor()) {
+            br.spawnVictoryDoor();
+        }
+
+        Door doorr = player.checkCollision(roomActual);
+        if (doorr instanceof VictoryDoor) {
+            changeState(victoria);
+        }
+    }
+    
     bullets.update(gestorEnemigos, player);
     bullets.dibujarBalas();
     // Actualizar enemigos
