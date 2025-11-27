@@ -13,14 +13,25 @@ public class PlayingState implements GameState {
   private Dungeon dungeon;
   private RoomRenderer renderer;
   private BulletFactory bulletFactory;
+  private CaminanteAleatorio walker; 
   
-  // Constructor, recibe el gestor de audio
+  // Constructor, recibe el gestor de audio y entradas
   public PlayingState(AudioManager audio, InputManager input) {
     this.audio = audio;
     this.input = input;
-    this.dungeon = new Dungeon(1);
+    this.dungeon = new Dungeon(rows, cols);
+    // Crear la matriz y el caminante
+    this.walker = new CaminanteAleatorio(dungeon);
+    
+    PVector bossPos = walker.getCurrentPos();
+    Room bossRoom = dungeon.getRoom((int)bossPos.x, (int)bossPos.y);
+    bossRoom.setType(RoomType.BOSS);   // ahora esta room es la del jefe
+    
+    println("El jefe aparecerá en fila " + bossPos.y + " , columna " + bossPos.x);
+    
+    
     this.renderer = new RoomRenderer(dungeon, new GestorBullets());
-    this.jugador = new Player(new PVector(width/2, height/2),0,0);
+    this.jugador = new Player(new PVector(width/2, height/2),walker.getStartPos());
     this.bulletFactory = new BulletFactory();
   }
   /* inicializa al entrar al juego */
@@ -30,14 +41,12 @@ public class PlayingState implements GameState {
   
   /* Dibujando la pantalla */
   void update() {
-    text("Estando en el juego", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
-    
     jugador.mover(input);
     jugador.shoot(renderer.getBullets(), input, bulletFactory);
-    renderer.render(jugador);
+    renderer.render(jugador,walker);
     jugador.display();
-    if (jugadorGana()) changeState(victoria);
-    else if (jugadorPierde()) changeState(derrota);
+    //if (jugadorGana()) changeState(victoria);
+     if (jugadorPierde()) changeState(derrota);
     
     // ************************   DEPURADOR
     fill(255);
@@ -55,10 +64,10 @@ public class PlayingState implements GameState {
       changeState(derrota);
   }
   
-  boolean jugadorGana() {
-    if(jugador.col == 4 && jugador.row ==1) { return true; }
-     return false;
-  }
+  //boolean jugadorGana() {
+  //  //if(jugador.col == 4 && jugador.row ==1) { return true; }
+  //  // return false;
+  //}
   
   boolean jugadorPierde() {
     // Comprueba si la columna del jugador es 3

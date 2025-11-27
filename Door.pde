@@ -11,6 +11,8 @@ class Door extends GameObject {
   private boolean isOpen;
   /** Representa el area de colision de la puerta */
   private Colisionador collider;
+  
+  private Room targetRoom;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor para puertas con posicion variada */
@@ -44,10 +46,15 @@ class Door extends GameObject {
   /** Metodo que dibuja a la habitacion*/
   public void display() {
     noStroke();
-    if (isOpen) {
+    
+    if (targetRoom != null && targetRoom.getType() == RoomType.BOSS) {
+      fill(255, 255, 0); // amarillo
+    } else {
+      if (isOpen) {
       fill(0, 255, 0); // Color verde para puertas abiertas
     } else {
       fill(255, 0, 0); // Color rojo para puertas cerradas
+    }
     }
     circle(this.posicion.x, this.posicion.y, this.ancho);
   }

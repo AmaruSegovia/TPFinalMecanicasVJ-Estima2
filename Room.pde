@@ -1,3 +1,9 @@
+enum RoomType {
+  NORMAL,
+  BOSS,
+  TREASURE,
+  SUBBOSS
+}
 /** Clase que representa las habitaciones de la dungeon */
 class Room extends GameObject {
   /** Representa las posiciones de las puertas en binario */
@@ -10,6 +16,8 @@ class Room extends GameObject {
  
   /** Representa el fondo de la habitación */
   private PImage background;
+  
+  private RoomType type = RoomType.NORMAL; // por defecto normal
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
@@ -37,6 +45,7 @@ class Room extends GameObject {
     noStroke();
     imageMode(CORNER);
     tint(255);
+    
     image(background, 0, 0, 900, 800);
     for (Door door : this.doorsMap.values()) {
       if (door != null) door.display();
@@ -48,7 +57,7 @@ class Room extends GameObject {
     for (Door door : this.doorsMap.values()) {
       if (door != null) return true; // verifica si el objeto door no es null.
     }
-    println("no hay puertas!! estas encerrado!! >:3");
+    //println("no hay puertas!! estas encerrado!! >:3");
     return false;
   }
   
@@ -90,4 +99,7 @@ class Room extends GameObject {
   public int getNameRoom() {
     return this.nameRoom;
   }
+  
+  public void setType(RoomType type) { this.type = type; }
+  public RoomType getType() { return type; }
 }

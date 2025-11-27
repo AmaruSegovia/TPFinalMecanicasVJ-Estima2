@@ -3,6 +3,8 @@ class Dungeon {
 
   private int nivel;
   private int cols, rows; // Número de columnas y filas en la matriz de habitaciones
+  
+  private int[][] matriz;
   private Room[][] rooms; // Matriz de las habitaciones que hay en la dungeon
 
   /* -- CONSTRUCTORES -- */
@@ -11,33 +13,27 @@ class Dungeon {
     println("Aun no has inicializado nada");
   }
   /** constructor parametrizado */
-  public Dungeon(int nivel) {
-    this.nivel = nivel;
-    int[][] matriz = startDungeon();
-    this.cols = matriz[0].length;
-    this.rows = matriz.length;
+  public Dungeon(int rows, int cols) {
+    //this.nivel = nivel;
+    this.cols = cols;
+    this.rows = rows;
+    
+    this.matriz = new int[this.rows][this.cols];
+    this.matriz = startDungeon();
     this.rooms = new Room[this.rows][this.cols];  // Inicialización de las dimenciones de la matriz de habitaciones
-    generateRooms(matriz);
+    
   }
 
   /* -- METODOS -- */
   /** Metodo que inicia la dungeon segun el nivel */
   public int[][] startDungeon() {
-    switch (this.nivel) {
-    case 1:
-      return new int[][] {
-        {2, 14, 12, 0,0},
-        {0, 3, 11, 10,0}
-      };
-    case 2:
-    
-    ;
-    default:
-      // Valor por defecto si el nivel no esta definido.
-      return new int[][] {
-        {0}
-      };
+    // Inicializar la matriz con ceros
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < this.cols; j++) {
+        this.matriz[i][j] = 0;
+      }
     }
+    return this.matriz;
   }
 
   /** Metodo que genera las habitaciones */
@@ -59,6 +55,68 @@ class Dungeon {
     }
     println("Room Inexistente por estar fuera de rango");
     return null;
+  } 
+  /** Metodo que devuelve la cantidad de celdas distintas a 0 */
+  public int nonZeroCount() {
+    int count = 0;
+    for (int[] row : matriz) {
+      for (int col : row) {
+        if (col != 0) {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
+  
+  /*** Cambios en la Dungeon ***/
+    /** Metodo que dibuja la matriz */
+  void display() {
+    stroke(0);
+    fill(255);
+
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < this.cols; j++) {
+        int x = j * cellSize;
+        int y = i * cellSize;
+
+        rect(x, y, cellSize, cellSize);
+
+        // Dibujar conexiones segun el valor binario de la matriz
+        int val = this.matriz[i][j];
+        if ((val & 1) != 0) line(x + cellSize / 2, y + cellSize / 2, x + cellSize / 2, y); // Arriba dibuja una linea si el primer bit esta activo
+        if ((val & 2) != 0) line(x + cellSize / 2, y + cellSize / 2, x + cellSize, y + cellSize / 2); // Derecha dibuja una linea si el segundo bit esta activo
+        if ((val & 4) != 0) line(x + cellSize / 2, y + cellSize / 2, x + cellSize / 2, y + cellSize); // Abajo dibuja una linea si el tercero bit esta activo
+        if ((val & 8) != 0) line(x + cellSize / 2, y + cellSize / 2, x, y + cellSize / 2); // Izquierda dibuja una linea si el cuarto bit esta activo
+
+        // Mostrar el valor de la celda
+        fill(0);
+        textAlign(CENTER, CENTER);
+        text(val, x + cellSize / 2, y + cellSize / 2);
+        fill(255);
+      }
+    }
+  }
+  /** Metodo que muestra la matriz por consola */
+  public void printMatrix() {
+    for (int[] row : matriz) {
+      for (int col : row) {
+        print(col + " ");
+      }
+      println();
+    }
+  }
+  
+  /** Metodo que agrega valores a las ponicion actual y la anterior*/
+  public void addValue(PVector lastPos, PVector currentPos, int value, int reverseValue){
+    // primero en Y porque recorremos la matriz segun las filas
+    combineValue(int(lastPos.y), int(lastPos.x), value); // Agregar el valor al indice actual
+    combineValue(int(currentPos.y), int(currentPos.x), reverseValue); // Agregar el valor al indice al que se movio
+  }
+  
+  /** Metodo que combina los valores de una celda especifica de la matriz */
+  public void combineValue(int y, int x, int newValue) {
+    this.matriz[y][x] |= newValue; // Usa el operador OR bit a bit para comparar entre el valor que tenia el indice y el nuevo valor
   }
   
   /* -- ASESORES -- */
@@ -67,8 +125,15 @@ class Dungeon {
   public int getCols(){
     return this.cols;
   }
-  /** Devuelve el numero de columnas */
+  /** Devuelve el numero de filas */
   public int getRows(){
     return this.rows;
   }
+  /** Devuelve el numero de filas */
+  public int[][] getMatriz(){
+    return this.matriz;
+  }
+  
+  /** Retorna el valor de un indice especifico */
+  public int getValue(int y, int x) {  return this.matriz[y][x];  }
 }

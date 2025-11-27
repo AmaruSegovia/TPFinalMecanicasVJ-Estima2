@@ -6,12 +6,13 @@ import java.util.Deque;
 
 
 /**Variables Globales--------*/
-public boolean W_PRESSED;
-public boolean D_PRESSED;
-public boolean S_PRESSED;
-public boolean A_PRESSED;
 public int nivel = 1;
-public int estadoJuego = 0;
+int cols = int(random(6, 6)); // Número de columnas de la matriz
+int rows = int(random(6, 6)); // Número de filas de la matriz
+int cellSize;
+int indexNonZero;
+
+boolean start = false;
 
 import ddf.minim.*;
 
@@ -32,8 +33,18 @@ PImage background;
 // --- Setup Global ---
 public void setup()
 {
+  
+  
+  // Establecer un número aleatorio entre el valor mas alto entre la columna o la fila y la suma de estas para los elementos diferentes de cero
+  indexNonZero = int(random(((cols > rows) ? cols : rows), (cols+rows)));
+  println("Matriz de "+ rows+" , "+cols );
+  println("Número objetivo de elementos diferentes de cero: " + indexNonZero);
+  
+  cellSize = width / ((cols > rows) ? cols : rows); // se divide segun el maximo entre las cols y rows
+
   noSmooth();
   size(900, 800);
+  
   
   // Inicializar Managers
   audio = new AudioManager(this);

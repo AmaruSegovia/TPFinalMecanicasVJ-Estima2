@@ -4,7 +4,7 @@ class Follower extends Enemy implements IVisualizable, IMovable{
 
   /* -- CONSTRUCTOR -- */
   public Follower(PVector posicion) {
-    super(posicion,6,color(255, 255, 255)); 
+    super(posicion,1,color(255, 255, 255)); 
     this.ancho=22;
     this.alto=22;
     this.velocidad = 140; // ajusta la velocidad del enemigo

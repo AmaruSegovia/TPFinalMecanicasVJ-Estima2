@@ -28,7 +28,7 @@ class Player extends GameObject implements IVisualizable {
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
-  public Player(PVector posicion, int startCol, int startRow) {
+  public Player(PVector posicion, PVector startPos) {
     this.posicion = posicion;
     this.alto = 20;
     this.ancho = 20;
@@ -44,8 +44,8 @@ class Player extends GameObject implements IVisualizable {
     this.hitTime = 0;
     
     // Inicializar posición en la dungeon para no crashear
-    this.col = startCol;
-    this.row = startRow;
+    this.col = int(startPos.x);
+    this.row = int(startPos.y);
   }
 
   /* -- METODOS -- */
@@ -123,27 +123,16 @@ class Player extends GameObject implements IVisualizable {
 
   /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */
   public void shoot(GestorBullets gestor, InputManager input, BulletFactory factory) {
-  if (input.isShooting() && input.getShootDirection() != null) {
-    long now = millis();
-    if (now - lastShotTime >= shootCooldown) {
-      // Usar la fábrica para crear la bala del jugador
-      Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection());
-      gestor.addBullet(b);
-      lastShotTime = now;
+    if (input.isShooting() && input.getShootDirection() != null) {
+      long now = millis();
+      if (now - lastShotTime >= shootCooldown) {
+        // Usar la fábrica para crear la bala del jugador
+        Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection());
+        gestor.addBullet(b);
+        lastShotTime = now;
+      }
     }
   }
-}
-
-
-  
-  //public boolean verificarColision(Enemy enemigo, Bala bala) {
-  //  if ((collider.isCircle(enemigo.collider) || collider.isCircle(bala.collider)) && !isHit) {
-  //    reducirVida();
-  //    return true;
-  //  }
-  //  return false;
-  //}
-
   
   public void dibujarBarraVida(float barraAncho, float barraAlto, float offsetY) {
     float porcentaje = (float) lives / maxLives;   // proporción de vida
@@ -196,6 +185,8 @@ class Player extends GameObject implements IVisualizable {
   public boolean getIsHit(){
     return this.isHit;
   }
+  
+  public PVector getCurrentPos(){ return new PVector(this.col, this.row); }
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
