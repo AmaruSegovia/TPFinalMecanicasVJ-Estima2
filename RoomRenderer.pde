@@ -57,6 +57,7 @@ class RoomRenderer {
           player.updatePosition(newCol, newRow, entryPos);
           //Genera cuando el player toca la puerta
           gestorEnemigos.createEnemies(nextRoom);
+          bullets.clearBullets();
       }
     }
     

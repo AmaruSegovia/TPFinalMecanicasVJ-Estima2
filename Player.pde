@@ -96,8 +96,8 @@ class Player extends GameObject implements IVisualizable {
     this.posicion.add(direccion.getDestino().copy().mult(speed * Time.getDeltaTime(frameRate)));
 
     // Limitar el movimiento dentro de la pantalla
-    posicion.x = constrain(posicion.x, ancho * 2, width - ancho * 2);
-    posicion.y = constrain(posicion.y, alto * 2, height - alto * 2);
+    posicion.x = constrain(posicion.x, ancho * 2 + 40, width - ancho * 2 - 40);
+    posicion.y = constrain(posicion.y, alto * 2 + 40, height - alto * 2- 40);
     
     //Actualizando la posición del collider
     collider.setPosicion(posicion);
@@ -143,7 +143,6 @@ class Player extends GameObject implements IVisualizable {
         }
     }
   }
-
 
   
   public Door checkCollision(Room roomActual) {

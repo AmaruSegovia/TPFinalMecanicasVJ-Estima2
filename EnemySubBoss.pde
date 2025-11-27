@@ -14,7 +14,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
     this.velocidad = 980;   
     this.ancho=22;
     this.alto=22;
-    this.tiempoEspera = (int) random(200, 500);
+    this.tiempoEspera = (int) random(100,250);
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
     this.ultimaPosicionBomba = posicion.copy();//La posicion incial del sub-boss
