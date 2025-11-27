@@ -10,7 +10,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
   
   /* -- CONSTRUCTOR -- */
   public SubBoss(PVector posicion) {
-    super(posicion,10,color(255, 255, 255));
+    super(posicion,10,color(255, 255, 255),1);
     this.velocidad = 980;   
     this.ancho=22;
     this.alto=22;
@@ -36,7 +36,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
     imageMode(CENTER);
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     // dibuja la colision del boss
-    this.collider.display(#FFF63E);
+    //this.collider.display(#FFF63E);
     dibujarBarraVida(10, 50, 5, 35);
   }
   

@@ -55,7 +55,7 @@ public class PlayingState implements GameState {
     // ************************   DEPURADOR
     fill(255);
     textSize(20);
-    text("vida: " + jugador.getLives(), 150, 30);
+    //text("vida: " + jugador.getLives(), 150, 30);
   }
   
   /* reconociendo inputs */
