@@ -2,11 +2,13 @@ class RoomRenderer {
   private Dungeon dungeon;
   private GestorEnemigos gestorEnemigos;
   private GestorBullets bullets;
+  private MiniMap miniMap;
 
   public RoomRenderer(Dungeon dungeon, GestorBullets bullets) {
     this.dungeon = dungeon;
     this.gestorEnemigos = new GestorEnemigos(dungeon.getRows() * dungeon.getCols()) ;
     this.bullets = bullets;
+    this.miniMap = new MiniMap(180, 180, dungeon); // Crear el mini-mapa
   }
 
   public void render(Player player) {
@@ -47,7 +49,7 @@ class RoomRenderer {
         }
           player.updatePosition(newCol, newRow, entryPos);
           //Genera cuando el player toca la puerta
-          gestorEnemigos.createEnemies(nextRoom.getNameRoom());
+          gestorEnemigos.createEnemies(nextRoom);
       }
     }
     
@@ -55,6 +57,8 @@ class RoomRenderer {
     bullets.dibujarBalas();
     // Actualizar enemigos
     gestorEnemigos.actualizar(player, bullets);
+    
+    miniMap.display(player);
   }
 
   private void mostrarTutorial() {

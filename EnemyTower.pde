@@ -5,7 +5,7 @@ class Tower extends Enemy implements IVisualizable, IShooter{
 
   /* -- CONSTRUCTOR -- */
   public Tower(PVector posicion) {
-    super(posicion, 5, color(255, 255, 255));
+    super(posicion, 1, color(255, 255, 255));
     this.ancho = 22;
     this.alto = 22;
     this.fireRate = 0.8f;

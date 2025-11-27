@@ -22,14 +22,27 @@ class GestorEnemigos {
     inicializarBoss();
   }
   
-  public void createEnemies (int nameRoom) {
+  public void createEnemies (Room room) {
     //removeEnemies();
     // Verificar si los enemigos ya han sido generados para esta habitación
-    if (this.enemigosGenerados[nameRoom]) {
+    if (this.enemigosGenerados[room.getNameRoom()]) {
       return; // Salir si ya han sido generados
     }
-    inicializarEnemigos();
-    this.enemigosGenerados[nameRoom] = true;
+    
+    if (room.getType() == RoomType.BOSS) {
+    inicializarBoss();
+    room.stateDoors(false); // 🔹 cerrar puertas al entrar
+  } else if (room.getType() == RoomType.SUBBOSS) {
+    inicializarSubBosses();
+  } else if (room.getType() == RoomType.TREASURE) {
+    // no enemigos, solo cofres
+  } else {
+    inicializarTowers();
+    inicializarFollowers();
+  }
+  
+    //inicializarEnemigos();
+    this.enemigosGenerados[room.getNameRoom()] = true;
   }
 
   /** Inicializa a enemigos por tipo */
