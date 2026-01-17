@@ -28,14 +28,13 @@ VictoryState victoria;
 GameOverState derrota;
 CreditsState creditos;
 
+// -- Variables globales --
 PImage background;
 
 // --- Setup Global ---
 public void setup()
 {
-  
-  
-  // Establecer un número aleatorio entre el valor mas alto entre la columna o la fila y la suma de estas para los elementos diferentes de cero
+  // Establecer un numero aleatorio entre el valor mas alto entre la columna o la fila y la suma de estas para los elementos diferentes de cero
   indexNonZero = int(random(((cols > rows) ? cols : rows), (cols+rows)));
   println("Matriz de "+ rows+" , "+cols );
   println("Número objetivo de elementos diferentes de cero: " + indexNonZero);
@@ -44,7 +43,6 @@ public void setup()
 
   noSmooth();
   size(900, 800);
-  
   
   // Inicializar Managers
   audio = new AudioManager(this);
@@ -68,14 +66,13 @@ public void setup()
 public void draw() {
   background(0);
   currentState.update();
-  println(frameRate);
+  //println(frameRate);
 }
 
 void changeState(GameState newState) {
   currentState = newState;
   currentState.onEnter(); // activa lo inicial, como el setup al momenbto de cambiar de estado
 }
-
 
 // --- Control de teclas ---
 void keyPressed() {

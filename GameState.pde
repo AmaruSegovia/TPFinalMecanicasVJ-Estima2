@@ -14,6 +14,9 @@ public class PlayingState implements GameState {
   private RoomRenderer renderer;
   private BulletFactory bulletFactory;
   private CaminanteAleatorio walker; 
+  private GameAssets assets;
+  
+  private MiniMap miniMap;
   
   // Constructor, recibe el gestor de audio y entradas
   public PlayingState(AudioManager audio, InputManager input) {
@@ -23,6 +26,10 @@ public class PlayingState implements GameState {
     // Crear la matriz y el caminante
     this.walker = new CaminanteAleatorio(dungeon);
     
+    // Cargar assets
+    assets = new GameAssets();
+    assets.load();
+    
     PVector bossPos = walker.getCurrentPos();
     
     dungeon.generateRooms(dungeon.getMatriz(), bossPos);
@@ -30,9 +37,11 @@ public class PlayingState implements GameState {
     println("El jefe aparecerá en fila " + bossPos.y + " , columna " + bossPos.x);
     
     
-    this.renderer = new RoomRenderer(dungeon, new GestorBullets());
+    this.renderer = new RoomRenderer(dungeon, new GestorBullets(), assets.getRoomVisuals());
     this.jugador = new Player(new PVector(width/2, height/2),walker.getStartPos());
     this.bulletFactory = new BulletFactory();
+    
+    this.miniMap = new MiniMap( dungeon); // Crear el mini-mapa
   }
   /* inicializa al entrar al juego */
   public void onEnter() {
@@ -48,8 +57,8 @@ public class PlayingState implements GameState {
     renderer.render(jugador,walker);
     jugador.display();
     
+    miniMap.display(jugador);
     
-    //if (jugadorGana()) changeState(victoria);
      if (jugadorPierde()) changeState(derrota);
     
     // ************************   DEPURADOR

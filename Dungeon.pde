@@ -44,10 +44,10 @@ class Dungeon {
             PVector pos = new PVector(j, i);
             // Si esta celda es la del boss, crear BossRoom
             if (bossPos != null && pos.equals(bossPos)) {
-                this.rooms[i][j] = new BossRoom(matriz[i][j], width+1, height+1, new PVector(0, 0), cont);
+                this.rooms[i][j] = new BossRoom(matriz[i][j], cont);
             } else {
                 // En cualquier otro caso, crear Room normal
-                this.rooms[i][j] = new Room(matriz[i][j], width+1, height+1, new PVector(0, 0), cont);
+                this.rooms[i][j] = new Room(matriz[i][j], cont);
             }
             cont++;
         }
@@ -126,6 +126,10 @@ class Dungeon {
   public void combineValue(int y, int x, int newValue) {
     this.matriz[y][x] |= newValue; // Usa el operador OR bit a bit para comparar entre el valor que tenia el indice y el nuevo valor
   }
+  public boolean isValid(int col, int row) {
+  return col >= 0 && col < cols && row >= 0 && row < rows;
+}
+
   
   /* -- ASESORES -- */
   /* Getters */

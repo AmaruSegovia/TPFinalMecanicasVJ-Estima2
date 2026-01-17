@@ -46,7 +46,7 @@ class Door extends GameObject {
     }
   }
 
-  // --- Carga de imágenes ---
+  // --- Carga de imagenes ---
   private void cargarSprites() {
     // Cargamos SOLO la versión original (asumiendo que apunta hacia ARRIBA/VERTICAL)
     this.spriteCerrada = loadImage("puerta.png"); 
@@ -65,7 +65,7 @@ class Door extends GameObject {
     float angulo = 0;
     
     switch (this.direction) {
-      case UP:    angulo = 0; break;             // Sin rotación
+      case UP:    angulo = 0; break;             // Sin rotacion
       case RIGHT: angulo = HALF_PI; break;       // 90 grados a la derecha
       case DOWN:  angulo = PI; break;            // 180 grados (cabeza abajo)
       case LEFT:  angulo = -HALF_PI; break;      // -90 grados a la izquierda
