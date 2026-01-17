@@ -37,13 +37,13 @@ class Player extends GameObject implements IVisualizable {
     this.alto = 20;
     this.ancho = 20;
     this.speed = 0;
-    this.topSpeed = 250;
+    this.topSpeed = 250*difficulty.playerSpeed;
     this.damage = 1;
     this.sprite = new SpriteObject("mage.png", ancho, alto, 4);
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
     this.direccion = new Vector(posicion, Direction.DOWN); // Vector inicial hacia abajo
     this.collider = new Colisionador(this.posicion,this.ancho*3);
-    this.lives = 15;
+    this.lives = difficulty.playerLives;
     this.maxLives = lives;
     this.isHit = false;
     this.hitTime = 0;
@@ -68,6 +68,9 @@ class Player extends GameObject implements IVisualizable {
     textSize(20);
     fill(255);
     dibujarBarraVida(50, 5, 35);
+    text("vidas: " + lives, 100, 100);
+    text("vel: " + speed, 100, 150);
+
     //collider.display(255);
   }
 
@@ -75,8 +78,8 @@ class Player extends GameObject implements IVisualizable {
   public void mover(InputManager input) {
     this.direccion.setOrigen(this.posicion.copy());
 
-    float acceleration = 60;
-    float deceleration = 10;
+    float acceleration = 60*difficulty.playerSpeed;
+    float deceleration = 10*difficulty.playerSpeed;
 
     // Operador ternario para acelerar o desacelerar segun si se apreta una tecla
     speed = input.isMoving() ? speed + acceleration : speed - deceleration;

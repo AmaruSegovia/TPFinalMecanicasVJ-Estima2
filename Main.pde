@@ -7,8 +7,8 @@ import java.util.Deque;
 
 /**Variables Globales--------*/
 public int nivel = 1;
-int cols = int(random(6, 6)); // Número de columnas de la matriz
-int rows = int(random(6, 6)); // Número de filas de la matriz
+int cols; // Numero de columnas de la matriz
+int rows; // Numero de filas de la matriz
 int cellSize;
 int indexNonZero;
 
@@ -30,37 +30,30 @@ CreditsState creditos;
 
 // -- Variables globales --
 PImage background;
+Difficulty difficulty = Difficulty.NORMAL;
 
 // --- Setup Global ---
 public void setup()
 {
-  // Establecer un numero aleatorio entre el valor mas alto entre la columna o la fila y la suma de estas para los elementos diferentes de cero
-  indexNonZero = int(random(((cols > rows) ? cols : rows), (cols+rows)));
-  println("Matriz de "+ rows+" , "+cols );
-  println("Número objetivo de elementos diferentes de cero: " + indexNonZero);
-  
-  cellSize = width / ((cols > rows) ? cols : rows); // se divide segun el maximo entre las cols y rows
-
   noSmooth();
   size(900, 800);
-  
+
   // Inicializar Managers
   audio = new AudioManager(this);
   input = new InputManager();
-  
+
   PFont pixelFont = createFont("pixelFont.ttf", 20);
   textFont(pixelFont);
-  
-  
+
+
   // Inicializar estados
   menu = new MenuState(audio);
-  jugando = new PlayingState(audio,input);
   victoria = new VictoryState(audio);
   derrota = new GameOverState(audio);
   creditos = new CreditsState(audio);
-  
-   // Estado inicial
-  changeState(menu); 
+
+  // Estado inicial
+  changeState(menu);
 }
 
 public void draw() {
@@ -81,4 +74,39 @@ void keyPressed() {
 }
 void keyReleased() {
   input.keyReleased(key);
+}
+
+int BASE_MIN_ROOMS = 6;
+int BASE_MAX_ROOMS = 8;
+
+void prepareDungeonValues() {
+
+  float baseSize = random(4, 8);
+
+  // crecimiento suave por nivel
+  float levelMultiplier = 1.0 + (nivel - 1) * 0.35;
+
+  // dificultad ajusta sin romper
+  float difficultyMultiplier = difficulty.multidungeon;
+
+  // tamaño final
+  int size = int(baseSize * levelMultiplier);
+
+  // limites
+  size = constrain(size, 4, 16);
+
+  cols = size;
+  rows = size;
+  
+  int minRooms = int(5 * levelMultiplier * difficultyMultiplier);
+  int maxRooms = int(8 * levelMultiplier * difficultyMultiplier);
+
+  indexNonZero = int(random(minRooms, maxRooms + 1));
+  cellSize = width / size;
+
+  println("----- DUNGEON PREPARADA -----");
+  println("Dificultad: " + difficulty);
+  println("Nivel: " + nivel);
+  println("Rooms totales: " + indexNonZero);
+  println("Matriz: " + rows + " x " + cols);
 }

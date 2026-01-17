@@ -74,11 +74,6 @@ public class PlayingState implements GameState {
   
   }
   
-  //boolean jugadorGana() {
-  //  //if(jugador.col == 4 && jugador.row ==1) { return true; }
-  //  // return false;
-  //}
-  
   boolean jugadorPierde() {
     // Comprueba si la columna del jugador es 3
     if (jugador.getLives() <= 0) { return true; }
@@ -94,6 +89,8 @@ public class PlayingState implements GameState {
 // Estado del juego que representa el menu inicial
 public class MenuState implements GameState {
   private AudioManager audio;
+  private int selectedIndex = 1; // NORMAL por defecto
+
   private PImage img = loadImage("splash.png");
   
   // Constructor, recibe el gestor de audio
@@ -115,12 +112,64 @@ public class MenuState implements GameState {
     textAlign(CENTER, CENTER);
     textSize(32);
     text("Presiona ENTER para jugar", width / 2, height / 1.5 + 20*(sin(millis()*0.003)+5));
+    
+    Difficulty[] diffs = Difficulty.values();
+    
+    pushMatrix();
+      textAlign(CENTER);
+      fill(255);
+      textSize(28);
+      
+      int boxW = 200;
+      int boxH = 50;
+    
+      translate(width/2 - boxW/2, height/2 - boxH/2);
+      text("Dificultad", boxW/2, -20);
+      
+      for (int i = 0; i < diffs.length; i++) {
+    
+        int x = 0;
+        int y = i * (boxH + 10);
+    
+        // Fondo del cuadro
+        if (i == selectedIndex) {
+          fill(255, 200, 0, 220); // seleccionado
+        } else {
+          fill(0,100);
+        }
+        noStroke();
+        rect(x, y, boxW, boxH, 12);
+    
+        // Texto
+        fill(255);
+        textSize(20);
+        text(diffs[i].name(), boxW/2, y + boxH/1.6);
+      }
+    
+    popMatrix();
+
   }
   
   /* reconociendo inputs */
   void handleInput(char key) {
-    if (key == ENTER) 
+
+    int max = Difficulty.values().length;
+  
+    if (keyCode == UP || key == 'w' || key == 'W') {
+      selectedIndex--;
+      if (selectedIndex < 0) selectedIndex = max - 1;
+    }
+  
+    if (keyCode == DOWN || key == 's' || key == 'S') {
+      selectedIndex++;
+      if (selectedIndex >= max) selectedIndex = 0;
+    }
+  
+    if (key == ENTER) {
+      difficulty = Difficulty.values()[selectedIndex];
+      prepareDungeonValues();
       changeState(new PlayingState(audio, input));
+    }
   }
 }
 
