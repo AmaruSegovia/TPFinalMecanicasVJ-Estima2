@@ -2,24 +2,30 @@ class RoomRenderer {
   private Dungeon dungeon;
   private GestorEnemigos gestorEnemigos;
   private GestorBullets bullets;
-  private MiniMap miniMap;
+  private RoomVisualRegistry roomVisuals;
 
-  public RoomRenderer(Dungeon dungeon, GestorBullets bullets) {
+  public RoomRenderer(Dungeon dungeon, GestorBullets bullets, RoomVisualRegistry roomVisuals) {
     this.dungeon = dungeon;
     this.gestorEnemigos = new GestorEnemigos(dungeon.getRows() * dungeon.getCols()) ;
     this.bullets = bullets;
-    this.miniMap = new MiniMap(180, 180, dungeon); // Crear el mini-mapa
+    this.roomVisuals = roomVisuals;
   }
 
   public void render(Player player, CaminanteAleatorio walker) {
     Room roomActual = dungeon.getRoom(player.getCol(), player.getRow());
     if (roomActual == null) return;
     
-    roomActual.display();
+    roomVisuals.get(roomActual.getType()).render();
+    for (Door door : roomActual.getAllDoors()) {
+      door.display();
+    }
     roomActual.updateDoors(gestorEnemigos.hayEnemigos());
     
     PVector startPos = walker.getStartPos();
+    PVector subPos = walker.getSubBossPos();
     Room roomInicial = dungeon.getRoom((int)startPos.x, (int)startPos.y);
+    Room subRoom = dungeon.getRoom((int)subPos.x, (int)subPos.y);
+    subRoom.setType(RoomType.SUBBOSS);
     gestorEnemigos.enemigosGenerados[roomInicial.getNameRoom()] = true;
 
 
@@ -54,7 +60,21 @@ class RoomRenderer {
           player.updatePosition(newCol, newRow, entryPos);
           //Genera cuando el player toca la puerta
           gestorEnemigos.createEnemies(nextRoom);
+          bullets.clearBullets();
       }
+    }
+    
+    // --- Logica BossRoom ---
+    if (roomActual instanceof BossRoom) {
+        BossRoom br = (BossRoom) roomActual;
+        if (gestorEnemigos.hayEnemigos() && !br.hasVictoryDoor()) {
+            br.spawnVictoryDoor();
+        }
+
+        Door doorr = player.checkCollision(roomActual);
+        if (doorr instanceof VictoryDoor) {
+            changeState(victoria);
+        }
     }
     
     bullets.update(gestorEnemigos, player);
@@ -62,7 +82,6 @@ class RoomRenderer {
     // Actualizar enemigos
     gestorEnemigos.actualizar(player, bullets);
     
-    miniMap.display(player);
   }
 
   private void mostrarTutorial() {

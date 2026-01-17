@@ -6,11 +6,12 @@ class OrbitalBullet extends Bullet {
   private int tiempoLanzamientoMs;
   private boolean enOrbita;
 
-  public OrbitalBullet(Boss boss, float anguloInicial, float radio, float tiempoOrbitaSeg) {
+  public OrbitalBullet(Boss boss, float anguloInicial, float radio, float tiempoOrbitaSeg, float damage) {
     super(boss.getPosicion().copy(), anguloInicial, radio);
     this.boss = boss;
     this.angulo = anguloInicial;
     this.radio = radio;
+    this.damage = damage;
     this.velocidadOrbita = 2.0f; // radianes por segundo
     this.tiempoLanzamientoMs = millis() + int(tiempoOrbitaSeg );
     this.enOrbita = true;
@@ -21,11 +22,11 @@ class OrbitalBullet extends Bullet {
     PVector bossPosition = boss.getPosicion();
     if (enOrbita) {
 
-        this.angulo += 0.04; // Velocidad de la órbita
+        this.angulo += 0.04; // Velocidad de la orbita
 
-        // Parámetros para la oscilación radial
-        float baseRadio = 100; // Radio base de la órbita
-        float amplitude = 300; // Amplitud de la oscilación
+        // Parametros para la oscilación radial
+        float baseRadio = 100; // Radio base de la orbita
+        float amplitude = 300; // Amplitud de la oscilacion
         float frequency = 0.7; // Frecuencia de la oscilación
 
         // Calcular la oscilación radial
@@ -35,7 +36,7 @@ class OrbitalBullet extends Bullet {
         this.posicion.x = bossPosition.x + radialOscillation * cos(angulo);
         this.posicion.y = bossPosition.y + radialOscillation * sin(angulo);
         colisionador.setPosicion(this.posicion);
-        // lanzar después de cierto tiempo
+        // lanzar despues de cierto tiempo
       if (millis() >= tiempoLanzamientoMs) {
         enOrbita = false;
         this.direction = new PVector(cos(angulo), sin(angulo));

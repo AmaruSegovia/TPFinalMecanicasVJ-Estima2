@@ -1,5 +1,5 @@
 /* Clase que representa a los enemigos por defecto */
-abstract class Enemy extends GameObject {
+public abstract class Enemy extends GameObject {
   protected int lives;
   protected boolean isHit; // bandera para el impacto
   protected int hitTime; // tiempo del impacto
@@ -8,10 +8,12 @@ abstract class Enemy extends GameObject {
   protected color currentColor;
   protected Colisionador collider;
   protected SpriteObject sprite;
+  protected float damage;
   /* -- CONSTRUCTOR -- */
-  public Enemy(PVector posicion, int vidas, color colorInicial) {
+  public Enemy(PVector posicion, int vidas, color colorInicial, float damage) {
     this.posicion = posicion; // constructor de clase GameObject con la pos y tamaño
     this.lives = vidas;
+    this.damage = damage;
     this.isHit = false;
     this.hitTime = 0;
     this.originalColor = colorInicial;

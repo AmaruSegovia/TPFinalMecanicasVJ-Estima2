@@ -4,7 +4,7 @@ class Follower extends Enemy implements IVisualizable, IMovable{
 
   /* -- CONSTRUCTOR -- */
   public Follower(PVector posicion) {
-    super(posicion,1,color(255, 255, 255)); 
+    super(posicion,6,color(255, 255, 255),1); 
     this.ancho=22;
     this.alto=22;
     this.velocidad = 140; // ajusta la velocidad del enemigo
@@ -21,6 +21,7 @@ class Follower extends Enemy implements IVisualizable, IMovable{
     updateHitEffect(); // logica comun de impacto
     checkCollisionWithPlayer(player);
     limitarDentroPantalla(70);
+    this.collider.setPosicion(this.posicion);
   }
   
   /** Dibuj al enemigo */
@@ -32,8 +33,7 @@ class Follower extends Enemy implements IVisualizable, IMovable{
     imageMode(CENTER);
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     // dibuja el area de colision del enemigo
-    this.collider.display(#FF3E78);
-    this.collider.setPosicion(this.posicion);
+    //this.collider.display(#FF3E78);
 
     // Dibujar el contorno de la barra de vida
     noFill();

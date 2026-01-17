@@ -1,19 +1,20 @@
 class SubBoss extends Enemy implements IVisualizable, IMovable{
   private float velocidad;
   private PVector ultimaPosicionJugador;
-  private int tiempoEspera = 200; // El tiempo de espera del enemigo antes de comenzar a perseguir al jugador
+  private int tiempoEspera; // El tiempo de espera del enemigo antes de comenzar a perseguir al jugador
   private int tiempoEsperaActual = 0; // El tiempo actual de espera acumulado
   private boolean persiguiendoJugador = false; // Indica si el enemigo está actualmente persiguiendo al jugador
-  private ArrayList<Bomb> bombsList; // ArrayList que servirá para la creación de las bombas
+  private ArrayList<Bomb> bombsList; // ArrayList que servira para la creación de las bombas
   private PVector ultimaPosicionBomba; // La posición donde el sub-jefe dejó la última bomba
   private float distanciaBomba = 80; // La distancia que debe cumplir el sub-jefe para dejar otra bomba
   
   /* -- CONSTRUCTOR -- */
   public SubBoss(PVector posicion) {
-    super(posicion,10,color(255, 255, 255));
+    super(posicion,10,color(255, 255, 255),1);
     this.velocidad = 980;   
     this.ancho=22;
     this.alto=22;
+    this.tiempoEspera = (int) random(100,250);
     this.ultimaPosicionJugador = new PVector(0, 0);
     this.bombsList = new ArrayList<Bomb>();
     this.ultimaPosicionBomba = posicion.copy();//La posicion incial del sub-boss
@@ -35,7 +36,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
     imageMode(CENTER);
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     // dibuja la colision del boss
-    this.collider.display(#FFF63E);
+    //this.collider.display(#FFF63E);
     dibujarBarraVida(10, 50, 5, 35);
   }
   
@@ -48,7 +49,8 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
         tiempoEsperaActual = 0;//Reseteamos el contador
         persiguiendoJugador = true;
         ultimaPosicionJugador = player.getPosicion().copy();//Actualiza la ultima posicion obtenida del jugador
-      }else {
+        tiempoEspera = (int) random(100, 250);  
+    }else {
         movimientoOscilatorioY(); // levita mientras espera
       }
     }
@@ -91,11 +93,13 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
       bomba.display();
       // Verificar colisión con el jugador y aplicar daño
       if (bomba.checkCollisionWithPlayer(jugador)) {
-        bomba.explotar(jugador); // Aplica daño al jugador si colisiona
-      }
-      if (bomba.haExplotado) {
-        bombsList.remove(i);
-      }
+  bomba.explotar(jugador);
+}
+// eliminar bomba solo cuando su animacion termino
+if (bomba.animacionTerminada) {
+  bombsList.remove(i);
+}
+
     }
   }
 

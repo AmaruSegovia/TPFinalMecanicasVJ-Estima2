@@ -4,52 +4,65 @@ enum RoomType {
   TREASURE,
   SUBBOSS
 }
+
+class RoomVisual {
+  PImage background;
+
+  public RoomVisual(PImage background) {
+    this.background = background;
+  }
+  
+  public void render() {
+    imageMode(CORNER);
+    tint(255);
+    image(background, 0, 0, 900, 800);
+  }
+}
+
+class RoomVisualRegistry {
+  private Map<RoomType, RoomVisual> visuals = new HashMap<>();
+  private RoomVisual defaultVisual;
+
+  public void register(RoomType type, RoomVisual visual) {
+    visuals.put(type, visual);
+  }
+
+  public RoomVisual get(RoomType type) {
+    if (!visuals.containsKey(type)) {
+      println("⚠️ RoomVisual no registrado para: " + type);
+      return defaultVisual;
+    }
+    return visuals.get(type);
+  }
+}  
+
+
 /** Clase que representa las habitaciones de la dungeon */
-class Room extends GameObject {
-  /** Representa las posiciones de las puertas en binario */
-  private int doors;
+class Room {
   /** Representa la lista de puertas que tiene la habitacion*/
-  private Map<Direction, Door> doorsMap = new HashMap<>();
+  protected Map<Direction, Door> doorsMap = new HashMap<>();
   
   /** Representa el nombre de la habitacion */
-  private int nameRoom;
- 
-  /** Representa el fondo de la habitación */
-  private PImage background;
+  protected int nameRoom;
   
-  private RoomType type = RoomType.NORMAL; // por defecto normal
+  protected RoomType type = RoomType.NORMAL; // por defecto normal
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
-  public Room(int doors, int ancho, int alto, PVector posicion, int name) {
-    super(posicion, ancho, alto);
-    this.doors = doors;
+  public Room(int doors, int name) {
     this.nameRoom = name;
-    background = loadImage("bg.png");
-    generateDoors();
+    generateDoors(doors);
   }
 
   /* -- METODOS -- */
   /** Metodo que genera las puertas segun el numero de la matriz sus binarios */
-  public void generateDoors() {
+  public void generateDoors(int doors) {
     // Comprobacion AND bit a bit para saber si hay una puerta en X direccion
     // Se comparan los bits del valor de la matriz con otro para limpiar bits
-    if ((this.doors & 1) != 0) doorsMap.put(Direction.UP, new Door(Direction.UP));
-    if ((this.doors & 2) != 0) doorsMap.put(Direction.RIGHT, new Door(Direction.RIGHT));
-    if ((this.doors & 4) != 0) doorsMap.put(Direction.DOWN, new Door(Direction.DOWN));
-    if ((this.doors & 8) != 0) doorsMap.put(Direction.LEFT, new Door(Direction.LEFT));
-  }
-
-  /** Metodo que dibuja la room y las puertas */
-  public void display() {
-    noStroke();
-    imageMode(CORNER);
-    tint(255);
-    
-    image(background, 0, 0, 900, 800);
-    for (Door door : this.doorsMap.values()) {
-      if (door != null) door.display();
-    }
+    if ((doors & 1) != 0) doorsMap.put(Direction.UP, new Door(Direction.UP));
+    if ((doors & 2) != 0) doorsMap.put(Direction.RIGHT, new Door(Direction.RIGHT));
+    if ((doors & 4) != 0) doorsMap.put(Direction.DOWN, new Door(Direction.DOWN));
+    if ((doors & 8) != 0) doorsMap.put(Direction.LEFT, new Door(Direction.LEFT));
   }
 
   /** Metodo que devuelve si hay puertas en la habitacion*/
@@ -77,10 +90,10 @@ class Room extends GameObject {
     }
   }
   
-  /**Imprime cantidad de enemigos y puertas, depuracion **/
-  public void debugInfo() {
-    println("Room at " + posicion + " | Doors: " + doorsMap.size());
+  public void addDoor(Direction dir, Door door) {
+    doorsMap.put(dir, door);
   }
+
 
   /* -- ASESORES -- */
   
@@ -102,4 +115,42 @@ class Room extends GameObject {
   
   public void setType(RoomType type) { this.type = type; }
   public RoomType getType() { return type; }
+}
+
+class BossRoom extends Room {
+  private VictoryDoor victoryDoor;
+
+  public BossRoom(int doors, int name) {
+    super(doors, name);
+    setType(RoomType.BOSS);
+  }
+
+  
+  public void display() {
+    noStroke();
+    imageMode(CORNER);
+    tint(255);
+    image(background, 0, 0, 900, 800);
+
+    // Dibujar puerta de victoria si existe
+    if (victoryDoor != null) {
+      victoryDoor.display();
+    }
+  }
+
+  /** Crear la puerta de victoria en el centro */
+  public void spawnVictoryDoor() {
+    if (victoryDoor == null) {
+      victoryDoor = new VictoryDoor(new PVector(width/2, height/2));
+      addDoor(Direction.UP, victoryDoor); // usamos el metodo addDoor de Room
+    }
+  }
+
+  public boolean hasVictoryDoor() {
+    return victoryDoor != null;
+  }
+
+  public VictoryDoor getVictoryDoor() {
+    return victoryDoor;
+  }
 }

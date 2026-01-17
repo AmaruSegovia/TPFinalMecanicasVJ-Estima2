@@ -23,13 +23,15 @@ private class Bullet extends GameObject implements IVisualizable {
   protected float angulo;
   /* Representa el estado de la bala, si esta disparada o esta orbitando*/
   protected boolean disparada;
+  protected float damage;
   
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
-  public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed, BulletOwner owner){
+  public Bullet(PVector pos, int ancho, int alto, PVector direction, float speed, BulletOwner owner, float damage){
     super(pos, ancho, alto);
     this.pertenece = owner;
     this.direction = direction;
+    this.damage =damage;
     this.speed = speed;
     if(owner == BulletOwner.PLAYER){
       this.spritePlayer = new SpriteObject("playerBullet.png", ancho, alto, 3);
@@ -38,17 +40,6 @@ private class Bullet extends GameObject implements IVisualizable {
     }
     this.colisionador = new Colisionador(this.posicion, ancho*3); 
     this.disparada = true;
-  }
-
-  /** Constructor para balas con angulo para el enemigo */
-  public Bullet(PVector pos, float angulo){
-    super(pos, 8, 8);
-    this.pertenece = BulletOwner.ENEMY; 
-    this.angulo = angulo;
-    this.speed = 400;
-    this.spriteBoss = new SpriteObject("bossBullet1.png", ancho, alto, 3);
-    this.disparada = true;
-    this.colisionador = new Colisionador(this.posicion, ancho*3); 
   }
   
   /** Constructor para balas que orbitan para el enemigo */
@@ -72,18 +63,18 @@ private class Bullet extends GameObject implements IVisualizable {
     }else{      
       this.spriteBoss.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     }
-    colisionador.display(color(255,0,0));
+    //colisionador.display(color(255,0,0));
     
-    //  Dibujar línea de dirección
+    //  Dibujar linea de direcciion
     stroke(0, 255, 0); // verde
-    if (disparada && direction != null) {
-      stroke(0, 255, 0);
-      line(
-        posicion.x, posicion.y, 
-        posicion.x + direction.x * 50,
-        posicion.y + direction.y * 50
-      );
-    }
+    //if (disparada && direction != null) {
+    //  stroke(0, 255, 0);
+    //  line(
+    //    posicion.x, posicion.y, 
+    //    posicion.x + direction.x * 50,
+    //    posicion.y + direction.y * 50
+    //  );
+    //}
   }
   
   /** Metodo para mover las balas */
@@ -96,27 +87,22 @@ private class Bullet extends GameObject implements IVisualizable {
 
  public void moverAng() {
     
-    // Cálculo del movimiento en ángulo
+    // Calculo del movimiento en angulo
     PVector moveVector = PVector.fromAngle(angulo).mult(speed).mult(Time.getDeltaTime(frameRate));
     
-    // Añadir oscilación sinusoidal al movimiento
-    float amplitude = 2; // Amplitud de la oscilación
-    float frequency = 0.5; // Frecuencia de la oscilación
+    // Añadir oscilacion sinusoidal al movimiento
+    float amplitude = 2; // Amplitud de la oscilacion
+    float frequency = 0.5; // Frecuencia de la oscilacion
     float oscillation = amplitude * sin(frequency * (millis() / 1000.0));
     
-    // Ajustar el movimiento según la oscilación
+    // Ajustar el movimiento segun la oscilación
     PVector oscillationVector = new PVector(oscillation * cos(angulo + HALF_PI), oscillation * sin(angulo + HALF_PI));
     moveVector.add(oscillationVector);
     
-    // Actualizar la posición de la bala
+    // Actualizar la posicion de la bala
     this.posicion.add(moveVector);
     this.colisionador.setPosicion(this.posicion);
 
-    
-    // Verificar colisión con el jugador
-    //if (colisionador.isCircle(jugador.collider) && !jugador.isHit) {
-    //    jugador.reducirVida();
-    //}
 }
   public boolean balaFuera() {
     return posicion.x < 0 || posicion.x > width || posicion.y < 0 || posicion.y > height;

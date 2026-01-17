@@ -14,6 +14,9 @@ public class PlayingState implements GameState {
   private RoomRenderer renderer;
   private BulletFactory bulletFactory;
   private CaminanteAleatorio walker; 
+  private GameAssets assets;
+  
+  private MiniMap miniMap;
   
   // Constructor, recibe el gestor de audio y entradas
   public PlayingState(AudioManager audio, InputManager input) {
@@ -23,16 +26,22 @@ public class PlayingState implements GameState {
     // Crear la matriz y el caminante
     this.walker = new CaminanteAleatorio(dungeon);
     
+    // Cargar assets
+    assets = new GameAssets();
+    assets.load();
+    
     PVector bossPos = walker.getCurrentPos();
-    Room bossRoom = dungeon.getRoom((int)bossPos.x, (int)bossPos.y);
-    bossRoom.setType(RoomType.BOSS);   // ahora esta room es la del jefe
+    
+    dungeon.generateRooms(dungeon.getMatriz(), bossPos);
     
     println("El jefe aparecerá en fila " + bossPos.y + " , columna " + bossPos.x);
     
     
-    this.renderer = new RoomRenderer(dungeon, new GestorBullets());
+    this.renderer = new RoomRenderer(dungeon, new GestorBullets(), assets.getRoomVisuals());
     this.jugador = new Player(new PVector(width/2, height/2),walker.getStartPos());
     this.bulletFactory = new BulletFactory();
+    
+    this.miniMap = new MiniMap( dungeon); // Crear el mini-mapa
   }
   /* inicializa al entrar al juego */
   public void onEnter() {
@@ -43,25 +52,26 @@ public class PlayingState implements GameState {
   void update() {
     jugador.mover(input);
     jugador.shoot(renderer.getBullets(), input, bulletFactory);
+    jugador.updateAnimation(input);
+    
     renderer.render(jugador,walker);
     jugador.display();
-    //if (jugadorGana()) changeState(victoria);
+    
+    miniMap.display(jugador);
+    
      if (jugadorPierde()) changeState(derrota);
     
     // ************************   DEPURADOR
     fill(255);
     textSize(20);
-    text("Balas: " + renderer.getBullets().getBulletCount(), 150, 30);
+    //text("vida: " + jugador.getLives(), 150, 30);
   }
   
   /* reconociendo inputs */
-  void handleInput(char key) { 
-    if (key == ENTER) 
-      changeState(victoria);
-    if (keyCode == UP) 
-      changeState(creditos);
-    if (keyCode == DOWN) 
-      changeState(derrota);
+  void handleInput(char key) {
+    if (key == 'r' || key == 'R' ) 
+      changeState(new PlayingState(audio, input));
+  
   }
   
   //boolean jugadorGana() {
@@ -110,7 +120,7 @@ public class MenuState implements GameState {
   /* reconociendo inputs */
   void handleInput(char key) {
     if (key == ENTER) 
-      changeState(jugando);
+      changeState(new PlayingState(audio, input));
   }
 }
 
@@ -144,7 +154,7 @@ public class VictoryState implements GameState {
   /* reconociendo inputs */
   void handleInput(char key) {
     if (key == ENTER) {
-      changeState(menu); 
+      changeState(creditos); 
     }
   }
 }

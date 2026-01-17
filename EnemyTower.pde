@@ -5,7 +5,7 @@ class Tower extends Enemy implements IVisualizable, IShooter{
 
   /* -- CONSTRUCTOR -- */
   public Tower(PVector posicion) {
-    super(posicion, 1, color(255, 255, 255));
+    super(posicion, 5, color(255, 255, 255),1);
     this.ancho = 22;
     this.alto = 22;
     this.fireRate = 0.8f;
@@ -58,7 +58,8 @@ class Tower extends Enemy implements IVisualizable, IShooter{
                 8, 8,
                 vectorDireccion,
                 300,
-                BulletOwner.ENEMY
+                BulletOwner.ENEMY, 
+                this.damage
             );
 
             gestorBalas.addBullet(nuevaBala); // agregar al gestor

@@ -2,7 +2,7 @@
 class Dungeon {
 
   private int nivel;
-  private int cols, rows; // Número de columnas y filas en la matriz de habitaciones
+  private int cols, rows; // Numero de columnas y filas en la matriz de habitaciones
   
   private int[][] matriz;
   private Room[][] rooms; // Matriz de las habitaciones que hay en la dungeon
@@ -20,7 +20,7 @@ class Dungeon {
     
     this.matriz = new int[this.rows][this.cols];
     this.matriz = startDungeon();
-    this.rooms = new Room[this.rows][this.cols];  // Inicialización de las dimenciones de la matriz de habitaciones
+    this.rooms = new Room[this.rows][this.cols];
     
   }
 
@@ -37,15 +37,23 @@ class Dungeon {
   }
 
   /** Metodo que genera las habitaciones */
-  public void generateRooms(int[][] matriz) {
+  public void generateRooms(int[][] matriz, PVector bossPos) {
     int cont = 0;
     for (int i = 0; i < this.rows; i++) {
-      for (int j = 0; j < this.cols; j++) {
-        this.rooms[i][j] = new Room(matriz[i][j], width+1, height+1, new PVector(0, 0),cont);
-        cont++;
-      }
+        for (int j = 0; j < this.cols; j++) {
+            PVector pos = new PVector(j, i);
+            // Si esta celda es la del boss, crear BossRoom
+            if (bossPos != null && pos.equals(bossPos)) {
+                this.rooms[i][j] = new BossRoom(matriz[i][j], cont);
+            } else {
+                // En cualquier otro caso, crear Room normal
+                this.rooms[i][j] = new Room(matriz[i][j], cont);
+            }
+            cont++;
+        }
     }
   }
+
 
   /** Metodo que devuelve el objeto habitacion */
   public Room getRoom(int col, int row) {
@@ -118,6 +126,10 @@ class Dungeon {
   public void combineValue(int y, int x, int newValue) {
     this.matriz[y][x] |= newValue; // Usa el operador OR bit a bit para comparar entre el valor que tenia el indice y el nuevo valor
   }
+  public boolean isValid(int col, int row) {
+  return col >= 0 && col < cols && row >= 0 && row < rows;
+}
+
   
   /* -- ASESORES -- */
   /* Getters */

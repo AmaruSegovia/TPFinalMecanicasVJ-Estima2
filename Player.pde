@@ -12,13 +12,17 @@ class Player extends GameObject implements IVisualizable {
   /** Representa el ultimo disparo */
   private long lastShotTime = 0;       
   /** Representa el tiempo minimo entre cada disparo */
-  private int shootCooldown = 310; 
+  private int shootCooldown = 310;
+  
+  private float damage;
   
   /** Representa el sprite del jugador */
   private SpriteObject sprite;
   /** Representa el estado de la animación del sprite del jugador */
   private int animationState;
   private Colisionador collider;
+  private Direction lastDirection = Direction.RIGHT;
+
   
   private int lives;
   private int maxLives;
@@ -34,6 +38,7 @@ class Player extends GameObject implements IVisualizable {
     this.ancho = 20;
     this.speed = 0;
     this.topSpeed = 250;
+    this.damage = 1;
     this.sprite = new SpriteObject("mage.png", ancho, alto, 4);
     this.animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA;
     this.direccion = new Vector(posicion, Direction.DOWN); // Vector inicial hacia abajo
@@ -63,7 +68,7 @@ class Player extends GameObject implements IVisualizable {
     textSize(20);
     fill(255);
     dibujarBarraVida(50, 5, 35);
-    collider.display(255);
+    //collider.display(255);
   }
 
   /** Metodo que mueve al jugador */
@@ -94,13 +99,53 @@ class Player extends GameObject implements IVisualizable {
     this.posicion.add(direccion.getDestino().copy().mult(speed * Time.getDeltaTime(frameRate)));
 
     // Limitar el movimiento dentro de la pantalla
-    posicion.x = constrain(posicion.x, ancho * 2, width - ancho * 2);
-    posicion.y = constrain(posicion.y, alto * 2, height - alto * 2);
+    posicion.x = constrain(posicion.x, ancho * 2 + 40, width - ancho * 2 - 40);
+    posicion.y = constrain(posicion.y, alto * 2 + 40, height - alto * 2- 40);
     
     //Actualizando la posición del collider
     collider.setPosicion(posicion);
     
   }// end mover
+  
+  public void updateAnimation(InputManager input) {
+    // Movimiento
+    if (input.isMoving()) {
+        // Tomar la última direccion activa
+        for (Direction dir : input.getActiveDirections()) {
+            lastDirection = dir; // actualizar  direccion
+        }
+
+        switch (lastDirection) {
+            case RIGHT: animationState = MaquinaEstadosAnimacion.MOV_DERECHA; break;
+            case LEFT:  animationState = MaquinaEstadosAnimacion.MOV_IZQUIERDA; break;
+            case UP:    animationState = MaquinaEstadosAnimacion.MOV_DERECHA; break; 
+            case DOWN:  animationState = MaquinaEstadosAnimacion.MOV_IZQUIERDA; break; 
+        }
+    } else {
+        // Idle segun direccion
+        switch (lastDirection) {
+            case RIGHT: animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA; break;
+            case LEFT:  animationState = MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA; break;
+            case UP:    animationState = MaquinaEstadosAnimacion.ESTATICO_DERECHA; break; 
+            case DOWN:  animationState = MaquinaEstadosAnimacion.ESTATICO_IZQUIERDA; break; 
+        }
+    }
+
+    // Disparo
+    if (input.isShooting()) {
+        Direction shootDir = input.getShootDirection();
+        if (shootDir != null) {
+            lastDirection = shootDir; // actualizar hacia donde disparo
+        }
+
+        switch (lastDirection) {
+            case RIGHT: animationState = MaquinaEstadosAnimacion.ATAQUE_DERECHA; break;
+            case LEFT:  animationState = MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA; break;
+            case UP:    animationState = MaquinaEstadosAnimacion.ATAQUE_DERECHA; break; 
+            case DOWN:  animationState = MaquinaEstadosAnimacion.ATAQUE_IZQUIERDA; break; 
+        }
+    }
+  }
 
   
   public Door checkCollision(Room roomActual) {
@@ -127,7 +172,7 @@ class Player extends GameObject implements IVisualizable {
       long now = millis();
       if (now - lastShotTime >= shootCooldown) {
         // Usar la fábrica para crear la bala del jugador
-        Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection());
+        Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection(), this.damage);
         gestor.addBullet(b);
         lastShotTime = now;
       }
@@ -187,6 +232,7 @@ class Player extends GameObject implements IVisualizable {
   }
   
   public PVector getCurrentPos(){ return new PVector(this.col, this.row); }
+  public float getDamage() {  return this.damage; }
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
@@ -199,5 +245,7 @@ class Player extends GameObject implements IVisualizable {
   public void setAnimationState(int animationState) {  this.animationState = animationState;  }
   
   public void setLives(int lives) {  this.lives = lives;  }
+  
+  public void setDamage(float damage) {  this.damage = damage;  }
 
 }
