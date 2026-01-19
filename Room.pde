@@ -41,11 +41,15 @@ class RoomVisualRegistry {
 class Room {
   /** Representa la lista de puertas que tiene la habitacion*/
   protected Map<Direction, Door> doorsMap = new HashMap<>();
+  /** Representa la lista de recolectables en la habitacion */
+  ArrayList<Collectible> collectibles = new ArrayList<Collectible>();
   
   /** Representa el nombre de la habitacion */
   protected int nameRoom;
   
   protected RoomType type = RoomType.NORMAL; // por defecto normal
+  
+  private boolean lootSpawned = false;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
@@ -93,7 +97,25 @@ class Room {
   public void addDoor(Direction dir, Door door) {
     doorsMap.put(dir, door);
   }
+  
+  public boolean hasLootSpawned() {
+    return lootSpawned;
+  }
 
+  public void markLootSpawned() {
+    lootSpawned = true;
+  }
+  
+  public void addCollectible(Collectible c) {
+    collectibles.add(c);
+  }
+
+  public ArrayList<Collectible> getCollectibles() {
+    return collectibles;
+  }
+  public PVector getCenterPosition() {
+    return new PVector(width / 2, height / 2);
+  }
 
   /* -- ASESORES -- */
   

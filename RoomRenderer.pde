@@ -3,10 +3,12 @@ class RoomRenderer {
   private GestorEnemigos gestorEnemigos;
   private GestorBullets bullets;
   private RoomVisualRegistry roomVisuals;
+  private RoomEnemySpawner spawner;
 
   public RoomRenderer(Dungeon dungeon, GestorBullets bullets, RoomVisualRegistry roomVisuals) {
     this.dungeon = dungeon;
-    this.gestorEnemigos = new GestorEnemigos(dungeon.getRows() * dungeon.getCols()) ;
+    this.gestorEnemigos = new GestorEnemigos() ;
+    this.spawner = new RoomEnemySpawner(dungeon.getRows() * dungeon.getCols());
     this.bullets = bullets;
     this.roomVisuals = roomVisuals;
   }
@@ -26,7 +28,7 @@ class RoomRenderer {
     Room roomInicial = dungeon.getRoom((int)startPos.x, (int)startPos.y);
     Room subRoom = dungeon.getRoom((int)subPos.x, (int)subPos.y);
     subRoom.setType(RoomType.SUBBOSS);
-    gestorEnemigos.enemigosGenerados[roomInicial.getNameRoom()] = true;
+    spawner.enemigosGenerados[roomInicial.getNameRoom()] = true;
 
 
     if (roomActual == roomInicial) {
@@ -59,7 +61,7 @@ class RoomRenderer {
         }
           player.updatePosition(newCol, newRow, entryPos);
           //Genera cuando el player toca la puerta
-          gestorEnemigos.createEnemies(nextRoom);
+          spawner.spawnForRoom(nextRoom, gestorEnemigos);
           bullets.clearBullets();
       }
     }

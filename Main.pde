@@ -80,7 +80,6 @@ int BASE_MIN_ROOMS = 6;
 int BASE_MAX_ROOMS = 8;
 
 void prepareDungeonValues() {
-
   float baseSize = random(4, 8);
 
   // crecimiento suave por nivel
@@ -91,9 +90,6 @@ void prepareDungeonValues() {
 
   // tamaño final
   int size = int(baseSize * levelMultiplier);
-
-  // limites
-  size = constrain(size, 4, 16);
 
   cols = size;
   rows = size;

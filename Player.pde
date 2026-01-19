@@ -79,7 +79,7 @@ class Player extends GameObject implements IVisualizable {
     this.direccion.setOrigen(this.posicion.copy());
 
     float acceleration = 60*difficulty.playerSpeed;
-    float deceleration = 10*difficulty.playerSpeed;
+    float deceleration = 20;
 
     // Operador ternario para acelerar o desacelerar segun si se apreta una tecla
     speed = input.isMoving() ? speed + acceleration : speed - deceleration;
