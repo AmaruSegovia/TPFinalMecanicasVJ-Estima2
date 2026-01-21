@@ -47,7 +47,7 @@ class CollectibleFactory {
 class BootsCollectible extends Collectible {
 
   public BootsCollectible(PVector pos) {
-    super(pos, 20);
+    super(pos);
   }
 
   void onPickUp(Player p) {
@@ -63,7 +63,7 @@ class BootsCollectible extends Collectible {
 class HeartCollectible extends Collectible {
 
   public HeartCollectible(PVector pos) {
-    super(pos, 20);
+    super(pos);
   }
 
   void onPickUp(Player p) {

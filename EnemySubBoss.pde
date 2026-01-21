@@ -69,7 +69,7 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
       }
     }
     if (collider.colisionaCon(player.getCollider()) && !player.getIsHit()) {
-      player.reducirVida();
+      player.receiveDamage();
     }
 
     creacionEliminacionBombas(player);

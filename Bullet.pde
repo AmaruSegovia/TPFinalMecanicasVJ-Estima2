@@ -116,7 +116,7 @@ private class Bullet extends GameObject implements IVisualizable {
   public boolean verificarColision(Enemy enemigo) {
     // Verifica que el enemigo no sea el propietario de la bala
     if (this.pertenece == BulletOwner.PLAYER && colisionador.colisionaCon(enemigo.getCollider())) {
-      enemigo.reducirVida();
+      enemigo.receiveDamage();
       return true;
     }
     return false;

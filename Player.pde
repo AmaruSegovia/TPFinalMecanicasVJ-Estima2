@@ -60,11 +60,14 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
   /* -- METODOS -- */
   /** Metodo que dibuja al jugador en pantalla */
   public void display() {
-     if (isHit && millis() - hitTime < hitDuration) {
+    if (isHit && millis() - hitTime >= hitDuration) {
+      isHit = false;
+    }
+
+     if (isHit) {
       tint(255, 0, 0); // el jugador se torna rojo cuando está en estado de impacto
     } else {
       tint(255);
-      isHit = false; // restablecer la bandera
     }
     stroke(0);
     fill(200, 30);
@@ -203,11 +206,16 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
   }
 
   
-  public void reducirVida() {
-    this.lives --;
-    this.isHit = true; // establecer bandera de impacto
-    this.hitTime = millis(); // iniciar temporizador
+  public void receiveDamage() {
+    if (isHit) return;
+  
+    lives --;
+    lives = max(0, lives);
+  
+    isHit = true; // establecer bandera de impacto
+    hitTime = millis(); // iniciar temporizador
   }
+  
 
    /* Getters */
   /** Devuelve la velocidad maxima del jugador */

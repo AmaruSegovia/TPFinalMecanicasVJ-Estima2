@@ -30,7 +30,7 @@ public class Bomb extends GameObject implements IVisualizable {
         collider.setAncho((int)radioActual * 2);
 
         if (collider.colisionaCon(objetivo.getCollider()) && !objetivo.getIsHit()) {
-          objetivo.reducirVida();
+          objetivo.receiveDamage();
           activarAnimacion();
         }
       } else {
@@ -62,14 +62,14 @@ public class Bomb extends GameObject implements IVisualizable {
 
   public void explotar(Player jugador) {
     if (collider.colisionaCon(jugador.collider) && !jugador.isHit) {
-      jugador.reducirVida();
+      jugador.receiveDamage();
       activarAnimacion();
     }
   }
 
   public boolean checkCollisionWithPlayer(Player jugador) {
     if (collider.colisionaCon(jugador.collider) && !jugador.isHit) {
-      jugador.reducirVida();
+      jugador.receiveDamage();
       activarAnimacion();
       return true;
     }

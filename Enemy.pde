@@ -21,7 +21,7 @@ public abstract class Enemy extends GameObject {
     this.collider = new Colisionador(this.posicion, this.ancho-10);
   }
 
-  public void reducirVida() {   
+  public void receiveDamage() {   
     this.lives--;
     this.isHit = true; // establecer bandera de impacto
     this.hitTime = millis(); // iniciar temporizador
@@ -45,7 +45,7 @@ public abstract class Enemy extends GameObject {
   
    public void checkCollisionWithPlayer(Player player) {
     if (  collider.colisionaCon(player.collider) && !player.isHit) {
-      player.reducirVida();
+      player.receiveDamage();
     }
   }
   
