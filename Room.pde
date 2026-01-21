@@ -87,6 +87,18 @@ class Room {
     }
   }
   
+  
+  public void checkColectable(Player p) {
+    for (int i = collectibles.size()-1; i >= 0; i--) {
+      Collectible c = collectibles.get(i);
+      c.update(p);
+
+      if (c.isPicked()) {
+        collectibles.remove(i);
+      }
+    }
+  }
+  
   /** Metodo que cierra o abre las puertas */
   public void stateDoors(boolean state) {
     for (Door door : doorsMap.values()) {
@@ -159,6 +171,7 @@ class BossRoom extends Room {
       victoryDoor.display();
     }
   }
+  
 
   /** Crear la puerta de victoria en el centro */
   public void spawnVictoryDoor() {

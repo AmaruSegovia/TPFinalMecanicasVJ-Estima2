@@ -32,7 +32,7 @@ class MiniMap {
 
   // Estado
   private boolean[][] visited;
-  private boolean[][] discovered; //<>//
+  private boolean[][] discovered; //<>// //<>//
 
   public MiniMap(Dungeon matrix) {
     this.dungeon = matrix;

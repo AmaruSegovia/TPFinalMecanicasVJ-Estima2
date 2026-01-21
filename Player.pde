@@ -1,5 +1,5 @@
 /** Clase que representa al jugador */
-class Player extends GameObject implements IVisualizable {
+class Player extends GameObject implements IVisualizable, EffectTarget {
   /** Representa la velocidad y maxima velocidad del jugador */
   private float speed,  topSpeed;
   /** Representa la direccion de movimiento del jugador */
@@ -22,6 +22,8 @@ class Player extends GameObject implements IVisualizable {
   private int animationState;
   private Colisionador collider;
   private Direction lastDirection = Direction.RIGHT;
+  
+  private EffectManager effectManager;
 
   
   private int lives;
@@ -51,6 +53,8 @@ class Player extends GameObject implements IVisualizable {
     // Inicializar posición en la dungeon para no crashear
     this.col = int(startPos.x);
     this.row = int(startPos.y);
+    
+    effectManager = new EffectManager(this);
   }
 
   /* -- METODOS -- */
@@ -233,6 +237,8 @@ class Player extends GameObject implements IVisualizable {
   public boolean getIsHit(){
     return this.isHit;
   }
+  
+  public EffectManager getEffectManager() { return effectManager; }
   
   public PVector getCurrentPos(){ return new PVector(this.col, this.row); }
   public float getDamage() {  return this.damage; }

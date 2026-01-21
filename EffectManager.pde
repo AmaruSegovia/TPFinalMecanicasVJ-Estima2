@@ -1,24 +1,24 @@
 class EffectManager {
 
-  ArrayList<Effect> effects = new ArrayList<Effect>();
-  Player player;
+  private ArrayList<Effect> effects = new ArrayList<>();
+  private EffectTarget target;
 
-  public EffectManager(Player player) {
-    this.player = player;
+  public EffectManager(EffectTarget target) {
+    this.target = target;
   }
 
   public void addEffect(Effect e) {
-    e.apply(player);
+    e.apply(target);
     effects.add(e);
   }
 
-  public void update() {
-    for (int i = effects.size() - 1; i >= 0; i--) {
+  public void update(float delta) {
+    for (int i = effects.size()-1; i >= 0; i--) {
       Effect e = effects.get(i);
-      e.update();
+      e.update(delta);
 
       if (e.isExpired()) {
-        e.remove(player);
+        e.remove(target);
         effects.remove(i);
       }
     }

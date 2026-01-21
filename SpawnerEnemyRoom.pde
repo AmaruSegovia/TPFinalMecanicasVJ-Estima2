@@ -2,7 +2,7 @@
 class RoomEnemySpawner {
   private boolean[] enemigosGenerados;
   private ArrayList<PatronEnemigo> patrones;
-  private int maxEnemigos = 2;
+  private int maxEnemigos = (int)random(1,3);
 
   public RoomEnemySpawner(int totalRooms) {
     enemigosGenerados = new boolean[totalRooms];

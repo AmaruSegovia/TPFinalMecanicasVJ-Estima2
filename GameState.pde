@@ -15,8 +15,6 @@ public class PlayingState implements GameState {
   private BulletFactory bulletFactory;
   private CaminanteAleatorio walker; 
   private GameAssets assets;
-  private EffectManager effectManager;
-  private ArrayList<Collectible> collectibles;
 
   
   private MiniMap miniMap;
@@ -49,16 +47,6 @@ public class PlayingState implements GameState {
   /* inicializa al entrar al juego */
   public void onEnter() {
     this.audio.playJuego();
-    this.effectManager = new EffectManager(jugador);
-    this.collectibles = new ArrayList<Collectible>();
-    
-    collectibles.add(
-      new SpeedCollectible(
-        new PVector(width/2, height/2)
-      )
-    );
-
-
   }
   
   /* Dibujando la pantalla */
@@ -67,17 +55,10 @@ public class PlayingState implements GameState {
     jugador.shoot(renderer.getBullets(), input, bulletFactory);
     jugador.updateAnimation(input);
     
-    effectManager.update();
     
     renderer.render(jugador,walker);
     jugador.display();
-    
-    // Dibujar recolectables
-    for (Collectible c : collectibles) {
-      c.display();
-    }
-
-    checkCollectibles();
+    //effectManager.update();
     
     miniMap.display(jugador);
     
@@ -88,17 +69,6 @@ public class PlayingState implements GameState {
     textSize(20);
     //text("vida: " + jugador.getLives(), 150, 30);
   }
-  void checkCollectibles() {
-    for (int i = collectibles.size() - 1; i >= 0; i--) {
-      Collectible c = collectibles.get(i);
-  
-      if (c.checkCollision(jugador)) {
-        c.onPickUp(jugador, effectManager);
-        collectibles.remove(i);
-      }
-    }
-  }
-
   
   /* reconociendo inputs */
   void handleInput(char key) {

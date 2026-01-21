@@ -1,52 +1,77 @@
 abstract class Collectible extends GameObject {
-  int size = 20;
+  
+
+  protected Colisionador collider;
+  protected boolean picked = false;
 
   public Collectible(PVector pos) {
     super(pos, 20, 20);
+    collider = new Colisionador(pos, 20);
   }
 
-  public void display() {
-    fill(255, 215, 0);
-    rect(posicion.x, posicion.y, ancho, alto);
+  public void update(Player p) {
+    collider.display(0);
+    collider.setPosicion(posicion);
+
+    if (!picked && collider.colisionaCon(p.getCollider())) {
+      onPickUp(p);
+      picked = true;
+    }
   }
 
-  public boolean checkCollision(Player p) {
-    return dist(
-      posicion.x, posicion.y,
-      p.getPosicion().x, p.getPosicion().y
-    ) < 20;
+  public boolean isPicked() {
+    return picked;
   }
 
-  abstract void onPickUp(Player p, EffectManager manager);
+  abstract void onPickUp(Player p);
+  abstract void display();
+}
+
+
+class CollectibleFactory {
+
+  Collectible randomTreasure(PVector pos) {
+    float r = random(1);
+
+    if (r < 0.3) return new HeartCollectible(pos);
+     return new BootsCollectible(pos);
+  }
+
+  Collectible randomBossDrop(PVector pos) {
+    return new BootsCollectible(pos);
+  }
 }
 
 
 //------------------ :0 -----------------------
-//class ExtraLife extends Collectible {
+class BootsCollectible extends Collectible {
 
-//  public ExtraLife(PVector pos) {
-//    super(pos, 20, true, 0);
-//  }
-
-//  public void apply(Player player) {
-//    player.addLife(2);
-//  }
-//}
-
-class SpeedCollectible extends Collectible {
-
-  public SpeedCollectible(PVector pos) {
-    super(pos);
+  public BootsCollectible(PVector pos) {
+    super(pos, 20);
   }
 
-  void onPickUp(Player p, EffectManager manager) {
-    manager.addEffect(
-      new SpeedBoostEffect(600, 80) // 600 frames ≈ 10 seg
-    );
+  void onPickUp(Player p) {
+    p.setTopSpeed(p.getTopSpeed() + 20);
+    p.setLives(p.getLives() + 1);
   }
 
-  public void display() {
+  void display() {
     fill(0, 200, 255);
-    ellipse(posicion.x, posicion.y, 20, 20);
+    rect(posicion.x, posicion.y, ancho, alto);
+  }
+}
+class HeartCollectible extends Collectible {
+
+  public HeartCollectible(PVector pos) {
+    super(pos, 20);
+  }
+
+  void onPickUp(Player p) {
+    p.setLives(p.getLives() + 1);
+  }
+
+  void display() {
+    fill(255, 0, 0);
+    ellipse(posicion.x, posicion.y, ancho, alto);
   }
 }

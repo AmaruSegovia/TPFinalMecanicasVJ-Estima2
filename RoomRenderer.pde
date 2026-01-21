@@ -4,6 +4,8 @@ class RoomRenderer {
   private GestorBullets bullets;
   private RoomVisualRegistry roomVisuals;
   private RoomEnemySpawner spawner;
+  
+  CollectibleFactory factory = new CollectibleFactory();
 
   public RoomRenderer(Dungeon dungeon, GestorBullets bullets, RoomVisualRegistry roomVisuals) {
     this.dungeon = dungeon;
@@ -18,6 +20,7 @@ class RoomRenderer {
     if (roomActual == null) return;
     
     roomVisuals.get(roomActual.getType()).render();
+    roomActual.checkColectable(player);
     for (Door door : roomActual.getAllDoors()) {
       door.display();
     }
@@ -33,6 +36,22 @@ class RoomRenderer {
 
     if (roomActual == roomInicial) {
       mostrarTutorial();
+    }
+    
+    if (
+      roomActual.getType() == RoomType.SUBBOSS &&
+      !gestorEnemigos.hayEnemigos() &&
+      !roomActual.hasLootSpawned()
+    ) {
+      roomActual.markLootSpawned();
+      Collectible drop = factory.randomTreasure(
+        roomActual.getCenterPosition()
+      );
+    
+      if (drop != null) {
+        roomActual.addCollectible(drop);
+      }
+    
     }
     
     Door door = player.checkCollision(roomActual);

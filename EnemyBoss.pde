@@ -1,4 +1,4 @@
-class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
+class Boss extends Enemy implements IVisualizable, IShooter{ //<>// //<>//
   private Direction dirX; 
   private boolean embistiendo = false;
   private boolean inCenter = true;
@@ -173,7 +173,7 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
   }
   /* =========================
      DETECCION DEL JUGADOR
-  ========================== */ //<>//
+  ========================== */ //<>// //<>//
   public void detectarPlayer(Player player) {
     //area de deteccion dibujada
     if (player.getPosicion().y < 160) {
