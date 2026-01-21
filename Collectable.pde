@@ -1,6 +1,4 @@
 abstract class Collectible extends GameObject {
-  
-
   protected Colisionador collider;
   protected boolean picked = false;
 
@@ -29,12 +27,11 @@ abstract class Collectible extends GameObject {
 
 
 class CollectibleFactory {
-
   Collectible randomTreasure(PVector pos) {
     float r = random(1);
 
-    if (r < 0.8) return new EnemyLifeRevealCollectible(pos);
-    if (r < 0.9) return new HeartCollectible(pos);
+    if (r < 0.2) return new EnemyLifeRevealCollectible(pos);
+    if (r < 0.5) return new HeartCollectible(pos);
     return new BootsCollectible(pos);
   }
 }
