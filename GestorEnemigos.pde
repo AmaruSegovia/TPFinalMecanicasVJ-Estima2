@@ -2,6 +2,7 @@
 class GestorEnemigos {
   /** Representa a los enemigos x room */
   private ArrayList<Enemy> enemies = new ArrayList<>();
+  private LifeBar enemyBar = new LifeBar(40, 5, 30);
 
   /* -- CONSTRUCTOR -- */
   public GestorEnemigos() {
@@ -12,20 +13,6 @@ class GestorEnemigos {
   public void spawn(ArrayList<Enemy> nuevos) {
     enemies.clear();
     enemies.addAll(nuevos);
-  }
-
-  public void update(Player jugador, GestorBullets gestorBalas) {
-    for (Enemy e : enemies) {
-      e.update(jugador, this);
-
-      if (e instanceof IShooter) {
-        ((IShooter)e).shoot(jugador, gestorBalas);
-      }
-
-      e.display();
-    }
-
-    enemies.removeIf(Enemy::isDead);
   }
 
   public void clear() {
@@ -49,6 +36,8 @@ class GestorEnemigos {
         ((IShooter)e).shoot(jugador, gestorBalas);
       }
       e.display();
+      if (jugador.canSeeEnemyLife() && !(e instanceof Boss))
+        enemyBar.draw( e.getPosicion(), e.getLives(), e.getMaxLives());
     }
 
     // Eliminar los que murieron
@@ -73,5 +62,4 @@ class GestorEnemigos {
   public void removeEnemies() {
     this.enemies.clear(); // Eliminar los enemigos de la lista
   }
-  
 }

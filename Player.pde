@@ -1,3 +1,12 @@
+/** Clase que representa los stats del jugador*/
+// No implementada aun
+class PlayerStats {
+  float topSpeed = 250;
+  float damage = 1;
+  int maxLives = 6;
+}
+
+
 /** Clase que representa al jugador */
 class Player extends GameObject implements IVisualizable, EffectTarget {
   /** Representa la velocidad y maxima velocidad del jugador */
@@ -24,7 +33,9 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
   private Direction lastDirection = Direction.RIGHT;
   
   private EffectManager effectManager;
-
+  private LifeBar lifeBar;
+  
+  private boolean canSeeLifeEnemy = false;
   
   private int lives;
   private int maxLives;
@@ -55,6 +66,7 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
     this.row = int(startPos.y);
     
     effectManager = new EffectManager(this);
+    lifeBar = new LifeBar(50, 5, 35);
   }
 
   /* -- METODOS -- */
@@ -74,7 +86,7 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
     this.sprite.render(this.animationState, this.posicion.copy());
     textSize(20);
     fill(255);
-    dibujarBarraVida(50, 5, 35);
+    lifeBar.draw(posicion, lives, maxLives);
     text("vidas: " + lives, 100, 100);
     text("vel: " + speed, 100, 150);
 
@@ -189,23 +201,6 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
     }
   }
   
-  public void dibujarBarraVida(float barraAncho, float barraAlto, float offsetY) {
-    float porcentaje = (float) lives / maxLives;   // proporción de vida
-    float anchoActual = porcentaje * barraAncho;   // ancho proporcional
-
-    // Interpolación lineal del color de verde (vida completa) a rojo (sin vida)
-    float r = map(lives, 0, maxLives, 255, 0);
-    float g = map(lives, 0, maxLives, 0, 255);
-    fill(r, g, 0);
-
-    rect(posicion.x - barraAncho / 2, posicion.y - offsetY, anchoActual, barraAlto);
-
-    noFill();
-    stroke(0);
-    rect(posicion.x - barraAncho / 2, posicion.y - offsetY, barraAncho, barraAlto);
-  }
-
-  
   public void receiveDamage() {
     if (isHit) return;
   
@@ -216,6 +211,14 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
     hitTime = millis(); // iniciar temporizador
   }
   
+  public boolean canSeeEnemyLife() {
+    return canSeeLifeEnemy;
+  }
+
+  public void enableEnemyLifeReveal() {
+    this.canSeeLifeEnemy = true;
+     println("Enemy life reveal ACTIVADO");
+  }
 
    /* Getters */
   /** Devuelve la velocidad maxima del jugador */
@@ -249,7 +252,7 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
   public EffectManager getEffectManager() { return effectManager; }
   
   public PVector getCurrentPos(){ return new PVector(this.col, this.row); }
-  public float getDamage() {  return this.damage; }
+  public float getDamage() {  return this.damage; } 
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */

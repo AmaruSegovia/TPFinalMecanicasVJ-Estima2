@@ -45,8 +45,7 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, this.posicion.copy());
     
     updateHitEffect();
-    dibujarBarraVida();
-    //this.collider.display(#FF3E78);
+    lifeBar.drawBoss(this.lives, this.maxLives);
   }
 
   private void moverHorizontal() {
@@ -211,25 +210,6 @@ class Boss extends Enemy implements IVisualizable, IShooter{ //<>//
 
   private void resetSpeed() {
     this.topSpeed = random(100, 200);
-  }
-  
-  private void dibujarBarraVida() {
-    float margen = 50; // margen en ambos extremos de la pantalla
-    float barraAncho = width - 2 * margen; // ancho total de la barra
-    float barraAlto = 20; // alto de la barra
-    float vidasMaximas = 60; // número máximo de vidas
-    float anchoActual = (lives / vidasMaximas) * barraAncho; // ancho actual basado en las vidas
-    float r = map(lives, 0, vidasMaximas, 255, 0);
-    float g = map(lives, 0, vidasMaximas, 0, 255);
-    fill(r, g, 0); // color interpolado para la barra de vida
-    rect(margen, height - barraAlto - 80, anchoActual, barraAlto); // posición de la barra en la parte inferior
-  
-    // Dibujar el contorno de la barra de vida
-    noFill();
-    stroke(0);
-    strokeWeight(7);
-    rect(margen, height - barraAlto - 80, barraAncho, barraAlto);
-    strokeWeight(0);
   }
   
   public boolean isDefeated() {

@@ -33,11 +33,8 @@ class CollectibleFactory {
   Collectible randomTreasure(PVector pos) {
     float r = random(1);
 
-    if (r < 0.3) return new HeartCollectible(pos);
-     return new BootsCollectible(pos);
-  }
-
-  Collectible randomBossDrop(PVector pos) {
+    if (r < 0.8) return new EnemyLifeRevealCollectible(pos);
+    if (r < 0.9) return new HeartCollectible(pos);
     return new BootsCollectible(pos);
   }
 }
@@ -73,5 +70,20 @@ class HeartCollectible extends Collectible {
   void display() {
     fill(255, 0, 0);
     ellipse(posicion.x, posicion.y, ancho, alto);
+  }
+}
+class EnemyLifeRevealCollectible extends Collectible {
+
+  public EnemyLifeRevealCollectible(PVector pos) {
+    super(pos);
+  }
+
+  void onPickUp(Player p) {
+    p.enableEnemyLifeReveal();
+  }
+
+  public void display() {
+    fill(255, 255, 0);
+    rect(posicion.x, posicion.y, ancho, alto);
   }
 }

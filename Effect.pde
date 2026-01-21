@@ -9,7 +9,6 @@ interface EffectTarget {
   void setDamage(float v);
 }
 
-
 interface Effect {
   void apply(EffectTarget target);
   void update(float delta);

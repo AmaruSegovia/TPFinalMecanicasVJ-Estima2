@@ -37,7 +37,6 @@ class SubBoss extends Enemy implements IVisualizable, IMovable{
     this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
     // dibuja la colision del boss
     //this.collider.display(#FFF63E);
-    dibujarBarraVida(10, 50, 5, 35);
   }
   
   /** METODO PARA ACTUALIZAR LA POSICION DEL ENEMIGO BASADO EN LA POSICION DEL JUGADOR*/

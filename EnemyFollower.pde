@@ -31,14 +31,10 @@ class Follower extends Enemy implements IVisualizable, IMovable{
     noStroke();
     // dibuja al enemigo
     imageMode(CENTER);
-    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(this.posicion.x, this.posicion.y));
+    this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, this.posicion);
     // dibuja el area de colision del enemigo
     //this.collider.display(#FF3E78);
 
-    // Dibujar el contorno de la barra de vida
-    noFill();
-    stroke(0);
-    dibujarBarraVida(6, 40, 5, 30);
   }
 
   public void mover(Player jugador, GestorEnemigos enemies) {

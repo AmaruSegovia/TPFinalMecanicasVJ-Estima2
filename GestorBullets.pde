@@ -29,7 +29,7 @@ public class GestorBullets {
       if (b.getOwner() == BulletOwner.PLAYER) {
         for (Enemy e : enemies.getAllEnemies()) {
           if (b.getCollider().colisionaCon(e.getCollider())) {
-            e.receiveDamage();
+            e.receiveDamage(1);
             if (e.getLives() <= 0) enemies.removeEnemy(e);
             it.remove(); // elimina la bala de forma segura
             break;

@@ -35,8 +35,7 @@ class Tower extends Enemy implements IVisualizable, IShooter{
       this.sprite.render(MaquinaEstadosAnimacion.MOV_DERECHA, new PVector(0, 0));  // Dibujamos la torreta rotada en el origen de la transformación
     popMatrix();
 
-    dibujarBarraVida(5, 40, 5, 35);
-  }
+  } //<>//
 
   public void shoot(Player player, GestorBullets gestorBalas) {
     PVector centro = this.posicion.copy();
