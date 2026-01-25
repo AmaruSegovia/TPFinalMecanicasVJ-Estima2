@@ -95,11 +95,12 @@ public class MenuState implements GameState {
   private AudioManager audio;
   private int selectedIndex = 1; // NORMAL por defecto
 
-  private PImage img = loadImage("splash.png");
+  private PImage img;
   
   // Constructor, recibe el gestor de audio
   public MenuState(AudioManager audio) { 
-    this.audio = audio; 
+    this.audio = audio;
+    this.img = loadImage("splash.png"); 
   }
   /* inicializa al entrar al menu */
   public void onEnter() {
@@ -180,11 +181,12 @@ public class MenuState implements GameState {
 // Estado del juego que representa el menu de vistoria
 public class VictoryState implements GameState {
   private AudioManager audio;
-  private PImage img = loadImage("victory.png");
+  private PImage img;
   
   // Constructor, recibe el gestor de audio
   public VictoryState(AudioManager audio) { 
-    this.audio = audio;  
+    this.audio = audio;
+    this.img = loadImage("victory.png");
   }
   /* inicializa al entrar a la pantalla de vctoria */
   public void onEnter() {
@@ -215,11 +217,12 @@ public class VictoryState implements GameState {
 // Estado del juego que representa el menu de Game over
 public class GameOverState implements GameState {
   private AudioManager audio;
-  private PImage img = loadImage("defeat.png");
+  private PImage img;
   
   // Constructor, recibe el gestor de audio
   public GameOverState(AudioManager audio) { 
-    this.audio = audio;  
+    this.audio = audio;
+    this.img = loadImage("defeat.png"); 
   }
   /* inicializa al entrar a la pantalla de derrota */
   public void onEnter() {
@@ -249,11 +252,12 @@ public class GameOverState implements GameState {
 // Estado del juego que representa la pantalla de creditos
 public class CreditsState implements GameState {
   private AudioManager audio;
-  private PImage img = loadImage("creditos.png");
+  private PImage img;
   
   // Constructor, recibe el gestor de audio
   public CreditsState(AudioManager audio) { 
-    this.audio = audio;  
+    this.audio = audio;
+    this.img = loadImage("creditos.png"); 
   }
   /* inicializa al entrar a los creditos */
   public void onEnter() {

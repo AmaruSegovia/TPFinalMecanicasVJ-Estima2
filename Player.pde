@@ -182,10 +182,11 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
   }
 
   /** Actualiza la posicion del jugador segun los parametros anteriores */
-  private void updatePosition(int newCol, int newRow, PVector newPos) {
+  public void updatePosition(int newCol, int newRow, PVector newPos) {
     this.col = newCol;
     this.row = newRow;
     this.posicion = newPos.copy();
+    this.collider.setPosicion(this.posicion);
   }
 
   /** Devuelve una bala a una dirección definida por una tecla para ser gestionada posteriormente por un GestorBullets */

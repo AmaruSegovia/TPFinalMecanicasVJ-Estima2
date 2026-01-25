@@ -32,12 +32,15 @@ CreditsState creditos;
 PImage background;
 Difficulty difficulty = Difficulty.NORMAL;
 
+// Funcion settings() para inicializacion de ventana
+void settings() {
+  size(900, 800);
+  noSmooth();
+}
+
 // --- Setup Global ---
 public void setup()
 {
-  noSmooth();
-  size(900, 800);
-
   // Inicializar Managers
   audio = new AudioManager(this);
   input = new InputManager();

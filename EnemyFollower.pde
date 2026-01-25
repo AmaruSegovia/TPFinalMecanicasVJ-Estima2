@@ -1,6 +1,8 @@
 class Follower extends Enemy implements IVisualizable, IMovable{
   /** Representa la velocidad del enemigo */
   private float velocidad;
+  
+  private Colisionador tempCollider;
 
   /* -- CONSTRUCTOR -- */
   public Follower(PVector posicion) {
@@ -10,6 +12,7 @@ class Follower extends Enemy implements IVisualizable, IMovable{
     this.velocidad = 140; // ajusta la velocidad del enemigo
     this.collider = new Colisionador(this.posicion, this.ancho*3);
     this.sprite = new SpriteObject("chaser.png", ancho, alto, 3);
+    this.tempCollider = new Colisionador(new PVector(0, 0), this.ancho*3);
   }
   
   /* -- METODOS -- */
@@ -46,8 +49,8 @@ class Follower extends Enemy implements IVisualizable, IMovable{
     // posicion tentativa
     PVector nuevaPos = PVector.add(this.posicion, direccion);
   
-    // crear un colisionador temporal en la nueva pos
-    Colisionador tempCollider = new Colisionador(nuevaPos, (int)this.ancho*3);
+    // [OPTIMIZACIÓN] Reutilizar colisionador temporal en lugar de crear uno nuevo cada frame
+    tempCollider.setPosicion(nuevaPos);
   
     boolean puedeMover = true;
     for (Enemy e : enemies.getAllEnemies()) {

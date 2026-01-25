@@ -6,6 +6,9 @@ class RoomRenderer {
   private RoomEnemySpawner spawner;
   
   CollectibleFactory factory = new CollectibleFactory();
+  
+  private PImage tutorialWASD;
+  private PImage tutorialIJKL;
 
   public RoomRenderer(Dungeon dungeon, GestorBullets bullets, RoomVisualRegistry roomVisuals) {
     this.dungeon = dungeon;
@@ -13,6 +16,9 @@ class RoomRenderer {
     this.spawner = new RoomEnemySpawner(dungeon.getRows() * dungeon.getCols());
     this.bullets = bullets;
     this.roomVisuals = roomVisuals;
+    
+    this.tutorialWASD = loadImage("wasd.png");
+    this.tutorialIJKL = loadImage("ijkl.png");
   }
 
   public void render(Player player, CaminanteAleatorio walker) {
@@ -113,8 +119,9 @@ class RoomRenderer {
     text("Caminar", width/4.8, height/1.5);
     text("Disparar", width/1.27, height/1.5);
     imageMode(CENTER);
-    image(loadImage("wasd.png"), width/4.8, height/1.8, 120, 80);        
-    image(loadImage("ijkl.png"), width/1.27, height/1.8, 120, 80);
+    // [OPTIMIZACIÓN] Usar imágenes pre-cargadas en lugar de loadImage() cada frame
+    image(tutorialWASD, width/4.8, height/1.8, 120, 80);        
+    image(tutorialIJKL, width/1.27, height/1.8, 120, 80);
   }
   
   public GestorBullets getBullets() {
