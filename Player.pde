@@ -87,10 +87,6 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
     textSize(20);
     fill(255);
     lifeBar.draw(posicion, lives, maxLives);
-    text("vidas: " + lives, 100, 100);
-    text("vel: " + speed, 100, 150);
-
-    //collider.display(255);
   }
 
   /** Metodo que mueve al jugador */
@@ -168,7 +164,6 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
         }
     }
   }
-
   
   public Door checkCollision(Room roomActual) {
     if (!roomActual.hasDoors()) return null;
@@ -218,7 +213,6 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
 
   public void enableEnemyLifeReveal() {
     this.canSeeLifeEnemy = true;
-     println("Enemy life reveal ACTIVADO");
   }
 
    /* Getters */

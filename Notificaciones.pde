@@ -1,0 +1,62 @@
+/** Clase que representa un mensaje temporal en pantalla */
+class MensajeNotificacion {
+  String text;
+  int creationTime;
+  int duration = 1500; 
+  float yOffset = 0;
+
+  public MensajeNotificacion(String text) {
+    this.text = text;
+    this.creationTime = millis();
+  }
+
+  public boolean isExpired() {
+    return millis() - creationTime > duration + 1000; 
+  }
+
+  public void display(int index) {
+    int elapsed = millis() - creationTime;
+    float alpha = 255;
+
+    if (elapsed > duration) {
+      alpha = map(elapsed, duration, duration + 1000, 255, 0);
+    }
+
+    yOffset = lerp(yOffset, index * 30, 0.1);
+
+    pushMatrix();
+    textAlign(CENTER, CENTER);
+    textSize(30);
+    
+    fill(0, alpha * 0.5f);
+    text(text, width/2 + 2, 100 - yOffset + 2);
+    
+    fill(255, 215, 0, alpha); 
+    text(text, width/2, 100 - yOffset);
+    popMatrix();
+  }
+}
+
+/** Gestiona la cola de notificaciones de loot */
+class Notificaciones {
+  private ArrayList<MensajeNotificacion> activeNotifications;
+
+  public Notificaciones() {
+    activeNotifications = new ArrayList<MensajeNotificacion>();
+  }
+
+  public void add(String message) {
+    activeNotifications.add(new MensajeNotificacion(message));
+  }
+
+  public void updateAndDisplay() {
+    for (int i = activeNotifications.size() - 1; i >= 0; i--) {
+      MensajeNotificacion n = activeNotifications.get(i);
+      n.display(i);
+      
+      if (n.isExpired()) {
+        activeNotifications.remove(i);
+      }
+    }
+  }
+}

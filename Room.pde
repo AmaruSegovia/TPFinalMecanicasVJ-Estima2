@@ -89,10 +89,10 @@ class Room {
   }
   
   
-  public void checkColectable(Player p) {
+  public void checkColectable(Player p, Notificaciones notifications) {
     for (int i = collectibles.size()-1; i >= 0; i--) {
       Collectible c = collectibles.get(i);
-      c.update(p);
+      c.update(p, notifications);
 
       if (c.isPicked()) {
         collectibles.remove(i);
@@ -175,14 +175,14 @@ class StartRoom extends Room {
   public void renderRoomUI(RoomRenderer renderer) {
     fill(#ccffff);
     textSize(48);
-    text("Cómo Jugar", width/2, height/8);
+    text("Cómo Jugar", width/2, height/6);
     textSize(36);
-    text("Caminar", width/4.8, height/1.5);
-    text("Disparar", width/1.27, height/1.5);
+    text("Caminar", width/4.2, height/1.5);
+    text("Disparar", width/1.3, height/1.5);
     imageMode(CENTER);
     
-    image(tutorialWASD, width/4.8, height/1.8, 120, 80);        
-    image(tutorialIJKL, width/1.27, height/1.8, 120, 80);
+    image(tutorialWASD, width/4.2, height/1.8, 120, 80);        
+    image(tutorialIJKL, width/1.3, height/1.8, 120, 80);
   }
 }
 

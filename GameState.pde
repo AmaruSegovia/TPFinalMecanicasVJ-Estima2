@@ -15,6 +15,7 @@ public class PlayingState implements GameState {
   private BulletFactory bulletFactory;
   private CaminanteAleatorio walker; 
   private GameAssets assets;
+  private Notificaciones notificaciones;
 
   
   private MiniMap miniMap;
@@ -38,7 +39,8 @@ public class PlayingState implements GameState {
     
     println("El jefe aparecerá en fila " + layout.bossPos.y + " , columna " + layout.bossPos.x);
     
-    this.renderer = new RoomRenderer(dungeon, new GestorBullets(), assets.getRoomVisuals());
+    this.notificaciones = new Notificaciones();
+    this.renderer = new RoomRenderer(dungeon, new GestorBullets(), assets.getRoomVisuals(), notificaciones);
     this.jugador = new Player(new PVector(width/2, height/2),walker.getStartPos());
     this.bulletFactory = new BulletFactory();
     
@@ -62,12 +64,10 @@ public class PlayingState implements GameState {
     
     miniMap.display(jugador);
     
-     if (jugadorPierde()) changeState(derrota);
+    // Dibujar notificaciones al final de todo
+    notificaciones.updateAndDisplay();
     
-    // ************************   DEPURADOR
-    fill(255);
-    textSize(20);
-    //text("vida: " + jugador.getLives(), 150, 30);
+     if (jugadorPierde()) changeState(derrota);
   }
   
   /* reconociendo inputs */

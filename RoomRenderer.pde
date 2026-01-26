@@ -6,15 +6,15 @@ class RoomRenderer {
   private RoomEnemySpawner spawner;
   
   private CollectibleFactory factory = new CollectibleFactory();
-  
+  private Notificaciones notificaciones;
 
-  public RoomRenderer(Dungeon dungeon, GestorBullets bullets, RoomVisualRegistry roomVisuals) {
+  public RoomRenderer(Dungeon dungeon, GestorBullets bullets, RoomVisualRegistry roomVisuals, Notificaciones notificaciones) {
     this.dungeon = dungeon;
     this.gestorEnemigos = new GestorEnemigos() ;
     this.spawner = new RoomEnemySpawner(dungeon.getRows() * dungeon.getCols());
     this.bullets = bullets;
     this.roomVisuals = roomVisuals;
-    
+    this.notificaciones = notificaciones;
   }
 
   public void render(Player player) {
@@ -22,7 +22,7 @@ class RoomRenderer {
     if (roomActual == null) return;
     
     roomVisuals.get(roomActual.getType()).render();
-    roomActual.checkColectable(player);
+    roomActual.checkColectable(player, notificaciones);
     for (Door door : roomActual.getAllDoors()) {
       door.display();
     }

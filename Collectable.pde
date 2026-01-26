@@ -1,18 +1,20 @@
 abstract class Collectible extends GameObject {
   protected Colisionador collider;
   protected boolean picked = false;
+  protected String notificationText = "Objeto recogido";
 
   public Collectible(PVector pos) {
     super(pos, 20, 20);
     collider = new Colisionador(pos, 20);
   }
 
-  public void update(Player p) {
+  public void update(Player p, Notificaciones notifications) {
     collider.display(0);
     collider.setPosicion(posicion);
 
     if (!picked && collider.colisionaCon(p.getCollider())) {
       onPickUp(p);
+      notifications.add(notificationText);
       picked = true;
     }
   }
@@ -42,6 +44,7 @@ class BootsCollectible extends Collectible {
 
   public BootsCollectible(PVector pos) {
     super(pos);
+    this.notificationText = "MAS VELOCIDAD";
   }
 
   void onPickUp(Player p) {
@@ -58,6 +61,7 @@ class HeartCollectible extends Collectible {
 
   public HeartCollectible(PVector pos) {
     super(pos);
+    this.notificationText = "VIDA EXTRA";
   }
 
   void onPickUp(Player p) {
@@ -73,6 +77,7 @@ class EnemyLifeRevealCollectible extends Collectible {
 
   public EnemyLifeRevealCollectible(PVector pos) {
     super(pos);
+    this.notificationText = "OJO REVELADOR";
   }
 
   void onPickUp(Player p) {
