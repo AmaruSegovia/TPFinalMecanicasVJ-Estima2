@@ -16,7 +16,6 @@ public class PlayingState implements GameState {
   private CaminanteAleatorio walker; 
   private GameAssets assets;
   private Notificaciones notificaciones;
-
   
   private MiniMap miniMap;
   

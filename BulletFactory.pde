@@ -1,12 +1,12 @@
 // Patron de disenio Command para quitar dependencias 
 /** Clase que llama a la fabricacion **/
 class BulletFactory {
-  public Bullet createPlayerBullet(PVector posicion, Direction dir, float damage) {
+  public Bullet createPlayerBullet(PVector posicion, Direction dir, float damage, float speed) {
     return new Bullet(
       posicion.copy(),
       10, 10,
       dir.toVector().normalize(), // dirección fija
-      400,
+      speed,
       BulletOwner.PLAYER,
       damage
     );

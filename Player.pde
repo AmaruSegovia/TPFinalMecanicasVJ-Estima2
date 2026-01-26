@@ -22,6 +22,7 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
   private long lastShotTime = 0;       
   /** Representa el tiempo minimo entre cada disparo */
   private int shootCooldown = 310;
+  private float bulletSpeed = 400; // Velocidad base de balas
   
   private float damage;
   
@@ -189,8 +190,8 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
     if (input.isShooting() && input.getShootDirection() != null) {
       long now = millis();
       if (now - lastShotTime >= shootCooldown) {
-        // Usar la fábrica para crear la bala del jugador
-        Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection(), this.damage);
+        // Usar la fábrica para crear la bala del jugador con su velocidad actual
+        Bullet b = factory.createPlayerBullet(this.posicion.copy(), input.getShootDirection(), this.damage, this.bulletSpeed);
         gestor.addBullet(b);
         lastShotTime = now;
       }
@@ -248,6 +249,8 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
   
   public PVector getCurrentPos(){ return new PVector(this.col, this.row); }
   public float getDamage() {  return this.damage; } 
+  public float getBulletSpeed() { return this.bulletSpeed; }
+  public int getShootCooldown() { return this.shootCooldown; }
 
     /* Setters */
   /** Asigna una nueva velocidad maxima al jugador */
@@ -262,5 +265,8 @@ class Player extends GameObject implements IVisualizable, EffectTarget {
   public void setLives(int lives) {  this.lives = lives;  }
   
   public void setDamage(float damage) {  this.damage = damage;  }
+
+  public void setBulletSpeed(float speed) { this.bulletSpeed = speed; }
+  public void setShootCooldown(int cooldown) { this.shootCooldown = cooldown; }
 
 }
