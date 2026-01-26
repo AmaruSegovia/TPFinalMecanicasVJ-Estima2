@@ -29,7 +29,7 @@ class RoomVisualRegistry {
 
   public RoomVisual get(RoomType type) {
     if (!visuals.containsKey(type)) {
-      println("⚠️ RoomVisual no registrado para: " + type);
+      println("RoomVisual no registrado para: " + type);
       return defaultVisual;
     }
     return visuals.get(type);
@@ -50,6 +50,7 @@ class Room {
   protected RoomType type = RoomType.NORMAL; // por defecto normal
   
   private boolean lootSpawned = false;
+  private boolean isStart = false;
 
   /* -- CONSTRUCTORES -- */
   /** Constructor parametrizado */
@@ -149,6 +150,40 @@ class Room {
   
   public void setType(RoomType type) { this.type = type; }
   public RoomType getType() { return type; }
+  public void setIsStart(boolean s) { this.isStart = s; }
+  public boolean isStart() { return this.isStart; }
+  
+  /** Hooks polimórficos para lógica y UI específica de cada sala */
+  public void handleRoomLogic(GestorEnemigos gestor, Player player) {}
+  public void renderRoomUI(RoomRenderer renderer) {}
+}
+
+/* -- SUBCLASES ESPECIALIZADAS -- */
+
+class StartRoom extends Room {
+  private PImage tutorialWASD;
+  private PImage tutorialIJKL;
+
+  public StartRoom(int doors, int name) {
+    super(doors, name);
+    this.setIsStart(true);
+    this.tutorialWASD = loadImage("wasd.png");
+    this.tutorialIJKL = loadImage("ijkl.png");
+  }
+  
+  @Override
+  public void renderRoomUI(RoomRenderer renderer) {
+    fill(#ccffff);
+    textSize(48);
+    text("Cómo Jugar", width/2, height/8);
+    textSize(36);
+    text("Caminar", width/4.8, height/1.5);
+    text("Disparar", width/1.27, height/1.5);
+    imageMode(CENTER);
+    
+    image(tutorialWASD, width/4.8, height/1.8, 120, 80);        
+    image(tutorialIJKL, width/1.27, height/1.8, 120, 80);
+  }
 }
 
 class BossRoom extends Room {
@@ -159,25 +194,27 @@ class BossRoom extends Room {
     setType(RoomType.BOSS);
   }
 
-  
-  public void display() {
-    noStroke();
-    imageMode(CORNER);
-    tint(255);
-    image(background, 0, 0, 900, 800);
-
-    // Dibujar puerta de victoria si existe
-    if (victoryDoor != null) {
-      victoryDoor.display();
+  @Override
+  public void handleRoomLogic(GestorEnemigos gestor, Player player) {
+    // 1. Aparecer puerta si no hay enemigos
+    if (!gestor.hayEnemigos() && !hasVictoryDoor()) {
+      spawnVictoryDoor();
+    }
+    
+    // 2. Detectar victoria al entrar en la puerta
+    if (hasVictoryDoor()) {
+      Door door = player.checkCollision(this);
+      if (door instanceof VictoryDoor) {
+        changeState(victoria);
+      }
     }
   }
-  
 
   /** Crear la puerta de victoria en el centro */
   public void spawnVictoryDoor() {
     if (victoryDoor == null) {
       victoryDoor = new VictoryDoor(new PVector(width/2, height/2));
-      addDoor(Direction.UP, victoryDoor); // usamos el metodo addDoor de Room
+      addDoor(Direction.UP, victoryDoor); 
     }
   }
 
@@ -187,5 +224,33 @@ class BossRoom extends Room {
 
   public VictoryDoor getVictoryDoor() {
     return victoryDoor;
+  }
+}
+
+class TreasureRoom extends Room {
+  public TreasureRoom(int doors, int name) {
+    super(doors, name);
+    setType(RoomType.TREASURE);
+    // Auto-generar contenido inicial
+    CollectibleFactory factory = new CollectibleFactory();
+    Collectible chest = factory.randomTreasure(getCenterPosition());
+    if (chest != null) addCollectible(chest);
+  }
+}
+
+class SubBossRoom extends Room {
+  public SubBossRoom(int doors, int name) {
+    super(doors, name);
+    setType(RoomType.SUBBOSS);
+  }
+
+  @Override
+  public void handleRoomLogic(GestorEnemigos gestor, Player player) {
+    if (!gestor.hayEnemigos() && !hasLootSpawned()) {
+      markLootSpawned();
+      CollectibleFactory factory = new CollectibleFactory();
+      Collectible drop = factory.randomTreasure(getCenterPosition());
+      if (drop != null) addCollectible(drop);
+    }
   }
 }

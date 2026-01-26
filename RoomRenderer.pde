@@ -5,10 +5,8 @@ class RoomRenderer {
   private RoomVisualRegistry roomVisuals;
   private RoomEnemySpawner spawner;
   
-  CollectibleFactory factory = new CollectibleFactory();
+  private CollectibleFactory factory = new CollectibleFactory();
   
-  private PImage tutorialWASD;
-  private PImage tutorialIJKL;
 
   public RoomRenderer(Dungeon dungeon, GestorBullets bullets, RoomVisualRegistry roomVisuals) {
     this.dungeon = dungeon;
@@ -17,11 +15,9 @@ class RoomRenderer {
     this.bullets = bullets;
     this.roomVisuals = roomVisuals;
     
-    this.tutorialWASD = loadImage("wasd.png");
-    this.tutorialIJKL = loadImage("ijkl.png");
   }
 
-  public void render(Player player, CaminanteAleatorio walker) {
+  public void render(Player player) {
     Room roomActual = dungeon.getRoom(player.getCol(), player.getRow());
     if (roomActual == null) return;
     
@@ -32,33 +28,9 @@ class RoomRenderer {
     }
     roomActual.updateDoors(gestorEnemigos.hayEnemigos());
     
-    PVector startPos = walker.getStartPos();
-    PVector subPos = walker.getSubBossPos();
-    Room roomInicial = dungeon.getRoom((int)startPos.x, (int)startPos.y);
-    Room subRoom = dungeon.getRoom((int)subPos.x, (int)subPos.y);
-    subRoom.setType(RoomType.SUBBOSS);
-    spawner.enemigosGenerados[roomInicial.getNameRoom()] = true;
-
-
-    if (roomActual == roomInicial) {
-      mostrarTutorial();
-    }
-    
-    if (
-      roomActual.getType() == RoomType.SUBBOSS &&
-      !gestorEnemigos.hayEnemigos() &&
-      !roomActual.hasLootSpawned()
-    ) {
-      roomActual.markLootSpawned();
-      Collectible drop = factory.randomTreasure(
-        roomActual.getCenterPosition()
-      );
-    
-      if (drop != null) {
-        roomActual.addCollectible(drop);
-      }
-    
-    }
+    // Polimorfismo: Cada tipo de sala ejecuta su propia lógica e interfaz extra
+    roomActual.handleRoomLogic(gestorEnemigos, player);
+    roomActual.renderRoomUI(this);
     
     Door door = player.checkCollision(roomActual);
     if (door != null) {
@@ -91,41 +63,12 @@ class RoomRenderer {
       }
     }
     
-    // --- Logica BossRoom ---
-    if (roomActual instanceof BossRoom) {
-        BossRoom br = (BossRoom) roomActual;
-        if (gestorEnemigos.hayEnemigos() && !br.hasVictoryDoor()) {
-            br.spawnVictoryDoor();
-        }
-
-        Door doorr = player.checkCollision(roomActual);
-        if (doorr instanceof VictoryDoor) {
-            changeState(victoria);
-        }
-    }
-    
     bullets.update(gestorEnemigos, player);
     bullets.dibujarBalas();
-    // Actualizar enemigos
     gestorEnemigos.actualizar(player, bullets);
-    
   }
 
-  private void mostrarTutorial() {
-    fill(#ccffff);
-    textSize(48);
-    text("Cómo Jugar", width/2, height/8);
-    textSize(36);
-    text("Caminar", width/4.8, height/1.5);
-    text("Disparar", width/1.27, height/1.5);
-    imageMode(CENTER);
-    // [OPTIMIZACIÓN] Usar imágenes pre-cargadas en lugar de loadImage() cada frame
-    image(tutorialWASD, width/4.8, height/1.8, 120, 80);        
-    image(tutorialIJKL, width/1.27, height/1.8, 120, 80);
-  }
-  
   public GestorBullets getBullets() {
     return bullets;
   }
-
 }

@@ -22,10 +22,10 @@ public class GameAssets {
       new RoomVisual(loadImage("bgfinalboss.png"))
     );
 
-    /*roomVisuals.register(
+    roomVisuals.register(
       RoomType.TREASURE,
-      new RoomVisual(loadImage("bgtreasure.png"))
-    );*/
+      new RoomVisual(loadImage("bgfinalboss.png"))
+    );
 
     roomVisuals.register(
       RoomType.SUBBOSS,

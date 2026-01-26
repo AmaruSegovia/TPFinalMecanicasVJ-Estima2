@@ -1,33 +1,36 @@
 class CaminanteAleatorio {
   private PVector pos; // Posicion actual del caminante
   private PVector start; // El inicio del recorrido
-  private PVector lastPos;
-  private PVector subPos;
-  private color Color;
-  
   private ArrayList<PVector> recorrido; 
+  
+  private LevelLayout layout;
 
-  public CaminanteAleatorio(Dungeon m) {
-    int x = int(random(m.getCols())); // aleatoria dentro de la matriz
-    int y = int(random(m.getRows())); // aleatoria dentro de la matriz
-    this.pos = new PVector(x, y); // posicion aleatoria dentro de la matriz
+  public CaminanteAleatorio() {
+    this.recorrido = new ArrayList<>();
+    this.layout = new LevelLayout();
+  }
+
+  /** Genera el nivel y devuelve la configuracion */
+  public LevelLayout generate(Dungeon m) {
+    m.startDungeon(); // Limpiar matriz
+    recorrido.clear();
+    
+    // Posicion inicial aleatoria
+    int x = int(random(m.getCols())); 
+    int y = int(random(m.getRows())); 
+    this.pos = new PVector(x, y);
     this.start = pos.copy();
-    this.recorrido = new ArrayList<>(); 
     this.recorrido.add(pos.copy());
-    this.Color = color(0, 0, 255, 100);
+    
+    this.layout.startPos = this.start;
+    
+    // Caminata aleatoria
     while (m.nonZeroCount() < indexNonZero) {
       move(m);
     }
     
-    if (recorrido.size() > 2) {
-      int indice = (int) random(1, recorrido.size()-1); 
-      this.subPos = recorrido.get(indice).copy();
-    } else {
-      this.subPos = pos.copy(); // fallback
-    }
-    
-    //println("Dungeon completada con " + m.nonZeroCount() + " celdas distintas de cero");
-    m.printMatrix();
+    calculateSpecialRooms(m);
+    return this.layout;
   }
 
   public void move(Dungeon matrix) {
@@ -43,7 +46,7 @@ class CaminanteAleatorio {
 
     // Verificando que las nuevas coordenadas esten dentro de los limites de la matriz
     if (newPos.x >= 0 && newPos.x < matrix.getCols() && newPos.y >= 0 && newPos.y < matrix.getRows()) {
-      
+
       // << operador de desplazamiento, desplaza los bits hacia la izquierda segun la direccion de desplazamiento
       int binaryValue = 1 << dir; // Calcular el valor binario segun la direccion
       int reverseBinaryValue = 1 << ((dir + 2) % 4); // Calcular el valor binario de la direccion opuesta
@@ -52,30 +55,59 @@ class CaminanteAleatorio {
       matrix.addValue(pos, newPos, binaryValue, reverseBinaryValue);
 
       // Mover el caminante a la nueva posicion
-      this.lastPos = pos.copy();
       this.pos = newPos.copy();
       this.recorrido.add(pos.copy());
     }
   }
+  
+  private void calculateSpecialRooms(Dungeon m) {
+    // 1. Boss
+    this.layout.bossPos = this.pos.copy();
+    
+    // 2. Sub Boss
+    if (recorrido.size() > 2) {
+      int indice = (int) random(1, recorrido.size() - 2); 
+      this.layout.subBossPos = recorrido.get(indice).copy();
+    } else {
+      this.layout.subBossPos = start.copy(); 
+    }
+    
+    // 3. Tesoro
+    layout.treasureRooms.clear();
+    ArrayList<PVector> leafRooms = new ArrayList<PVector>();
+    
+    for (int i = 0; i < m.getRows(); i++) {
+      for (int j = 0; j < m.getCols(); j++) {
+        int val = m.getValue(i, j);
+        if (val == 0) continue;
+        
+        // Contar puertas (bits)
+        int doorsCount = 0;
+        if ((val & 1) != 0) doorsCount++;
+        if ((val & 2) != 0) doorsCount++;
+        if ((val & 4) != 0) doorsCount++;
+        if ((val & 8) != 0) doorsCount++;
+        
+        if (doorsCount == 1) {
+          PVector roomPos = new PVector(j, i);
+          // No puede ser la misma que start, boss o subboss
+          if (!roomPos.equals(layout.startPos) && 
+              !roomPos.equals(layout.bossPos) &&
+              !roomPos.equals(layout.subBossPos)) {
+             leafRooms.add(roomPos); 
+          }
+        }
+      }
+    }
 
-  public void display() {
-    // Resaltar la posicion actual del caminante
-    fill(Color);
-    noStroke();
-    rect(pos.x * cellSize, pos.y * cellSize, cellSize, cellSize);
+    // Elegir solo una sala de tesoro aleatoria si hay opciones
+    if (leafRooms.size() > 0) {
+      int randIdx = (int)random(leafRooms.size());
+      layout.treasureRooms.add(leafRooms.get(randIdx));
+    }
   }
-
   /* -- ASESORES -- */
-  public void setColor(color Color) {  this.Color = Color;  }
-  
-  public PVector getStartPos() {
-    return start.copy();              //  para consultar inicio
-  }
-  
-  public PVector getSubBossPos() { return subPos.copy(); }
-
-  public PVector getCurrentPos() {
-    return pos.copy();                // posición actual
-  }
-  public PVector getLastPos() { return lastPos.copy(); }
+  public PVector getStartPos() { return start == null ? new PVector() : start.copy(); }
+  public PVector getCurrentPos() { return pos == null ? new PVector() : pos.copy(); }
+  public PVector getSubBossPos() { return layout.subBossPos == null ? new PVector() : layout.subBossPos.copy(); }
 }

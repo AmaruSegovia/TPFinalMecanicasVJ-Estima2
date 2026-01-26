@@ -25,18 +25,18 @@ public class PlayingState implements GameState {
     this.input = input;
     this.dungeon = new Dungeon(rows, cols);
     // Crear la matriz y el caminante
-    this.walker = new CaminanteAleatorio(dungeon);
+    this.walker = new CaminanteAleatorio();
     
     // Cargar assets
     assets = new GameAssets();
     assets.load();
     
-    PVector bossPos = walker.getCurrentPos();
+    // Generar layout del nivel
+    LevelLayout layout = walker.generate(dungeon);
     
-    dungeon.generateRooms(dungeon.getMatriz(), bossPos);
+    dungeon.generateRooms(dungeon.getMatriz(), layout);
     
-    println("El jefe aparecerá en fila " + bossPos.y + " , columna " + bossPos.x);
-    
+    println("El jefe aparecerá en fila " + layout.bossPos.y + " , columna " + layout.bossPos.x);
     
     this.renderer = new RoomRenderer(dungeon, new GestorBullets(), assets.getRoomVisuals());
     this.jugador = new Player(new PVector(width/2, height/2),walker.getStartPos());
@@ -56,7 +56,7 @@ public class PlayingState implements GameState {
     jugador.updateAnimation(input);
     
     
-    renderer.render(jugador,walker);
+    renderer.render(jugador);
     jugador.display();
     //effectManager.update();
     

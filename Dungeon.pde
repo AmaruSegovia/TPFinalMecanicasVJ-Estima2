@@ -14,7 +14,6 @@ class Dungeon {
   }
   /** constructor parametrizado */
   public Dungeon(int rows, int cols) {
-    //this.nivel = nivel;
     this.cols = cols;
     this.rows = rows;
     
@@ -36,19 +35,30 @@ class Dungeon {
     return this.matriz;
   }
 
-  /** Metodo que genera las habitaciones */
-  public void generateRooms(int[][] matriz, PVector bossPos) {
+  /** Metodo que genera las habitaciones aprovechando el polimorfismo */
+  public void generateRooms(int[][] matriz, LevelLayout layout) {
     int cont = 0;
+    
     for (int i = 0; i < this.rows; i++) {
         for (int j = 0; j < this.cols; j++) {
             PVector pos = new PVector(j, i);
-            // Si esta celda es la del boss, crear BossRoom
-            if (bossPos != null && pos.equals(bossPos)) {
-                this.rooms[i][j] = new BossRoom(matriz[i][j], cont);
+            int doors = matriz[i][j];
+            Room room = null;
+            
+            // 1. Decidir qué clase instanciar (Polimorfismo)
+            if (pos.equals(layout.bossPos)) {
+                room = new BossRoom(doors, cont);
+            } else if (pos.equals(layout.startPos)) {
+                room = new StartRoom(doors, cont);
+            } else if (layout.treasureRooms.contains(pos)) {
+                room = new TreasureRoom(doors, cont);
+            } else if (pos.equals(layout.subBossPos)) {
+                room = new SubBossRoom(doors, cont);
             } else {
-                // En cualquier otro caso, crear Room normal
-                this.rooms[i][j] = new Room(matriz[i][j], cont);
+                room = new Room(doors, cont);
             }
+            
+            this.rooms[i][j] = room;
             cont++;
         }
     }

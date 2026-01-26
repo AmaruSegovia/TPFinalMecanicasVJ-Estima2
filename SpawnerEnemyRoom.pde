@@ -6,16 +6,15 @@ class RoomEnemySpawner {
 
   public RoomEnemySpawner(int totalRooms) {
     enemigosGenerados = new boolean[totalRooms];
-    enemigosGenerados[0] = true;
     patrones = new ArrayList<>();
     inicializarPatrones();
   }
 
   public void spawnForRoom(Room room, GestorEnemigos gestor) {
-    
-    // Verificar si los enemigos ya han sido generados para esta habitacion
-    if (this.enemigosGenerados[room.getNameRoom()]) {
-      return; // Salir si ya han sido generados
+    // Si es la sala inicial o ya se generaron enemigos, no hacer nada
+    if (room.isStart() || this.enemigosGenerados[room.getNameRoom()]) {
+      enemigosGenerados[room.getNameRoom()] = true; 
+      return; 
     }
 
     ArrayList<Enemy> nuevos = new ArrayList<>();
