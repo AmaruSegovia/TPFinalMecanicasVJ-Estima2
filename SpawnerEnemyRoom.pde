@@ -73,47 +73,63 @@ class RoomEnemySpawner {
   
   /** Metodo que inicializa los patrones de los enemigos */
   private void inicializarPatrones() {
-    // Patron 1: 3 enemigos alineados horizontalmente
+    PVector centro = new PVector(width/2, height/2);
+
+    // Patron 1: El Escuadrón V
     PatronEnemigo patron1 = new PatronEnemigo();
-    addPosiciones(patron1, 3, height/2, "Tower");
+    patron1.addPosicion(new PVector(width/2, height/2), "Tower");
+    patron1.addPosicion(new PVector(width/3, height/2), "Follower");
+    patron1.addPosicion(new PVector(2*width/3, height/2), "Follower");
     patrones.add(patron1);
 
-    // Patron 2: 8 enemigos alineados horizontalmente arriba y abajo
+    // Patron 2: Círculo de Acecho
     PatronEnemigo patron2 = new PatronEnemigo();
-    addPosiciones(patron2, 4, height/3, "Follower");
-    addPosiciones(patron2, 4, height - height/3, "Follower");
+    patron2.addCirculo(centro, 150, 6, "Follower");
     patrones.add(patron2);
     
-    // Patron 3: Enemigos en forma de triangulo
+    // Patron 3: La Cruz Defensiva
     PatronEnemigo patron3 = new PatronEnemigo();
-    addPosicionUnica(patron3, width/2, height/3, "Tower");
-    addPosiciones(patron3, 2, height/2, "Tower");
-    addPosiciones(patron3, 3, height - height/3, "Tower");
+    patron3.addCruz(centro, 120, "Tower");
     patrones.add(patron3);
     
+    // Patron 4: Doble Fila
     PatronEnemigo patron4 = new PatronEnemigo();
-    patron4.addPosicion(new PVector(width/2 - 50, height/2), "Tower");
-    patron4.addPosicion(new PVector(width/2 + 50, height/2), "Tower");
-    patron4.addPosicion(new PVector(50, 50), "Follower");
-    patron4.addPosicion(new PVector(width - 50, 50), "Follower");
-    patron4.addPosicion(new PVector(50, height - 50), "Follower");
-    patron4.addPosicion(new PVector(width - 50, height - 50), "Follower");
+    patron4.addFila(height/2, 2, "Follower");
+    patron4.addFila(height/2, 3, "Tower");
     patrones.add(patron4);
-    
-    // Se pueden agregar mas patrones 
-  }
 
-  /** Metodo auxiliar para agregar una posicion unica a un patron */
-  private void addPosicionUnica(PatronEnemigo patron, float x, float y, String tipo) {
-    patron.addPosicion(new PVector(x, y), tipo);
-  }
+    // Patron 5: Las 4 Esquinas
+    PatronEnemigo patron5 = new PatronEnemigo();
+    patron5.addPosicion(new PVector(100, 100), "Tower");
+    patron5.addPosicion(new PVector(width-100, 100), "Tower");
+    patron5.addPosicion(new PVector(100, height-100), "Tower");
+    patron5.addPosicion(new PVector(width-100, height-100), "Tower");
+    patron5.addPosicion(centro, "Follower");
+    patrones.add(patron5);
 
-  /** Metodo auxiliar para agregar posiciones a un patron */
-  private void addPosiciones(PatronEnemigo patron, int cantidadEnemies, float y, String tipo) {
-    for (int i = 0; i < cantidadEnemies; i++) {
-      float x = (i + 1) * width / (cantidadEnemies + 1);
-      patron.addPosicion(new PVector(x, y), tipo);
-    }
+    // Patron 6: La Muralla
+    PatronEnemigo patron6 = new PatronEnemigo();
+    patron6.addColumna(width/4, 3, "Tower");
+    patron6.addColumna(3*width/4, 2, "Follower");
+    patrones.add(patron6);
+
+    // Patron 7: El Diamante Central
+    PatronEnemigo patron7 = new PatronEnemigo();
+    patron7.addX(centro, 100, "Tower");
+    patron7.addCirculo(centro, 200, 4, "Follower");
+    patrones.add(patron7);
+
+    // Patron 8: Pasillo
+    PatronEnemigo patron8 = new PatronEnemigo();
+    patron8.addColumna(width/3, 4, "Follower");
+    patron8.addColumna(2*width/3, 4, "Follower");
+    patrones.add(patron8);
+
+    // Patron 9: Emboscada Total
+    PatronEnemigo patron9 = new PatronEnemigo();
+    patron9.addPosicion(centro, "Tower");
+    patron9.addCirculo(centro, 180, 8, "Follower");
+    patrones.add(patron9);
   }
 
   private PVector posicionAleatoria() {
